@@ -54,4 +54,4 @@ autocmd InsertLeave * match ExtraWhitespace /\s\+$/
 autocmd BufWinLeave * call clearmatches()
 
 " https://github.com/tpope/vim-pathogen#readme
-call pathogen#infect()
+" call pathogen#infect()
