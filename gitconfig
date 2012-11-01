@@ -1,0 +1,7 @@
+[user]
+	email = nalabelle@gmail.com
+	name = nalabelle
+[core]
+	editor = vim
+[color]
+	ui = true
