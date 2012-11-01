@@ -3,5 +3,6 @@
 	name = nalabelle
 [core]
 	editor = vim
+  excludesfile = ~/.gitignore_global
 [color]
 	ui = true
