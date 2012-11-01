@@ -1,0 +1,17 @@
+#make scrolling work like normal
+termcapinfo xterm* ti@:te@
+
+#turn off audible bell
+vbell on
+
+#detach on hangup
+autodetach on
+
+#no copyright page
+startup_message off
+
+#status lines
+hardstatus alwayslastline
+hardstatus string '%{gk}[ %{G}%H %{g}][%= %{wk}%?%-Lw%?%{=b kR} (%{W}%n*%f %t%?(%u)%?%{=b kR})%{= kw}%?%+Lw%?%?%= %{g}][%{Y}%l%{g}] %{=b C}[ %m/%d %c ]%{W}'
+bind f eval "caption splitonly" "hardstatus ignore"
+bind F eval "caption always"    "hardstatus alwayslastline"
