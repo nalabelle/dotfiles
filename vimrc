@@ -19,7 +19,28 @@ set backspace=indent,eol,start
 set noerrorbells
 set novisualbell
 
+" stop littering swap everywhere
+if isdirectory($HOME . '/.vim/swap') == 0
+  :silent !mkdir -p ~/.vim/swap >/dev/null 2>&1
+endif
+set directory=~/.vim/swap
+
+" stop littering backup everywhere
+if isdirectory($HOME . '/.vim/backup') == 0
+  :silent !mkdir -p ~/.vim/backup >/dev/null 2>&1
+endif
+set backupdir=~/.vim/backup
 set backup          " make a backup file before overwriting, leave it after it's written
+
+" stop littering undo everywhere
+if exists("+undofile") " 7.3+
+  if isdirectory($HOME . '/.vim/undo') == 0
+    :silent !mkdir -p ~/.vim/undo > /dev/null 2>&1
+  endif
+  set undodir=~/.vim/undo
+  set undofile
+endif
+
 set ruler           " current row and column at bottom right
 set report=0        " report lines changed always
 set scrolloff=5     " keep 5 lines min above and below the cursor
