@@ -26,10 +26,6 @@ if [ -d "$HOME/.bin" ]; then
   PATH="$HOME/.bin:$PATH"
 fi
 
-# Ruby: Local gem installations
-if [ -d $HOME/.gem/bin ]; then
-  PATH=$PATH:$HOME/.gem/bin
-fi
 
 # MacPorts Installer addition on 2012-09-09_at_16:31:27: adding an appropriate PATH variable for use with MacPorts.
 # export PATH=/opt/local/bin:/opt/local/sbin:$PATH
@@ -43,9 +39,16 @@ fi
 
 # I hate Ruby
 
+# Ruby: Local gem installations
+#if [ -d $HOME/.gem/bin ]; then
+#  PATH=$PATH:$HOME/.gem/bin
+#fi
+
 # Don't install gems into root, unless necessary
-export GEM_HOME=$HOME/.gem
-export GEM_PATH=$HOME/.gem
+#export GEM_HOME=$HOME/.gem
+#export GEM_PATH=$HOME/.gem
 
 # select default interpreter
-eval "$(rbenv init -)"
+#eval "$(rbenv init -)"
+
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
