@@ -12,7 +12,8 @@
 # xterm*termname customization for 256color so here's a hacky way
 # hopefully no other terminals identify themselves as gnome-terminal.
 if [ "$COLORTERM" == "gnome-terminal" ] && [ "$TERM" == "xterm" ]; then
-  export TERM="xterm-256color"
+  export TERM="$TERM-256color"
+  #export TERM="xterm-256color"
 fi
 
 # if running bash
