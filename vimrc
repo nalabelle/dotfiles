@@ -1,10 +1,33 @@
 set nocompatible    " vim not vi, it's good to be explicit
+filetype off        " required for vundle
+
+" Vundle Initialization
+" Must come early to allow setting options later
+set rtp+=~/.vim/bundle/vundle/
+call vundle#rc()
+
+" Vundle the Vundle
+" required
+Bundle 'gmarik/vundle'
+
+" Other Repositories
+
+" Themes
+"Bundle 'jonathanfilip/vim-lucius'
+"Bundle 'darkspectrum'
+"Bundle 'wombat256'
+"Bundle 'wombat256mod'
+"Bundle 'junegunn/seoul256.vim'
+"Bundle 'baskerville/bubblegum'
+"Bundle 'w0ng/vim-hybrid'
+Bundle 'xoria256.vim'
+
 set noexrc          " don't use local config files
 set cpoptions=Be    " magic?
 
 " color options
-colo desert
-set background=dark
+colo xoria256
+set background=dark " could be light too...
 
 " syntax highlighting
 syntax on
@@ -74,5 +97,17 @@ autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
 autocmd InsertLeave * match ExtraWhitespace /\s\+$/
 autocmd BufWinLeave * call clearmatches()
 
-" https://github.com/tpope/vim-pathogen#readme
-" call pathogen#infect()
+" Make Vim recognize xterm escape sequences for Page and Arrow
+" keys, combined with any modifiers such as Shift, Control, and Alt.
+" See http://unix.stackexchange.com/questions/29907/how-to-get-vim-to-work-with-tmux-properly
+if &term =~ '^screen'
+  " Page keys http://sourceforge.net/p/tmux/tmux-code/ci/master/tree/FAQ
+  execute "set t_kP=\e[5;*~"
+  execute "set t_kN=\e[6;*~"
+
+  " Arrow keys http://unix.stackexchange.com/a/34723
+  execute "set <xUp>=\e[1;*A"
+  execute "set <xDown>=\e[1;*B"
+  execute "set <xRight>=\e[1;*C"
+  execute "set <xLeft>=\e[1;*D"
+endif
