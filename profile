@@ -8,6 +8,13 @@
 # for ssh logins, install and configure the libpam-umask package.
 #umask 022
 
+# Gnome terminal doesn't seem to allow for a way to set the
+# xterm*termname customization for 256color so here's a hacky way
+# hopefully no other terminals identify themselves as gnome-terminal.
+if [ "$COLORTERM" == "gnome-terminal" ] && [ "$TERM" == "xterm" ]; then
+  export TERM="xterm-256color"
+fi
+
 # if running bash
 if [ -n "$BASH_VERSION" ]; then
   # include .bashrc if it exists
