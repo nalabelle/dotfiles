@@ -13,13 +13,13 @@ Bundle 'gmarik/vundle'
 " Other Repositories
 
 " Themes
-"Bundle 'jonathanfilip/vim-lucius'
-"Bundle 'darkspectrum'
-"Bundle 'wombat256'
-"Bundle 'wombat256mod'
-"Bundle 'junegunn/seoul256.vim'
-"Bundle 'baskerville/bubblegum'
-"Bundle 'w0ng/vim-hybrid'
+Bundle 'jonathanfilip/vim-lucius'
+Bundle 'darkspectrum'
+Bundle 'wombat256'
+Bundle 'wombat256mod'
+Bundle 'junegunn/seoul256.vim'
+Bundle 'baskerville/bubblegum'
+Bundle 'w0ng/vim-hybrid'
 Bundle 'xoria256.vim'
 
 set noexrc          " don't use local config files
@@ -110,4 +110,23 @@ if &term =~ '^screen'
   execute "set <xDown>=\e[1;*B"
   execute "set <xRight>=\e[1;*C"
   execute "set <xLeft>=\e[1;*D"
+endif
+
+" Powerline!
+" set rtp+=~/.config/powerline/vim
+
+"python from powerline.vim import setup as powerline_setup
+"python powerline_setup()
+"python del powerline_setup
+
+set laststatus=2
+set noshowmode
+
+if ! has('gui_running')
+    set ttimeoutlen=10
+    augroup FastEscape
+        autocmd!
+        au InsertEnter * set timeoutlen=0
+        au InsertLeave * set timeoutlen=1000
+    augroup END
 endif
