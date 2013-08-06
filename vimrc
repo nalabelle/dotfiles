@@ -13,14 +13,26 @@ Bundle 'gmarik/vundle'
 " Other Repositories
 
 " Themes
-Bundle 'jonathanfilip/vim-lucius'
-Bundle 'darkspectrum'
-Bundle 'wombat256'
-Bundle 'wombat256mod'
-Bundle 'junegunn/seoul256.vim'
-Bundle 'baskerville/bubblegum'
-Bundle 'w0ng/vim-hybrid'
+"Bundle 'jonathanfilip/vim-lucius'
+"Bundle 'darkspectrum'
+"Bundle 'wombat256'
+"Bundle 'wombat256mod'
+"Bundle 'junegunn/seoul256.vim'
+"Bundle 'baskerville/bubblegum'
+"Bundle 'w0ng/vim-hybrid'
 Bundle 'xoria256.vim'
+
+" vim-airline
+" like powerline
+Bundle 'bling/vim-airline'
+
+" vim-bufferline
+" show the buffers in the statusline or commandbar
+Bundle 'bling/vim-bufferline'
+
+" vim-fugtive
+" git things for vim!
+Bundle 'tpope/vim-fugitive'
 
 set noexrc          " don't use local config files
 set cpoptions=Be    " magic?
@@ -112,16 +124,18 @@ if &term =~ '^screen'
   execute "set <xLeft>=\e[1;*D"
 endif
 
-" Powerline!
-" set rtp+=~/.config/powerline/vim
-
-"python from powerline.vim import setup as powerline_setup
-"python powerline_setup()
-"python del powerline_setup
-
+" Always display status line
 set laststatus=2
+" Don't show mode in the command bar
 set noshowmode
 
+" Airline customization
+let g:airline_theme='bubblegum'
+
+" Bufferline shows the buffers
+let g:bufferline_echo = 0
+
+" Leave insert mode immediately
 if ! has('gui_running')
     set ttimeoutlen=10
     augroup FastEscape
