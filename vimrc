@@ -34,6 +34,10 @@ Bundle 'bling/vim-bufferline'
 " git things for vim!
 Bundle 'tpope/vim-fugitive'
 
+" vim-coffee-script
+" support coffee script, comes with a lot of things
+Bundle 'kchmck/vim-coffee-script'
+
 set noexrc          " don't use local config files
 set cpoptions=Be    " magic?
 
