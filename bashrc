@@ -78,7 +78,7 @@ if [ -x /usr/bin/dircolors ]; then
 fi
 
 # enable color support of ls for OSX
-if [ "$OSTYPE" == "darwin"* ]; then
+if [[ "$OSTYPE" == "darwin"* ]]; then
   alias ls='ls -G'
 fi
 
