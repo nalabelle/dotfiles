@@ -38,6 +38,9 @@ Bundle 'tpope/vim-fugitive'
 " support coffee script, comes with a lot of things
 Bundle 'kchmck/vim-coffee-script'
 
+" indent guides for visually showing indent
+Bundle 'nathanaelkane/vim-indent-guides.git'
+
 set noexrc          " don't use local config files
 set cpoptions=Be    " magic?
 
@@ -91,6 +94,7 @@ set ignorecase      " ignore case in search patterns
 set smartcase       " override ignorecase if the search contains uppercase
 set hlsearch        " highlights searched text
 
+" Tab Formatting
 set expandtab       " use spaces instead of a hard tab
 set shiftround      " round indent to multiple of shiftwidth
 set shiftwidth=2    " number of spaces to use for each step of indent
@@ -148,3 +152,6 @@ if ! has('gui_running')
         au InsertLeave * set timeoutlen=1000
     augroup END
 endif
+
+" Visual Indent from vim-indent-guides
+let indent_guides_enable_on_vim_startup = 1
