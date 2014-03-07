@@ -71,3 +71,6 @@ PATH=$PATH:./node_modules/.bin
 #eval "$(rbenv init -)"
 
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
+
+#Let's use vim
+export EDITOR=vim
