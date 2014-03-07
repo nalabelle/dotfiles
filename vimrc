@@ -155,3 +155,10 @@ endif
 
 " Visual Indent from vim-indent-guides
 let indent_guides_enable_on_vim_startup = 1
+
+" Warn me when I'm over 80 cols
+if exists('+colorcolumn')
+  set colorcolumn=80
+else
+  au BufWinEnter * let w:m2=matchadd('ErrorMsg', '\%>80v.\+', -1)
+endif
