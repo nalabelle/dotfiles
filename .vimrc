@@ -41,6 +41,9 @@ Bundle 'kchmck/vim-coffee-script'
 " indent guides for visually showing indent
 Bundle 'nathanaelkane/vim-indent-guides.git'
 
+" racket support
+Bundle 'wlangstroth/vim-racket'
+
 set noexrc          " don't use local config files
 set cpoptions=Be    " magic?
 
