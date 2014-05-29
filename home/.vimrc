@@ -3,46 +3,46 @@ filetype off        " required for vundle
 
 " Vundle Initialization
 " Must come early to allow setting options later
-set rtp+=~/.vim/bundle/vundle/
-call vundle#rc()
+" 2014-05-13: set rtp+=~/.vim/bundle/vundle/
+set rtp+=~/.vim/bundle/Vundle.vim
+" 2014-05-13: call vundle#rc()
+call vundle#begin()
 
 " Vundle the Vundle
 " required
-Bundle 'gmarik/vundle'
+Plugin 'gmarik/Vundle.vim'
 
 " Other Repositories
 
 " Themes
-"Bundle 'jonathanfilip/vim-lucius'
-"Bundle 'darkspectrum'
-"Bundle 'wombat256'
-"Bundle 'wombat256mod'
-"Bundle 'junegunn/seoul256.vim'
-"Bundle 'baskerville/bubblegum'
-"Bundle 'w0ng/vim-hybrid'
-Bundle 'xoria256.vim'
+Plugin 'xoria256.vim'
 
 " vim-airline
 " like powerline
-Bundle 'bling/vim-airline'
+Plugin 'bling/vim-airline'
 
 " vim-bufferline
 " show the buffers in the statusline or commandbar
-Bundle 'bling/vim-bufferline'
+Plugin 'bling/vim-bufferline'
 
 " vim-fugtive
 " git things for vim!
-Bundle 'tpope/vim-fugitive'
+Plugin 'tpope/vim-fugitive'
 
 " vim-coffee-script
 " support coffee script, comes with a lot of things
-Bundle 'kchmck/vim-coffee-script'
+Plugin 'kchmck/vim-coffee-script'
 
 " indent guides for visually showing indent
-Bundle 'nathanaelkane/vim-indent-guides.git'
+Plugin 'nathanaelkane/vim-indent-guides'
 
 " racket support
-Bundle 'wlangstroth/vim-racket'
+Plugin 'wlangstroth/vim-racket'
+
+" markdown
+Plugin 'tpope/vim-markdown'
+
+call vundle#end()
 
 set noexrc          " don't use local config files
 set cpoptions=Be    " magic?
