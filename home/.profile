@@ -53,8 +53,11 @@ fi
 
 # Note, I have a local install in /usr/local or whatever. I don't install things globally (-g).
 # I do like to use apps now and then though, and that's where it's handy to have this:
-PATH=$PATH:./node_modules/.bin
+#PATH=$PATH:./node_modules/.bin
 # No idea if this will break things.
+# 2014-09-03 fresh install of nvm did this, let's see what happens
+export NVM_DIR="${HOME}/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
 
 # I hate Ruby
 
