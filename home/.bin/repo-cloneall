@@ -1,1 +1,160 @@
-/Users/nalabelle/.homesick/repos/binfiles/home/.bin/repo-cloneall
+#!/bin/bash
+
+CONFIGDIR="$HOME/.config/nalabelle"
+CONFIGFILE="gitscripts.conf"
+
+if [ ! -f $CONFIGDIR/$CONFIGFILE ]; then
+  if [ ! -d $CONFIGDIR ]; then
+    mkdir -p $CONFIGDIR
+  fi
+  cat > $CONFIGDIR/$CONFIGFILE << EOF
+# Configuration for createrepo and listrepo
+
+#Domain for your git server
+HOST=`hostname -d`
+
+#User to file the git repository under
+USER=`whoami`
+
+#Folder to store git directories
+LOCALSRC=`pwd`
+
+EOF
+fi
+
+. $CONFIGDIR/$CONFIGFILE
+
+help() {
+  cat << EOF
+usage: $0 options RepositoryName
+
+This script lists repositories under your username on a remote server.
+
+It assumes you use git for your remote username and store your bare git repositories under /home/git/. You may need to adjust that.
+
+OPTIONS:
+  -h  Show this message
+  -v  Output more information for debugging
+  -d  Show what commands this runs
+  -u  Only update repositories
+  -n  Only clone new repositories
+
+EOF
+}
+
+#Common array to store repositories in
+REPOS=( )
+
+list() {
+  if $VERBOSE; then
+    echo "User: $USER"
+    echo "Checking git@${HOST}:${USER}/"
+  fi
+
+  i=0
+  while read line
+  do
+    if $VERBOSE; then
+      echo "${i}: git@${HOST}:${line}"
+    fi
+    REPOS[$i]="git@""${HOST}:${line}"
+    (( i++ ))
+  done < <(ssh git@${HOST} find ${USER} -type d -name '*.git' | sort)
+
+}
+
+get() {
+  if $VERBOSE; then
+    echo "Cloning uncloned repositories into ${LOCALSRC}..."
+  fi
+
+  for i in "${REPOS[@]}"
+  do
+    CURRENT=${i#git@${HOST}:${USER}/}
+    if [ ! -d ${LOCALSRC}/${CURRENT%.git} ]; then
+      if $DRYRUN; then
+        echo "git clone $i ${LOCALSRC}/${CURRENT%.git}"
+      else
+        local RESULT=`git clone $i ${LOCALSRC}/${CURRENT%.git}`
+
+        if $VERBOSE; then
+          echo $RESULT
+        fi
+      fi
+    fi
+  done
+}
+
+update() {
+  if $VERBOSE; then
+    echo "Updating cloned repositories in ${LOCALSRC}..."
+  fi
+
+  for i in "${REPOS[@]}"
+  do
+    CURRENT=${i#git@${HOST}:${USER}/}
+    if [ -d ${LOCALSRC}/${CURRENT%.git} ]; then
+      if $VERBOSE; then
+        echo "Updating ${LOCALSRC}/${CURRENT%.git}"
+      fi
+      if $DRYRUN; then
+        echo "cd ${LOCALSRC}/${CURRENT%.git}"
+        echo "git pull"
+        echo "cd -"
+      else
+        cd ${LOCALSRC}/${CURRENT%.git}
+        local RESULT=`git pull`
+        cd -
+
+        if $VERBOSE; then
+          echo $RESULT;
+        fi
+      fi
+    fi
+  done
+}
+
+VERBOSE=false
+DRYRUN=false
+UPDATEONLY=false
+NEWONLY=false
+
+while getopts "hvdun" OPTION; do
+  case $OPTION in
+    h)
+      help
+      exit 0
+      ;;
+    v)
+      VERBOSE=true
+      ;;
+    d)
+      DRYRUN=true
+      ;;
+    u)
+      UPDATEONLY=true
+      ;;
+    n)
+      NEWONLY=true
+      ;;
+    ?)
+      help
+      exit 0
+      ;;
+  esac
+done
+
+shift $((OPTIND-1))
+
+if [[ -z $LOCALSRC ]]; then
+  LOCALSRC=`pwd`
+fi
+
+list
+if [ !$NEWONLY ]; then
+  get
+fi
+
+if [ !$UPDATEONLY ]; then
+  update
+fi

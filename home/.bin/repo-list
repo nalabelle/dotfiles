@@ -1,1 +1,78 @@
-/Users/nalabelle/.homesick/repos/binfiles/home/.bin/repo-list
+#!/bin/bash
+
+CONFIGDIR="$HOME/.config/nalabelle"
+CONFIGFILE="gitscripts.conf"
+
+if [ ! -f $CONFIGDIR/$CONFIGFILE ]; then
+  if [ ! -d $CONFIGDIR ]; then
+    mkdir -p $CONFIGDIR
+  fi
+  cat > $CONFIGDIR/$CONFIGFILE << EOF
+# Configuration for createrepo and listrepo
+
+#Domain for your git server
+HOST=`hostname -d`
+
+#User to file the git repository under
+USER=`whoami`
+
+#Folder to store git directories
+LOCALSRC=`pwd`
+
+EOF
+fi
+
+. $CONFIGDIR/$CONFIGFILE
+
+help() {
+  cat << EOF
+usage: $0 options
+
+This script lists repositories under your username on a remote server.
+
+It assumes you use git for your remote username and store your bare git repositories under /home/git/. You may need to adjust that.
+
+OPTIONS:
+  -h  Show this message
+  -v  Output more information for debugging
+
+EOF
+}
+
+list() {
+  if $VERBOSE; then
+    echo "User: $USER"
+    echo "Checking git@${HOST}:${USER}/"
+  fi
+
+  ssh git@${HOST} find ${USER} -type d -name '*.git' | sort | while read line; do echo "git@${HOST}:${line}"; done
+
+  if $VERBOSE; then
+    local SIZE=`ssh git@${HOST} du -h --max-depth=1 ${USER}/ | tail -n 1 | cut -f1`
+    local COUNT=`ssh git@${HOST} find ${USER} -type d -name '*.git' | wc -l`
+    echo "${SIZE} in ${COUNT} repositories"
+  fi
+
+}
+
+VERBOSE=false
+
+while getopts "hv" OPTION; do
+  case $OPTION in
+    h)
+      help
+      exit 0
+      ;;
+    v)
+      VERBOSE=true
+      ;;
+    ?)
+      help
+      exit 0
+      ;;
+  esac
+done
+
+shift $((OPTIND-1))
+
+list

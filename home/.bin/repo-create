@@ -1,1 +1,100 @@
-/Users/nalabelle/.homesick/repos/binfiles/home/.bin/repo-create
+#!/bin/bash
+
+CONFIGDIR="$HOME/.config/nalabelle"
+CONFIGFILE="gitscripts.conf"
+
+if [ ! -f $CONFIGDIR/$CONFIGFILE ]; then
+  if [ ! -d $CONFIGDIR ]; then
+    mkdir -p $CONFIGDIR
+  fi
+  cat > $CONFIGDIR/$CONFIGFILE << EOF
+# Configuration for createrepo and listrepo
+
+#Domain for your git server
+HOST=`hostname -d`
+
+#User to file the git repository under
+USER=`whoami`
+
+#Folder to store git directories
+LOCALSRC=`pwd`
+
+EOF
+fi
+
+. $CONFIGDIR/$CONFIGFILE
+
+help() {
+  cat << EOF
+usage: $0 options RepositoryName
+
+This script creates a repository under your username on a remote server.
+
+It assumes you use git for your remote username and store your bare git repositories under /home/git/. You may need to adjust that.
+
+OPTIONS:
+  -h  Show this message
+  -v  Output more information for debugging
+  -d  Show what commands this runs
+
+EOF
+}
+
+create() {
+  if $VERBOSE; then
+    echo "User: $USER"
+    echo "Creating git@${HOST}:/${USER}/${REPO}.git"
+  fi
+
+  #Create the Repository
+  if $DRYRUN; then
+    echo "ssh git@${HOST} "git init --bare ${USER}/${REPO}.git""
+  else
+    local RESULT=`ssh git@${HOST} "git init --bare ${USER}/${REPO}.git"`
+  fi
+
+  #Print the result?
+  if $VERBOSE; then
+    echo $RESULT
+  fi
+
+  #Output a repository url for usage
+  if ! $DRYRUN; then
+    LINE=`echo $RESULT | awk '{ print$6 }' | sed -e 's/\/home\/git\///' -e 's/\/$//'`
+    echo -e "Remote URL:\tgit@${HOST}:${LINE}"
+  fi
+}
+
+VERBOSE=false
+DRYRUN=false
+
+while getopts "hvd" OPTION; do
+  case $OPTION in
+    h)
+      help
+      exit 0
+      ;;
+    v)
+      VERBOSE=true
+      ;;
+    d)
+      DRYRUN=true
+      ;;
+    ?)
+      help
+      exit 0
+      ;;
+  esac
+done
+
+shift $((OPTIND-1))
+
+if [ -z $1 ]; then
+  echo "Please specify a repository name."
+  help
+  exit 0
+fi
+
+REPO=${1%/}
+
+create
