@@ -1,1 +1,22 @@
-/Users/nalabelle/.homesick/repos/binfiles/home/.bin/atamap
+#!/bin/bash
+# from http://serverfault.com/a/426561
+# note: inspired by Peter
+ls -l /sys/block/sd* \
+  \
+  | sed -e 's^.*-> \.\.^/sys^' \
+  -e 's^/host[0-9]\{1,2\}/target^ ^' \
+  -e 's^/[0-9]\{1,2\}\(:[0-9]\)\{3\}/block/^ ^' \
+  \
+  |  while read Path HostFull ID
+    do
+
+      # this nifty line will tokenize HostFull into named substrings ( = host numbers)
+      IFS=: read HostMain HostMid HostSub <<< "$HostFull"
+
+      if grep -q '/usb[0-9]*/' <<< $Path; then
+        echo "(Device $ID is not an ATA device, but a USB device [e. g. a pen drive])"
+      else
+        echo $ID: ata$(cat $Path/host$HostMain/scsi_host/host$HostMain/unique_id).$HostMid$HostSub
+      fi
+
+    done

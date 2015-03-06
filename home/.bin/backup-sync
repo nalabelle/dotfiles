@@ -1,1 +1,169 @@
-/Users/nalabelle/.homesick/repos/binfiles/home/.bin/backup-sync
+#!/bin/bash
+
+CONFIGDIR="$HOME/.config/nalabelle/backups"
+CONFIGNAME="default"
+CONFIGFILE="$CONFIGNAME.sync.conf.example"
+
+
+if [ ! -d $CONFIGDIR ]; then
+  mkdir -p $CONFIGDIR
+fi
+if [ ! -f $CONFIGDIR/$CONFIGFILE ]; then
+  cat > $CONFIGDIR/$CONFIGFILE << EOF
+# Example Backup Configuration
+
+## Date Format
+DATEFORMAT=\$(date '+%Y-%m-%d_%H%M%S')
+
+## Delete backups older than X days
+DAYSTOKEEP=20
+
+## Source information
+SOURCE=\$HOME
+EXCLUDES=\$CONFIGDIR/\$CONFIGNAME.sync/excludes
+INCLUDES=\$CONFIGDIR/\$CONFIGNAME.sync/includes
+
+## Destination information
+DESTINATION="user@host:/Backup/"
+
+EOF
+fi
+
+help() {
+  cat << EOF
+usage: $0 options config
+
+This script handles most of my lightweight backing up needs.
+
+It assumes a bunch of things. You probably shouldn't use it. Go away.
+
+OPTIONS:
+-h  Show this message
+-v  Output more information for debugging
+-d  Do a dry run to see what would be done
+-r  Don't output rsync dry run
+-p  If doing rsync, output progress
+
+Config file should be placed in the config directory. The extension will be automatically appended.
+
+EOF
+}
+
+buildstring() {
+  BUILDSTRING="rsync -arvz"
+
+  if [ -f $EXCLUDES ]; then
+    BUILDSTRING="$BUILDSTRING --exclude-from=$EXCLUDES"
+  fi
+
+  if [ -f $INCLUDES ]; then
+    BUILDSTRING="$BUILDSTRING --include-from=$INCLUDES"
+  fi
+
+  if $PROGRESS; then
+    BUILDSTRING="$BUILDSTRING --progress"
+  fi
+
+  ## maybe set these?
+  BUILDSTRING="$BUILDSTRING --delete-excluded"
+
+  if $DRYRUN; then
+    BUILDSTRING="$BUILDSTRING --dry-run"
+  fi
+
+  if ! $VERBOSE; then
+    BUILDSTRING="$BUILDSTRING -q"
+  fi
+
+  BUILDSTRING="$BUILDSTRING $SOURCE"
+  if [[ $DESTINATION != "" ]]; then
+    if $VERBOSE; then
+      echo "DESTINATION: $DESTINATION"
+    fi
+    if [[ ${DESTINATIONPATH} != "" ]]; then
+      echo "Invalid configuration file."
+      exit 1
+    fi
+    BUILDSTRING="$BUILDSTRING ${DESTINATION}"
+  else
+    echo "No destination specified."
+    exit 1
+  fi
+}
+
+dobackup() {
+  buildstring
+
+  if $DRYRUN; then
+    echo $BUILDSTRING
+    if ! $NORSYNC; then
+      eval $BUILDSTRING
+    fi
+  else
+    eval $BUILDSTRING
+  fi
+}
+
+VERBOSE=false
+DRYRUN=false
+PROGRESS=false
+NORSYNC=false
+
+while getopts "hvdpr" OPTION; do
+  case $OPTION in
+    h)
+      help
+      exit 0
+      ;;
+    v)
+      VERBOSE=true
+      ;;
+    d)
+      DRYRUN=true
+      ;;
+    p)
+      PROGRESS=true
+      ;;
+    r)
+      NORSYNC=true
+      ;;
+    ?)
+      help
+      exit 0
+      ;;
+  esac
+done
+
+shift $((OPTIND-1))
+
+if [ -z $1 ]; then
+  echo "Please specify a configuration file"
+  help
+  exit 0
+fi
+
+CONFIGNAME=${1}
+CONFIGFILE="$CONFIGNAME.sync.conf"
+
+#Defaults
+DATEFORMAT=$(date '+%Y-%m-%d_%H%M%S')
+
+DAYSTOKEEP=20
+
+SOURCE=$HOME
+EXCLUDES=$CONFIGDIR/$CONFIGNAME.sync/excludes
+INCLUDES=$CONFIGDIR/$CONFIGNAME.sync/includes
+
+DESTINATION="user@host:"
+
+if [ ! -f $CONFIGDIR/$CONFIGFILE ]; then
+  echo "Invalid configuration file"
+  help
+  exit 0
+fi
+
+. $CONFIGDIR/$CONFIGFILE
+
+dobackup
+
+exit 0
