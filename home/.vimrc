@@ -1,16 +1,15 @@
 set nocompatible    " vim not vi, it's good to be explicit
 filetype off        " required for vundle
+set title
 
 " Vundle Initialization
 " Must come early to allow setting options later
 " 2014-05-13: set rtp+=~/.vim/bundle/vundle/
 set rtp+=~/.vim/bundle/Vundle.vim
-" 2014-05-13: call vundle#rc()
 call vundle#begin()
 
 " Vundle the Vundle
-" required
-Plugin 'gmarik/Vundle.vim'
+Plugin 'VundleVim/Vundle.vim'
 
 " Other Repositories
 
@@ -19,7 +18,8 @@ Plugin 'xoria256.vim'
 
 " vim-airline
 " like powerline
-Plugin 'bling/vim-airline'
+Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
 
 " vim-bufferline
 " show the buffers in the statusline or commandbar
@@ -41,6 +41,12 @@ Plugin 'wlangstroth/vim-racket'
 
 " markdown
 Plugin 'tpope/vim-markdown'
+
+" session saving
+Plugin 'tpope/vim-obsession'
+
+" session helper
+Plugin 'dhruvasagar/vim-prosession'
 
 call vundle#end()
 
@@ -173,3 +179,19 @@ function! GitBlameCurrentLine()
     execute "!clear && git show $(git blame -w " . l:file . " -L " . l:lnum . "," . l:lnum . " | awk '{ print $1 }')"
 endf
 map \b :call GitBlameCurrentLine()<CR>
+
+" let tmux update titles based on session
+let g:prosession_tmux_title = 1
+let g:prosession_on_startup = 1
+let g:prosession_default_session = 1
+
+" easier split moving
+nnoremap <C-J> <C-W><C-J>
+nnoremap <C-K> <C-W><C-K>
+nnoremap <C-L> <C-W><C-L>
+nnoremap <C-H> <C-W><C-H>
+
+" open splits to right and bottom
+set splitbelow
+set splitright
+
