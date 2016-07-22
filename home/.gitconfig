@@ -8,3 +8,5 @@
 	ui = true
 [credential]
 	helper = osxkeychain
+[pull]
+	rebase = true

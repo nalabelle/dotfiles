@@ -165,3 +165,11 @@ if exists('+colorcolumn')
 else
   au BufWinEnter * let w:m2=matchadd('ErrorMsg', '\%>80v.\+', -1)
 endif
+
+" Git Blame
+function! GitBlameCurrentLine()
+    let l:file = expand('%')
+    let l:lnum = line(".")
+    execute "!clear && git show $(git blame -w " . l:file . " -L " . l:lnum . "," . l:lnum . " | awk '{ print $1 }')"
+endf
+map \b :call GitBlameCurrentLine()<CR>
