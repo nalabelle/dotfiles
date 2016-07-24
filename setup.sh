@@ -81,6 +81,11 @@ if [ ! -d $HOME/.vim/bundle/vundle ]; then
   git clone https://github.com/gmarik/vundle.git ~/.vim/bundle/vundle
 fi
 
+# Install TPM
+if [ ! -d $HOME/.tmux/plugins/tpm ]; then
+  git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+fi
+
 ### Link it all to $HOME ###
 echo "Force link all files?"
 select yn in "Yes" "No"; do
