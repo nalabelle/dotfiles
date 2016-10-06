@@ -39,14 +39,6 @@ if [ -d "$HOME/.local/bin" ]; then
 fi
 
 
-# MacPorts Installer addition on 2012-09-09_at_16:31:27: adding an appropriate PATH variable for use with MacPorts.
-# export PATH=/opt/local/bin:/opt/local/sbin:$PATH
-# Finished adapting your PATH environment variable for use with MacPorts.
-
-if [ -d "/opt/local/bin" ] && [ -d "/opt/local/sbin" ]; then
-    PATH=/opt/local/bin:/opt/local/sbin:$PATH
-fi
-
 # Environment Variables!
 
 # Node
@@ -77,3 +69,9 @@ export NVM_DIR="${HOME}/.nvm"
 
 #Let's use vim
 export EDITOR=vim
+
+# MacPorts Installer addition on 2012-09-09_at_16:31:27: adding an appropriate PATH variable for use with MacPorts.
+if [ -d "/opt/local/bin" ] && [ -d "/opt/local/sbin" ]; then
+    PATH=/opt/local/bin:/opt/local/sbin:$PATH
+fi
+

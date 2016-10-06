@@ -48,6 +48,9 @@ Plugin 'tpope/vim-obsession'
 " session helper
 Plugin 'dhruvasagar/vim-prosession'
 
+" auto set paste
+Plugin 'ConradIrwin/vim-bracketed-paste'
+
 call vundle#end()
 
 set noexrc          " don't use local config files
