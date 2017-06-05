@@ -16,6 +16,9 @@ Plugin 'VundleVim/Vundle.vim'
 " Themes
 Plugin 'xoria256.vim'
 
+" ctrl-p for finding files
+Plugin 'ctrlpvim/ctrlp.vim'
+
 " vim-airline
 " like powerline
 Plugin 'vim-airline/vim-airline'
@@ -46,7 +49,7 @@ Plugin 'tpope/vim-markdown'
 Plugin 'tpope/vim-obsession'
 
 " session helper
-Plugin 'dhruvasagar/vim-prosession'
+"Plugin 'dhruvasagar/vim-prosession'
 
 " auto set paste
 Plugin 'ConradIrwin/vim-bracketed-paste'
@@ -184,9 +187,7 @@ endf
 map \b :call GitBlameCurrentLine()<CR>
 
 " let tmux update titles based on session
-let g:prosession_tmux_title = 1
-let g:prosession_on_startup = 1
-let g:prosession_default_session = 1
+"let g:prosession_tmux_title = 1
 
 " easier split moving
 nnoremap <C-J> <C-W><C-J>
@@ -198,3 +199,6 @@ nnoremap <C-H> <C-W><C-H>
 set splitbelow
 set splitright
 
+" ctrlp bump file limits
+let g:ctrlp_max_files=0
+let g:ctrlp_max_depth=40
