@@ -1,6 +1,6 @@
 [user]
-	email = nalabelle@gmail.com
-	name = nalabelle
+  name = nalabelle
+  email = nalabelle@gmail.com
 [core]
 	editor = vim
   excludesfile = ~/.gitignore_global
@@ -14,3 +14,5 @@
 	default = simple
 [diff]
 	tool = vimdiff
+[include]
+  path = .gitconfig_local

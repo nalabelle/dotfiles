@@ -13,7 +13,6 @@
 # hopefully no other terminals identify themselves as gnome-terminal.
 if [ "$COLORTERM" == "gnome-terminal" ] && [ "$TERM" == "xterm" ]; then
   export TERM="$TERM-256color"
-  #export TERM="xterm-256color"
 fi
 
 # if running bash
