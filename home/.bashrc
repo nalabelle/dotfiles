@@ -137,3 +137,7 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
 
 HISTCONTROL=ignoreboth
+
+if [ -f ~/.bashrc_local ]; then
+  . ~/.bashrc_local
+fi
