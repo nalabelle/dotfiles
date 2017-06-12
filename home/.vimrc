@@ -42,6 +42,9 @@ Plugin 'nathanaelkane/vim-indent-guides'
 " racket support
 Plugin 'wlangstroth/vim-racket'
 
+" golang
+Plugin 'fatih/vim-go'
+
 " markdown
 Plugin 'tpope/vim-markdown'
 
@@ -53,6 +56,9 @@ Plugin 'tpope/vim-obsession'
 
 " auto set paste
 Plugin 'ConradIrwin/vim-bracketed-paste'
+
+" linting
+Plugin 'w0rp/ale'
 
 call vundle#end()
 
@@ -70,7 +76,8 @@ syntax on
 filetype plugin indent on
 
 " allow backspacing over autoindent, linebreaks, and start of insert
-set backspace=indent,eol,start
+" set backspace=indent,eol,start
+
 
 " make sure error bells stay off
 set noerrorbells
@@ -131,6 +138,9 @@ autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
 autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
 autocmd InsertLeave * match ExtraWhitespace /\s\+$/
 autocmd BufWinLeave * call clearmatches()
+set list
+set showbreak=↪\
+set listchars=tab:→…,trail:•,nbsp:⎵,extends:⟩,precedes:⟨
 
 " Make Vim recognize xterm escape sequences for Page and Arrow
 " keys, combined with any modifiers such as Shift, Control, and Alt.
