@@ -74,5 +74,7 @@ if [ -d "/opt/local/bin" ] && [ -d "/opt/local/sbin" ]; then
     PATH=/opt/local/bin:/opt/local/sbin:$PATH
 fi
 
-
-export PATH=$PATH:/home/$USER/go/bin
+# Go bin directory support
+if [ -d "${HOME}/go/bin" ]; then
+  export PATH=$PATH:${HOME}/go/bin
+fi
