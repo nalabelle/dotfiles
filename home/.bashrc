@@ -128,15 +128,21 @@ export EDITOR=vim
 source "$HOME/.homesick/repos/homeshick/homeshick.sh"
 source "$HOME/.homesick/repos/homeshick/completions/homeshick-completion.bash"
 
+# git autocomplete
 if [ -f ~/.git-completion.bash ]; then
   . ~/.git-completion.bash
 fi
+# known-hosts autocomplete
+complete -W "$(echo `cat ~/.ssh/known_hosts | cut -f 1 -d ' ' | \
+    sed -e s/,.*//g | uniq | grep -v "\["`;)" ssh
+
 homeshick --quiet refresh
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
 
 HISTCONTROL=ignoreboth
+
 
 if [ -f ~/.bashrc_local ]; then
   . ~/.bashrc_local
