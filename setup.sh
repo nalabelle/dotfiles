@@ -19,7 +19,7 @@ else
 fi
 
 if [ ! -d $HOME/.homesick/repos/dotfiles ]; then
-  homeshick clone git://github.com/nalabelle/dotfiles.git
+  homeshick clone git@github.com/nalabelle/dotfiles.git
 fi
 
 # Install Vundle
