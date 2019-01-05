@@ -1,14 +1,14 @@
-#!/bin/bash -e
-# Parts from the homeshick wiki, specifically
-# https://gist.github.com/andsens/2913223
+#!/bin/sh
+set -e
 
-# Paste this into ssh
-# curl -sL https://gist.github.com/andsens/2913223/raw/bootstrap_homeshick.sh | tar -xzO | /bin/bash -ex
-# When forking, you can get the URL from the raw (<>) button.
+VIM=$(which vim)
+TMUX=$(which tmux)
+GIT=$(which git)
 
-#./gnome-terminal.xoria256.sh
-
-#$aptget install -y tmux vim git
+if [ ! -f $VIM ] || [ ! -f $TMUX ] || [ ! -f $GIT ]; then
+  printf "You should install git, tmux, and vim."
+  exit 1
+fi
 
 ### Install homeshick ###
 if [ ! -d $HOME/.homesick/repos/homeshick ]; then
@@ -32,4 +32,7 @@ if [ ! -d $HOME/.tmux/plugins/tpm ]; then
   git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 fi
 
-echo "Completed"
+printf "Completed - Remember to install plugins:\n"
+printf "\tvim\tPluginInstall\n"
+printf "\ttmux\tprefix-I\n"
+
