@@ -55,7 +55,7 @@ Plugin 'tpope/vim-obsession'
 "Plugin 'dhruvasagar/vim-prosession'
 
 " auto set paste
-Plugin 'ConradIrwin/vim-bracketed-paste'
+" Plugin 'ConradIrwin/vim-bracketed-paste'
 
 " linting
 Plugin 'w0rp/ale'
