@@ -69,12 +69,10 @@ export NVM_DIR="${HOME}/.nvm"
 #Let's use vim
 export EDITOR=vim
 
-# MacPorts Installer addition on 2012-09-09_at_16:31:27: adding an appropriate PATH variable for use with MacPorts.
-if [ -d "/opt/local/bin" ] && [ -d "/opt/local/sbin" ]; then
-    PATH=/opt/local/bin:/opt/local/sbin:$PATH
-fi
-
 # Go bin directory support
+if [ -d "${HOME}/go" ]; then
+  export GOPATH=~/go
+fi
 if [ -d "${HOME}/go/bin" ]; then
   export PATH=$PATH:${HOME}/go/bin
 fi

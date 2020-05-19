@@ -67,6 +67,8 @@ esac
 
 #use vi mode instead of emacs
 set -o vi
+#remove escape lag
+export KEYTIMEOUT=1
 
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
