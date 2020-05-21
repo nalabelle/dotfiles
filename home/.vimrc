@@ -58,7 +58,7 @@ Plugin 'tpope/vim-obsession'
 " Plugin 'ConradIrwin/vim-bracketed-paste'
 
 " linting
-Plugin 'w0rp/ale'
+Plugin 'dense-analysis/ale'
 
 call vundle#end()
 
@@ -138,9 +138,13 @@ autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
 autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
 autocmd InsertLeave * match ExtraWhitespace /\s\+$/
 autocmd BufWinLeave * call clearmatches()
+
+" set EOL chars to almost blend in
+highlight NonText ctermfg=237
+set number
 set list
 set showbreak=↪\
-set listchars=tab:→…,trail:•,nbsp:⎵,extends:⟩,precedes:⟨
+set listchars=tab:→…,trail:•,nbsp:⎵,extends:⟩,precedes:⟨,eol:¶
 
 " Make Vim recognize xterm escape sequences for Page and Arrow
 " keys, combined with any modifiers such as Shift, Control, and Alt.
@@ -195,9 +199,6 @@ function! GitBlameCurrentLine()
     execute "!clear && git show $(git blame -w " . l:file . " -L " . l:lnum . "," . l:lnum . " | awk '{ print $1 }')"
 endf
 map \b :call GitBlameCurrentLine()<CR>
-
-" let tmux update titles based on session
-"let g:prosession_tmux_title = 1
 
 " easier split moving
 nnoremap <C-J> <C-W><C-J>
