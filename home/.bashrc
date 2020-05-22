@@ -116,19 +116,23 @@ if ! shopt -oq posix; then
   fi
 fi
 
-source "$HOME/.homesick/repos/homeshick/homeshick.sh"
-source "$HOME/.homesick/repos/homeshick/completions/homeshick-completion.bash"
-homeshick --quiet refresh
-
 # git autocomplete
 if [ -f ~/.git-completion.bash ]; then
   . ~/.git-completion.bash
 fi
+
+
+if [ -d "$HOME/.homesick" ]; then
+  source "$HOME/.homesick/repos/homeshick/homeshick.sh"
+  source "$HOME/.homesick/repos/homeshick/completions/homeshick-completion.bash"
+  homeshick --quiet refresh
+fi
+
 # known-hosts autocomplete
 complete -W "$(echo `cat ~/.ssh/known_hosts | cut -f 1 -d ' ' | \
     sed -e s/,.*//g | uniq | grep -v "\["`;)" ssh
 
 
-if [ -f ~/.bashrc_local ]; then
-  . ~/.bashrc_local
+if [ -f ~/.local/bashrc ]; then
+  . ~/.local/bashrc
 fi
