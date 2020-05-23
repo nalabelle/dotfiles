@@ -1,11 +1,13 @@
 $include /etc/inputrc
+set editing-mode vi
 set show-mode-in-prompt on
-$if term=linux
-  set vi-ins-mode-string \1\e[?0c\2
-  set vi-cmd-mode-string \1\e[?8c\2
+
+$if Bash
+  set vi-ins-mode-string \1\e[6 q\e[38;5;14m+\e[0m\2
+  set vi-cmd-mode-string \1\e[2 q\e[38;5;13m!\e[0m\2
 $else
-  set vi-ins-mode-string \1\e[6 q\2
-  set vi-cmd-mode-string \1\e[2 q\2
+  set vi-ins-mode-string \1\e[2 q\e[0m\2
+  set vi-cmd-mode-string \1\e[6 q\e[0m\2
 $endif
 
 # Color files by types
@@ -14,7 +16,15 @@ set colored-stats On
 set visible-stats On
 # Mark symlinked directories
 set mark-symlinked-directories On
+
 # Color the common prefix
 set colored-completion-prefix On
+# show completions on first tab
+set show-all-if-ambiguous On
+# turn off case sensitivity for completion
+set completion-ignore-case On
 # Color the common prefix in menu-complete
 set menu-complete-display-prefix On
+
+# don't turn ~ into a path
+set expand-tilde off
