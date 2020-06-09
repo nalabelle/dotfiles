@@ -206,6 +206,9 @@ nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
 
+" hide and show numbers/non-printing chars
+nnoremap <Leader>n :set number! <bar> set list!<CR>
+
 " open splits to right and bottom
 set splitbelow
 set splitright
