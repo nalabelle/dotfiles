@@ -5,8 +5,8 @@ if [ -z "$debian_chroot" ] && [ -r /etc/debian_chroot ]; then
 fi
 
 profile_paths=(
-  $HOME/.bin
-  $HOME/.local/bin
+  "$HOME/.bin"
+  "$HOME/.local/bin"
   #osx: homebrew mysql-client
   /usr/local/opt/mysql-client/bin
 )
@@ -21,7 +21,7 @@ function add_to_path {
 }
 
 for path in "${profile_paths[@]}"; do
-  add_to_path $path
+  add_to_path "$path"
 done
 export PATH=$PATH
 

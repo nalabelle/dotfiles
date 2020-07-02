@@ -56,6 +56,14 @@ Plugin 'tpope/vim-obsession'
 
 " auto set paste
 " Plugin 'ConradIrwin/vim-bracketed-paste'
+"
+"" Make Vim recognize xterm escape sequences for Page and Arrow
+" keys, combined with any modifiers such as Shift, Control, and Alt.
+" See http://unix.stackexchange.com/questions/29907/how-to-get-vim-to-work-with-tmux-properly
+  " Page keys http://sourceforge.net/p/tmux/tmux-code/ci/master/tree/FAQ
+  " Arrow keys http://unix.stackexchange.com/a/34723
+"
+Plugin 'nacitar/terminalkeys.vim'
 
 " linting
 Plugin 'dense-analysis/ale'
@@ -124,13 +132,6 @@ set softtabstop=2   " number of spaces that tab counts for when editing
 set tabstop=2       " number of spaces that tab counts for in a file
 
 " https://raw.github.com/sdball/dotfiles/master/vim/vimrc
-" blocks arrow keys for forced learning
-map <Left> :echo "NOPE! Use h"<cr>
-map <Right> :echo "NOPE! Use l"<cr>
-map <Up> :echo "NOPE! Use k"<cr>
-map <Down> :echo "NOPE! Use j"<cr>
-
-" https://raw.github.com/sdball/dotfiles/master/vim/vimrc
 " highlight trailing whitespace
 highlight ExtraWhitespace ctermbg=red guibg=red
 match ExtraWhitespace /\s\+$/
@@ -141,25 +142,14 @@ autocmd BufWinLeave * call clearmatches()
 
 " set EOL chars to almost blend in
 highlight NonText ctermfg=237
+
+" set ColorColumns to _near_ bg
+highlight ColorColumn ctermbg=233
+
 set number
 set list
 set showbreak=↪\
 set listchars=tab:→…,trail:•,nbsp:⎵,extends:⟩,precedes:⟨,eol:¶
-
-" Make Vim recognize xterm escape sequences for Page and Arrow
-" keys, combined with any modifiers such as Shift, Control, and Alt.
-" See http://unix.stackexchange.com/questions/29907/how-to-get-vim-to-work-with-tmux-properly
-if &term =~ '^screen'
-  " Page keys http://sourceforge.net/p/tmux/tmux-code/ci/master/tree/FAQ
-  execute "set t_kP=\e[5;*~"
-  execute "set t_kN=\e[6;*~"
-
-  " Arrow keys http://unix.stackexchange.com/a/34723
-  execute "set <xUp>=\e[1;*A"
-  execute "set <xDown>=\e[1;*B"
-  execute "set <xRight>=\e[1;*C"
-  execute "set <xLeft>=\e[1;*D"
-endif
 
 " Always display status line
 set laststatus=2
@@ -186,11 +176,14 @@ endif
 let indent_guides_enable_on_vim_startup = 1
 
 " Warn me when I'm over 80 cols
-if exists('+colorcolumn')
-  set colorcolumn=80
-else
-  au BufWinEnter * let w:m2=matchadd('ErrorMsg', '\%>80v.\+', -1)
-endif
+function! SetColorColumns()
+  if &colorcolumn
+    set colorcolumn=
+  else
+    set colorcolumn=80,100
+  endif
+endf
+call SetColorColumns()
 
 " Git Blame
 function! GitBlameCurrentLine()
@@ -198,7 +191,20 @@ function! GitBlameCurrentLine()
     let l:lnum = line(".")
     execute "!clear && git show $(git blame -w " . l:file . " -L " . l:lnum . "," . l:lnum . " | awk '{ print $1 }')"
 endf
-map \b :call GitBlameCurrentLine()<CR>
+
+function! ToggleFormatting()
+  set number!
+  set list!
+  call SetColorColumns()
+endf
+
+
+" https://raw.github.com/sdball/dotfiles/master/vim/vimrc
+" blocks arrow keys for forced learning
+map <Left> :echo "NOPE! Use h"<cr>
+map <Right> :echo "NOPE! Use l"<cr>
+map <Up> :echo "NOPE! Use k"<cr>
+map <Down> :echo "NOPE! Use j"<cr>
 
 " easier split moving
 nnoremap <C-J> <C-W><C-J>
@@ -207,7 +213,16 @@ nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
 
 " hide and show numbers/non-printing chars
-nnoremap <Leader>n :set number! <bar> set list!<CR>
+map <Leader>n :call ToggleFormatting()<CR>
+" enter and exit print mod
+map <Leader>p :set paste!<CR>
+" remove whitespace at end of lines
+function! TrimWhitespace()
+  %s/\s\+$//
+endf
+command! TrimWhitespace call TrimWhitespace()
+
+map <Leader>b :call GitBlameCurrentLine()<CR>
 
 " open splits to right and bottom
 set splitbelow
@@ -216,7 +231,6 @@ set splitright
 " ctrlp bump file limits
 let g:ctrlp_max_files=0
 let g:ctrlp_max_depth=40
-
 
 "Cursor settings:
 
@@ -234,4 +248,5 @@ let &t_SR ="\e[4 q" "SR = REPLACE mode
 let &t_EI ="\e[2 q" "EI = NORMAL mode (ELSE)
 "set t_RB= t_RF= t_RV= t_u7=
 au VimEnter * silent !echo -e "\e[2 q"
+
 
