@@ -3,8 +3,8 @@ set editing-mode vi
 set show-mode-in-prompt on
 
 $if Bash
-  set vi-ins-mode-string \1\e[6 q\e[38;5;14m+\e[0m\2
-  set vi-cmd-mode-string \1\e[2 q\e[38;5;13m!\e[0m\2
+  set vi-ins-mode-string \1\e[6 q\e[38;5;14m\2+\1\e[0m\2
+  set vi-cmd-mode-string \1\e[2 q\e[38;5;13m\2!\1\e[0m\2
 $else
   set vi-ins-mode-string \1\e[2 q\e[0m\2
   set vi-cmd-mode-string \1\e[6 q\e[0m\2
