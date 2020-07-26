@@ -1,12 +1,38 @@
 set nocompatible    " vim not vi, it's good to be explicit
+if has("multi_byte")
+  if &termencoding == ""
+    let &termencoding = &encoding
+  endif
+
+  if exists("+printencoding") && (&printencoding == "")
+    let &printencoding = &encoding
+  endif
+
+  set fileencodings-=ucs-bom
+  set fileencodings-=utf-8
+  if(&fileencodings == "") && (&encoding != "utf-8")
+    let &fileencodings = &encoding
+  endif
+  set fileencodings^=ucs-bom,utf-8
+
+  set encoding=utf-8
+  setglobal fileencoding=utf-8
+else
+  echoerr "no unicode!"
+endif
 filetype off        " required for vundle
 set title
 
-" Vundle Initialization
-" Must come early to allow setting options later
-" 2014-05-13: set rtp+=~/.vim/bundle/vundle/
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
+" make windows path operators reasonable
+if has("win32")
+  set shellslash
+  set rtp+=~/scoop/apps/vim/current/vimfiles/bundle/Vundle.vim
+  call vundle#begin('~/scoop/apps/vim/current/vimfiles/bundle/')
+else
+  set rtp+=~/.vim/bundle/Vundle.vim
+  call vundle#begin()
+endif
+
 
 " Vundle the Vundle
 Plugin 'VundleVim/Vundle.vim'
@@ -70,6 +96,7 @@ Plugin 'dense-analysis/ale'
 
 call vundle#end()
 
+
 set noexrc          " don't use local config files
 set cpoptions=Be    " magic?
 
@@ -84,7 +111,7 @@ syntax on
 filetype plugin indent on
 
 " allow backspacing over autoindent, linebreaks, and start of insert
-" set backspace=indent,eol,start
+set backspace=indent,eol,start
 
 
 " make sure error bells stay off
@@ -95,13 +122,13 @@ set novisualbell
 if isdirectory($HOME . '/.vim/swap') == 0
   :silent !mkdir -p ~/.vim/swap >/dev/null 2>&1
 endif
-set directory=~/.vim/swap
+set directory=~/.vim/swap,$TEMP
 
 " stop littering backup everywhere
 if isdirectory($HOME . '/.vim/backup') == 0
   :silent !mkdir -p ~/.vim/backup >/dev/null 2>&1
 endif
-set backupdir=~/.vim/backup
+set backupdir=~/.vim/backup,$TEMP
 set backup          " make a backup file before overwriting, leave it after it's written
 
 " stop littering undo everywhere
@@ -109,7 +136,7 @@ if exists("+undofile") " 7.3+
   if isdirectory($HOME . '/.vim/undo') == 0
     :silent !mkdir -p ~/.vim/undo > /dev/null 2>&1
   endif
-  set undodir=~/.vim/undo
+  set undodir=~/.vim/undo,$TEMP
   set undofile
 endif
 
@@ -141,15 +168,15 @@ autocmd InsertLeave * match ExtraWhitespace /\s\+$/
 autocmd BufWinLeave * call clearmatches()
 
 " set EOL chars to almost blend in
-highlight NonText ctermfg=237
+highlight NonText ctermfg=237 guifg=#3a3a3a
 
 " set ColorColumns to _near_ bg
-highlight ColorColumn ctermbg=233
+highlight ColorColumn ctermbg=233 guibg=#121212
 
 set number
 set list
-set showbreak=↪\
-set listchars=tab:→…,trail:•,nbsp:⎵,extends:⟩,precedes:⟨,eol:¶
+set showbreak=↪️
+set listchars=tab:→…,trail:•,nbsp:␣,extends:⟩,precedes:⟨,eol:¶
 
 " Always display status line
 set laststatus=2
@@ -249,4 +276,28 @@ let &t_EI ="\e[2 q" "EI = NORMAL mode (ELSE)
 "set t_RB= t_RF= t_RV= t_u7=
 au VimEnter * silent !echo -e "\e[2 q"
 
+if has('gui_running')
+  " Make shift-insert work like in Xterm
+  map <S-Insert> <MiddleMouse>
+  map! <S-Insert> <MiddleMouse>
+
+  " Only do this for Vim version 5.0 and later.
+  if version >= 500
+
+    " Switch on syntax highlighting if it wasn't on yet.
+    if !exists("syntax_on")
+      syntax on
+    endif
+
+    " For Win32 version, have "K" lookup the keyword in a help file
+    "if has("win32")
+    "  let winhelpfile='windows.hlp'
+    "  map K :execute "!start winhlp32 -k <cword> " . winhelpfile <CR>
+    "endif
+
+    "set enc=utf-8
+    set guifont=Fira_Code_Retina:h11:cDEFAULT:qCLEARTYPE
+
+  endif
+endif
 
