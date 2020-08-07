@@ -35,6 +35,8 @@ if [ -d "$PERLBREW_ROOT" ]; then
   fi
 fi
 
+export PYTHONPYCACHEPREFIX="$HOME/.cache/pycache"
+
 # If not running interactively, bail here
 if [ -z "$PS1" ]; then
   if [ -f ~/.local/bashrc ]; then
