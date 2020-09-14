@@ -1,0 +1,137 @@
+{
+    "rules": [
+        {
+            "description": "Escape -> Grave/Tilde, Caps -> Escape",
+            "manipulators": [
+                {
+                    "from": {
+                        "key_code": "escape",
+                        "modifiers": {
+                            "optional": [
+                                "any"
+                            ]
+                        }
+                    },
+                    "to": [
+                        {
+                            "key_code": "grave_accent_and_tilde"
+                        }
+                    ],
+                    "type": "basic"
+                },
+                {
+                    "from": {
+                        "key_code": "caps_lock",
+                        "modifiers": {
+                            "optional": [
+                                "any"
+                            ]
+                        }
+                    },
+                    "to": [
+                        {
+                            "key_code": "escape"
+                        }
+                    ],
+                    "type": "basic"
+                }
+            ]
+        },
+        {
+            "description": "CMD <-> CTRL",
+            "manipulators": [
+                {
+                    "from": {
+                        "key_code": "left_command",
+                        "modifiers": {
+                            "optional": [
+                                "any"
+                            ]
+                        }
+                    },
+                    "to": [
+                        {
+                            "key_code": "left_control"
+                        }
+                    ],
+                    "type": "basic",
+                    "conditions": [
+                      {
+                        "type": "frontmost_application_unless",
+                        "bundle_identifiers": [
+                          "^com\\.apple\\.Terminal$",
+                          "^com\\.googlecode\\.iterm2$",
+                          "^co\\.zeit\\.hyperterm$",
+                          "^co\\.zeit\\.hyper$",
+                          "^io\\.alacritty$",
+                          "^net\\.kovidgoyal\\.kitty$"
+                        ]
+                      }
+                    ]
+                },
+                {
+                    "from": {
+                        "key_code": "left_control",
+                        "modifiers": {
+                            "optional": [
+                                "any"
+                            ]
+                        }
+                    },
+                    "to": [
+                        {
+                            "key_code": "left_command"
+                        }
+                    ],
+                    "type": "basic",
+                    "conditions": [
+                      {
+                        "type": "frontmost_application_unless",
+                        "bundle_identifiers": [
+                          "^com\\.apple\\.Terminal$",
+                          "^com\\.googlecode\\.iterm2$",
+                          "^co\\.zeit\\.hyperterm$",
+                          "^co\\.zeit\\.hyper$",
+                          "^io\\.alacritty$",
+                          "^net\\.kovidgoyal\\.kitty$"
+                        ]
+                      }
+                    ]
+                },
+                {
+                    "from": {
+                        "key_code": "left_control",
+                        "modifiers": {
+                            "mandatory": [
+                                "left_shift"
+                            ],
+                            "optional": [
+                              "any"
+                            ]
+                        }
+                    },
+                    "to": [
+                        {
+                            "key_code": "left_command"
+                        }
+                    ],
+                    "type": "basic",
+                    "conditions": [
+                      {
+                        "type": "frontmost_application_if",
+                        "bundle_identifiers": [
+                          "^com\\.apple\\.Terminal$",
+                          "^com\\.googlecode\\.iterm2$",
+                          "^co\\.zeit\\.hyperterm$",
+                          "^co\\.zeit\\.hyper$",
+                          "^io\\.alacritty$",
+                          "^net\\.kovidgoyal\\.kitty$"
+                        ]
+                      }
+                    ]
+                }
+            ]
+        }
+    ],
+    "title": "K6"
+}
