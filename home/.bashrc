@@ -1,50 +1,74 @@
 # ~/.bashrc: executed by bash(1) for non-login shells.
-# set variable identifying the chroot you work in (used in the prompt below)
-if [ -z "$debian_chroot" ] && [ -r /etc/debian_chroot ]; then
-  debian_chroot=$(cat /etc/debian_chroot)
-fi
 
-profile_paths=(
+ADDITIONAL_PATHS=(
   "$HOME/.bin"
   "$HOME/.local/bin"
   #osx: homebrew mysql-client
   /usr/local/opt/mysql-client/bin
 )
-trap "unset profile_paths" EXIT
 
-function add_to_path {
-  l_path="$1"
-  if [ -d "$l_path" ]; then
-    PATH="$l_path:$PATH"
-  fi
-  unset l_path
+BASH_COMPLETION=(
+  /etc/bash_completion
+  /usr/share/bash-completion/bash_completion
+  /usr/local/etc/profile.d/bash_completion.sh
+  /usr/local/etc/bash_completion.d
+  "$HOME/.git-completion.bash"
+)
+
+ADDITIONAL_SCRIPTS=(
+  #osx: homebrew asdf
+  # maybe move to something using `brew --prefix`?
+  /usr/local/opt/asdf/asdf.sh
+)
+
+function _path {
+  local paths=("$@")
+  for l_path in "${paths[@]}"; do
+    if [ -d "$l_path" ]; then
+      if [[ ! $PATH == *"$l_path"* ]]; then
+        PATH="$l_path:$PATH"
+      fi
+    fi
+  done
+  export PATH=$PATH
 }
 
-for path in "${profile_paths[@]}"; do
-  add_to_path "$path"
-done
-export PATH=$PATH
+function _source {
+  local paths=("$@")
+  for l_path in "${paths[@]}"; do
+    if [ -d "$l_path" ]; then
+      _source "$l_path/*"
+    elif [ -r "$l_path" ]; then
+      # shellcheck disable=SC1090
+      . "$l_path"
+    fi
+  done
+  local l_path="$1"
+}
+
+_path "${ADDITIONAL_PATHS[@]}"
+_source "${BASH_COMPLETION[@]}"
+_source "${ADDITIONAL_SCRIPTS[@]}"
+
+if [ -d "$HOME/.homesick" ]; then
+  _source "$HOME/.homesick/repos/homeshick/homeshick.sh"
+  _source "$HOME/.homesick/repos/homeshick/completions/homeshick-completion.bash"
+  homeshick --quiet refresh
+fi
 
 export GOPATH="$HOME/go"
-add_to_path "${GOPATH}/bin"
+_path "${GOPATH}/bin"
 
 export PERLBREW_ROOT="$HOME/.perlbrew"
-if [ -d "$PERLBREW_ROOT" ]; then
-  if [ -s "$PERLBREW_ROOT/etc/bashrc" ]; then
-    source "$PERLBREW_ROOT/etc/bashrc"
-  fi
-fi
+_source "$PERLBREW_ROOT/etc/bashrc"
 
 export PYTHONPYCACHEPREFIX="$HOME/.cache/pycache"
 
 # If not running interactively, bail here
 if [ -z "$PS1" ]; then
-  if [ -f ~/.local/bashrc ]; then
-    . ~/.local/bashrc
-  fi
+  _source "$HOME/.local/bashrc"
   return
 fi
-
 
 # don't put duplicate lines in the history. See bash(1) for more options
 # don't overwrite GNU Midnight Commander's setting of `ignorespace'.
@@ -84,6 +108,11 @@ if [ -z "$color_prompt" ]; then
   fi
 fi
 
+# set variable identifying the chroot you work in (used in the prompt below)
+if [ -z "$debian_chroot" ] && [ -r /etc/debian_chroot ]; then
+  debian_chroot=$(cat /etc/debian_chroot)
+fi
+
 if [ "$color_prompt" = yes ]; then
   # enable color support of ls and also add handy aliases
   if [ -x /usr/bin/dircolors ]; then
@@ -121,45 +150,11 @@ man() {
       man "$@"
 }
 
-# Alias definitions.
-# You may want to put all your additions into a separate file like
-# ~/.bash_aliases, instead of adding them here directly.
-# See /usr/share/doc/bash-doc/examples in the bash-doc package.
-
-if [ -f ~/.bash_aliases ]; then
-    . ~/.bash_aliases
-fi
-
-# enable programmable completion features (you don't need to enable
-# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
-# sources /etc/bash.bashrc).
-if ! shopt -oq posix; then
-  if [ -f /usr/share/bash-completion/bash_completion ]; then
-    . /usr/share/bash-completion/bash_completion
-  elif [ -f /etc/bash_completion ]; then
-    . /etc/bash_completion
-  elif [ -r "/usr/local/etc/profile.d/bash_completion.sh" ]; then
-    . "/usr/local/etc/profile.d/bash_completion.sh"
-  fi
-fi
-
-# git autocomplete
-if [ -f ~/.git-completion.bash ]; then
-  . ~/.git-completion.bash
-fi
-
-
-if [ -d "$HOME/.homesick" ]; then
-  source "$HOME/.homesick/repos/homeshick/homeshick.sh"
-  source "$HOME/.homesick/repos/homeshick/completions/homeshick-completion.bash"
-  homeshick --quiet refresh
-fi
-
 # known-hosts autocomplete
 complete -W "$(echo `cat ~/.ssh/known_hosts | cut -f 1 -d ' ' | \
     sed -e s/,.*//g | uniq | grep -v "\["`;)" ssh
 
+_source "$HOME/.local/bashrc"
 
-if [ -f ~/.local/bashrc ]; then
-  . ~/.local/bashrc
-fi
+unset ADDITIONAL_PATHS
+unset BASH_COMPLETION
