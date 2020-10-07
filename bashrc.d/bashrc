@@ -28,6 +28,7 @@ if [ -d "$HOME/.homesick" ]; then
   _source "$HOME/.homesick/repos/homeshick/homeshick.sh"
   _source "$HOME/.homesick/repos/homeshick/completions/homeshick-completion.bash"
   homeshick --quiet refresh
+  alias dotf="homeshick cd dotfiles"
 fi
 
 export GOPATH="$HOME/go"
@@ -92,16 +93,16 @@ if [ "$color_prompt" = yes ]; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
     alias ls='ls --color=auto'
     alias grep='grep --color=auto'
-    #alias dir='dir --color=auto'
-    #alias vdir='vdir --color=auto'
-    #alias fgrep='fgrep --color=auto'
-    #alias egrep='egrep --color=auto'
   fi
 
   # enable color support of ls for OSX
   if [[ "$OSTYPE" == "darwin"* || "$OSTYPE" == "freebsd"* ]]; then
     alias ls='ls -G'
     alias grep='grep --color=auto'
+  fi
+
+  if diff --help | grep '\-\-color' > /dev/null || false; then
+    alias diff='diff --color'
   fi
 
   PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
