@@ -5,11 +5,9 @@ BASHRCD=(
   "$HOME/.bashrc_local"
 )
 
-function get_dotfiles_path() {
-  MY_PATH=$(dirname "${BASH_SOURCE[0]}")
-  DOTFILES_PATH=$(realpath "$MY_PATH")
-  echo "$DOTFILES_PATH"
-}
+
+DOTFILES_PATH=$(realpath "$(dirname "$(realpath "${BASH_SOURCE[0]}")")/..")
+export DOTFILES_PATH
 
 function _path {
   local paths=("$@")
