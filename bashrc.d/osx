@@ -1,0 +1,33 @@
+#!/bin/bash
+
+if [[ "$OSTYPE" != "darwin"* ]]; then
+  return
+fi
+
+
+function brew() {
+  local arg=("$@")
+  local cmd=$1
+  local dotfile_list="$DOTFILES_PATH/osx/brew"
+
+  if [ ! -f "$dotfile_list" ]; then
+    return
+  fi
+
+  command brew "${arg[@]}"
+
+  retval=$?
+  if [ "$retval" -ne 0 ]; then
+    return
+  fi
+
+  case $cmd in
+    install | uninstall | update | upgrade)
+      echo "logging changes to $dotfile_list"
+      command brew list -1 > "$dotfile_list"
+      ;;
+    *)
+      ;;
+  esac
+}
+
