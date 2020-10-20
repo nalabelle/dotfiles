@@ -1,0 +1,10 @@
+#!/bin/bash
+
+function git_branch() {
+  local branch
+  branch="$(git symbolic-ref --short HEAD 2>/dev/null)"
+  if [ -n "$branch" ]; then
+    echo "$branch";
+  fi
+
+}
