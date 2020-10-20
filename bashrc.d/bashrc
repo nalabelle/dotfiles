@@ -11,6 +11,7 @@ BASH_COMPLETION=(
   /usr/share/bash-completion/bash_completion
   /usr/local/etc/profile.d/bash_completion.sh
   /usr/local/etc/bash_completion.d
+  "$HOME/.bash-completion"
   "$HOME/.git-completion.bash"
 )
 
@@ -123,6 +124,18 @@ man() {
       LESS_TERMCAP_ue=$(printf "\e[0m") \
       LESS_TERMCAP_us=$(printf "\e[1;32m") \
       man "$@"
+}
+
+docker-pause-all() {
+  local containers
+  mapfile -t containers < <(docker ps -aq)
+  docker pause "${containers[@]}"
+}
+
+docker-resume-all() {
+  local containers
+  mapfile -t containers < <(docker ps -aq)
+  docker unpause "${containers[@]}"
 }
 
 # known-hosts autocomplete

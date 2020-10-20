@@ -29,6 +29,7 @@ libtool
 libunistring
 libyaml
 lmdb
+mkcert
 mpfr
 mysql
 mysql-client
