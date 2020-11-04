@@ -1,0 +1,111 @@
+#!/bin/bash
+set -e
+
+PERL_VERSION="5.32.0"
+PERL_VERSION_FILENAME=".perl-version"
+PROJECT_PATH="."
+PERL_VERSION_FILE="$PROJECT_PATH/$PERL_VERSION_FILENAME"
+PROJECT_ROOT=$(git rev-parse --show-toplevel)
+
+if [ -z "$PROJECT_ROOT" ]; then
+  echo "This app uses a git directory to track the top level of your project";
+  exit 1;
+fi
+
+function _help() {
+  cat << ENDHELP
+Helps manage perlbrew lib directories.
+
+perl-env init
+  Sets up the current directory with a "$PERL_VERSION_FILENAME" file, maps the current
+  path to an app name, and creates a perlbrew lib setup for it, and then enters
+  the perlbrew env
+
+perl-env env
+  Reads the "$PERL_VERSION_FILENAME" file, and enters the perlbrew env. Operates in a
+  subshell. Type "exit" to end the subshell.
+
+perl-env reset
+  Deletes the perlbrew lib and then re-creates it. Use this to reset your library path.
+
+ENDHELP
+}
+
+function _perl_version() {
+  cat "$PERL_VERSION_FILE"
+}
+
+function _app_name() {
+  local app_path
+  local app_name
+  app_path=$(realpath --relative-to="$PROJECT_ROOT" "$PROJECT_PATH")
+  app_name=$(sed 's/\//--/;s/_/-/;' <<<"$app_path")
+  echo "$app_name"
+}
+
+function _perllib() {
+  if [ ! -f "$PERL_VERSION_FILE" ]; then
+    echo "Path not initialized";
+    exit 1;
+  fi
+
+  local name
+  local version
+  name=$(_app_name)
+  version=$(_perl_version)
+  echo "$version@$name"
+}
+
+function _init() {
+  if [ -f "$PERL_VERSION_FILE" ]; then
+    echo "Path already initialized";
+    exit 1;
+  fi
+  echo "$PERL_VERSION" > "$PERL_VERSION_FILE"
+}
+
+function _create() {
+  perlbrew lib create "$(_perllib)"
+}
+
+function _env() {
+  export PROMPT_COMMAND='export PS1="(${PERLBREW_PERL}@${PERLBREW_LIB}) ${PS1:-}"; unset PROMPT_COMMAND;'
+  perlbrew use "$(_perllib)"
+}
+
+function _delete() {
+  perlbrew lib delete "$(_perllib)"
+}
+
+COMMAND="$1"
+case "$COMMAND" in
+  "init" )
+    _init
+    _create
+    _env
+    ;;
+  "create" )
+    _create
+    ;;
+  "reset" )
+    _delete
+    _create
+    _env
+    ;;
+  "delete" )
+    _delete
+    ;;
+  "env" )
+    _env
+    ;;
+  "" )
+    _env
+    ;;
+  "help" )
+    _help
+    ;;
+  * )
+    _help
+    ;;
+esac
+
