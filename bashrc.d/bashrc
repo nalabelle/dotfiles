@@ -12,6 +12,7 @@ BASH_COMPLETION=(
   /usr/local/etc/profile.d/bash_completion.sh
   /usr/local/etc/bash_completion.d
   "$HOME/.bash-completion"
+  "$HOME/.bash-completion.d"
   "$HOME/.git-completion.bash"
 )
 
