@@ -2,6 +2,7 @@
 
 ADDITIONAL_PATHS=(
   "$HOME/.bin"
+  "$HOME/.local/bin"
   #osx: homebrew mysql-client
   /usr/local/opt/mysql-client/bin
 )
