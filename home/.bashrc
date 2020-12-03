@@ -1,4 +1,5 @@
 # ~/.bashrc: executed by bash(1) for non-login shells.
+set -uo pipefail
 
 BASHRCD=(
   "$HOME/.bashrc.d"
@@ -37,3 +38,5 @@ function _source {
 
 _source "${BASHRCD[@]}"
 unset BASHRCD
+
+set +uo pipefail

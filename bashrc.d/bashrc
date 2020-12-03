@@ -1,4 +1,4 @@
-# ~/.bashrc: executed by bash(1) for non-login shells.
+#!/bin/bash
 
 ADDITIONAL_PATHS=(
   "$HOME/.bin"
@@ -27,13 +27,6 @@ _path "${ADDITIONAL_PATHS[@]}"
 _source "${BASH_COMPLETION[@]}"
 _source "${ADDITIONAL_SCRIPTS[@]}"
 
-if [ -d "$HOME/.homesick" ]; then
-  _source "$HOME/.homesick/repos/homeshick/homeshick.sh"
-  _source "$HOME/.homesick/repos/homeshick/completions/homeshick-completion.bash"
-  homeshick --quiet refresh
-  alias dotf="homeshick cd dotfiles"
-fi
-
 export GOPATH="$HOME/go"
 _path "${GOPATH}/bin"
 
@@ -47,10 +40,7 @@ if [ -z "$PS1" ]; then
   return
 fi
 
-# don't put duplicate lines in the history. See bash(1) for more options
-# don't overwrite GNU Midnight Commander's setting of `ignorespace'.
-HISTCONTROL=$HISTCONTROL${HISTCONTROL+:}ignoredups
-# ... or force ignoredups and ignorespace
+# don't put duplicate lines in the history
 HISTCONTROL=ignoreboth
 
 # append to the history file, don't overwrite it
@@ -86,7 +76,7 @@ if [ -z "$color_prompt" ]; then
 fi
 
 # set variable identifying the chroot you work in (used in the prompt below)
-if [ -z "$debian_chroot" ] && [ -r /etc/debian_chroot ]; then
+if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
   debian_chroot=$(cat /etc/debian_chroot)
 fi
 

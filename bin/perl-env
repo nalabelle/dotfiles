@@ -70,7 +70,7 @@ function _create() {
 
 function _env() {
   export PROMPT_COMMAND='export PS1="(${PERLBREW_PERL}@${PERLBREW_LIB}) ${PS1:-}"; unset PROMPT_COMMAND;'
-  perlbrew use "$(_perllib)"
+  perlbrew use "$(_perllib)" || _create && _env
 }
 
 function _delete() {
