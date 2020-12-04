@@ -1,14 +1,13 @@
 # ~/.bashrc: executed by bash(1) for non-login shells.
 set -uo pipefail
 
-BASHRCD=(
-  "$HOME/.bashrc.d"
-  "$HOME/.bashrc_local"
-)
-
-
 DOTFILES_PATH=$(realpath "$(dirname "$(realpath "${BASH_SOURCE[0]}")")/..")
 export DOTFILES_PATH
+
+BASHRCD=(
+  "$DOTFILES_PATH/bashrc.d"
+  "$HOME/.bashrc_local"
+)
 
 function _path {
   local paths=("$@")
