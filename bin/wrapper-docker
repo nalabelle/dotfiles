@@ -1,0 +1,28 @@
+#!/bin/bash
+set -Eeuo pipefail
+
+_cmd="$(which docker)"
+if [ -z "$_cmd" ]; then
+  echo "Couldn't find docker, is it installed?";
+  exit 1;
+fi
+
+function _debug() {
+  "$_cmd" run --rm -it --entrypoint /bin/bash "$@" \
+    || "$_cmd" run --rm -it --entrypoint /bin/sh "$@"
+}
+
+function _pass() {
+  command "$_cmd" "$@"
+}
+
+case "${1:-}" in
+  "debug" )
+    shift
+    _debug "$@"
+    ;;
+  * )
+    _pass "$@"
+    ;;
+esac
+

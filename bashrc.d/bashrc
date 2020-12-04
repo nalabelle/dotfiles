@@ -1,8 +1,7 @@
 #!/bin/bash
 
 ADDITIONAL_PATHS=(
-  "$HOME/.bin"
-  "$HOME/.local/bin"
+  "$DOTFILES_PATH/bin"
   #osx: homebrew mysql-client
   /usr/local/opt/mysql-client/bin
 )
