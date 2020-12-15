@@ -4,6 +4,14 @@ if [[ "$OSTYPE" != "darwin"* ]]; then
   return
 fi
 
+touch ~/.bash_sessions_disable
+
+if [[ "${BASH_VERSINFO:-99}" -lt 5 ]]; then
+  >&2 printf "bash version is lower than you're expecting\n"
+  >&2 printf "install the newer one, add it to /etc/shells, and then chsh -s to it\n"
+  export BASH_SILENCE_DEPRECATION_WARNING=1
+fi
+
 function brew() {
   local arg=("$@")
   local cmd=$1

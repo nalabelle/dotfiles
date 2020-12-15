@@ -19,4 +19,10 @@
 [fetch]
 	prune = true
 [alias]
+  tld = rev-parse --show-toplevel
   fpush = push --force-with-lease
+  log-compare = log --oneline --boundary --left-right --cherry-mark --decorate
+  # append something like this for a default
+  #origin/$(git branch --show-current)..${2:-${1:-HEAD}}"
+  logf = log-compare --abbrev-commit --format='tformat:%C(auto,blue)%m%C(auto) %h %s%d %C(auto,dim)%cr'
+  logr = logf --reverse
