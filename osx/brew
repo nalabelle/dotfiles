@@ -1,9 +1,12 @@
 --cask homebrew/cask/docker
 bash
 coreutils
+git
 homeshick
 jq
+mkcert
 readline
 shellcheck
 tmux
 vim
+wget
