@@ -1,8 +1,10 @@
 --cask homebrew/cask/docker
 bash
 coreutils
+font-fira-code
 git
 homeshick
+iterm2
 jq
 mkcert
 readline
