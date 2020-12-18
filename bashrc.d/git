@@ -2,9 +2,9 @@
 
 function git_branch() {
   local branch
-  branch="$(git symbolic-ref --short HEAD 2>/dev/null)"
+  branch="$(git branch --show-current 2>/dev/null)"
   if [ -n "$branch" ]; then
     echo "$branch";
   fi
-
 }
+
