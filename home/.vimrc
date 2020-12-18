@@ -225,6 +225,7 @@ function! ToggleFormatting()
   call SetColorColumns()
 endf
 
+map <Leader>o :silent !open -jg "%"<CR>
 
 " https://raw.github.com/sdball/dotfiles/master/vim/vimrc
 " blocks arrow keys for forced learning
