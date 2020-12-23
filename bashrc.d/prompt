@@ -4,13 +4,20 @@ color_prompt=${color_prompt:-}
 
 __git_prompt() {
   local _exports=(
-    GIT_PS1_SHOWCOLORHINTS=1
-    GIT_PS1_SHOWDIRTYSTATE=1
-    GIT_PS1_SHOWSTASHSTATE=1
-    GIT_PS1_SHOWUNTRACKEDFILES=1
-    GIT_PS1_SHOWUPSTREAM=1
-    GIT_PS1_STATESEPARATOR=""
+    "GIT_PS1_SHOWCOLORHINTS=1"
+    "GIT_PS1_SHOWDIRTYSTATE=1"
+    "GIT_PS1_SHOWSTASHSTATE=1"
+    "GIT_PS1_SHOWUNTRACKEDFILES=1"
+    "GIT_PS1_SHOWUPSTREAM=1"
+    "GIT_PS1_STATESEPARATOR="""
   )
+  if ! declare -F __git_ps1; then
+    if [ -r /usr/lib/git-core/git-sh-prompt ]; then
+      source /usr/lib/git-core/git-sh-prompt
+    else
+      return
+    fi
+  fi
   local _monkey_patch
   _monkey_patch="$( declare -pf __git_ps1 | \
     awk '/GIT_PS1_SHOWCOLORHINTS/ { print "    __git_ps1_colorize_gitstring;" } { print }' )"
@@ -24,7 +31,7 @@ __git_prompt() {
   echo -e "$_result"
 }
 
-if [ -n "$(which git)" ]; then
+if [ -n "$(command -v git)" ]; then
   #shellcheck disable=SC2016
   _ps1_git_prompt='$(__git_prompt)'
 fi
