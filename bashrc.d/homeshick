@@ -1,10 +1,12 @@
 #!/bin/bash
 
-if [ -n "$(which brew)" ]; then
+if [ -n "$(command -v brew)" ]; then
   HOMESHICK_DIR=$(brew --prefix)/opt/homeshick
-  export HOMESHICK_DIR
-  #shellcheck disable=SC1090
-  source "$HOMESHICK_DIR/homeshick.sh"
+  if [ -d "$HOMESHICK_DIR" ]; then
+    export HOMESHICK_DIR
+    #shellcheck disable=SC1090
+    source "$HOMESHICK_DIR/homeshick.sh"
+  fi
 fi
 
 if [ -d "$HOME/.homesick/repos/homeshick" ]; then
@@ -12,7 +14,7 @@ if [ -d "$HOME/.homesick/repos/homeshick" ]; then
   _source "$HOME/.homesick/repos/homeshick/completions/homeshick-completion.bash"
 fi
 
-if [ -n "$(which homeshick)" ]; then
+if [ -n "$(command -v homeshick)" ]; then
   homeshick --quiet refresh
 fi
 

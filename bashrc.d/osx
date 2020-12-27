@@ -12,36 +12,3 @@ if [[ "${BASH_VERSINFO:-99}" -lt 5 ]]; then
   export BASH_SILENCE_DEPRECATION_WARNING=1
 fi
 
-function brew() {
-  local arg=("$@")
-  local cmd=$1
-  local dotfile_list="$DOTFILES_PATH/osx/brew"
-
-  if [ ! -f "$dotfile_list" ]; then
-    return
-  fi
-
-  command brew "${arg[@]}"
-
-  retval=$?
-  if [ "$retval" -ne 0 ]; then
-    return
-  fi
-
-  case $cmd in
-    install )
-      shift;
-      echo "logging changes to $dotfile_list"
-      echo "$*" >> "$dotfile_list"
-      sort -o "$dotfile_list" "$dotfile_list"
-      ;;
-    uninstall )
-      shift;
-      echo "logging changes to $dotfile_list"
-      sed -i.bak "/^${*}/d" "$dotfile_list"
-      ;;
-    *)
-      ;;
-  esac
-}
-
