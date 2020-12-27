@@ -1,11 +1,13 @@
 #!/bin/bash
 
 if [ -n "$(command -v brew)" ]; then
-  HOMESHICK_DIR=$(brew --prefix)/opt/homeshick
+  HOMESHICK_DIR="$(brew --prefix)/opt/homeshick"
   if [ -d "$HOMESHICK_DIR" ]; then
     export HOMESHICK_DIR
     #shellcheck disable=SC1090
     source "$HOMESHICK_DIR/homeshick.sh"
+  else
+    unset HOMESHICK_DIR
   fi
 fi
 
