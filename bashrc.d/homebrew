@@ -9,7 +9,7 @@ if [[ -z "$(command -v brew)" ]]; then
 fi
 
 function _os_prefix() {
-  if [[ "$OSTYPE" != "darwin"* ]]; then
+  if [[ "$OSTYPE" == "darwin"* ]]; then
     echo "osx"
   else
     echo "linux"
@@ -44,7 +44,7 @@ function brew() {
     uninstall )
       shift;
       echo "logging changes to $dotfile_list"
-      sed -i.bak "/^${*}/d" "$dotfile_list"
+      sed -i.bak "/^${*//\//\\\/}/d" "$dotfile_list"
       ;;
     *)
       ;;
