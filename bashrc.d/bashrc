@@ -11,9 +11,6 @@ BASH_COMPLETION=(
   /usr/share/bash-completion/bash_completion
   /usr/local/etc/profile.d/bash_completion.sh
   /usr/local/etc/bash_completion.d
-  "$HOME/.bash-completion"
-  "$HOME/.bash-completion.d"
-  "$HOME/.git-completion.bash"
 )
 
 ADDITIONAL_SCRIPTS=(
@@ -29,8 +26,10 @@ _source "${ADDITIONAL_SCRIPTS[@]}"
 export GOPATH="$HOME/go"
 _path "${GOPATH}/bin"
 
-#export PERLBREW_ROOT="$HOME/.perlbrew"
-#_source "$PERLBREW_ROOT/etc/bashrc"
+export PERLBREW_ROOT="$HOME/.perlbrew"
+set +u
+_source "$PERLBREW_ROOT/etc/bashrc"
+set +x
 
 export PYTHONPYCACHEPREFIX="$HOME/.cache/pycache"
 
