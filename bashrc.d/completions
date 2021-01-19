@@ -9,3 +9,8 @@ if command -v docker-compose > /dev/null; then
   # shellcheck source=../bash_completion/docker-compose
   . "$DOTFILES_PATH"/bash_completion/docker-compose
 fi
+
+if command -v perlbrew > /dev/null; then
+  # shellcheck source=../bash_completion/perlbrew
+  . "$DOTFILES_PATH"/bash_completion/perlbrew
+fi
