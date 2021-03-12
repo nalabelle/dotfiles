@@ -41,6 +41,9 @@ function TrashScan() {
     Logger.log("Executing Search: " + search);
     var threads;
     while (threads = GmailApp.search(search, 0, GMAILAPP_MAX_THREADS)) {
+      if(threads.length == 0) {
+        break;
+      }
       Logger.log("Deleting " + threads.length + " threads...");
       GmailApp.moveThreadsToTrash(threads);
     }
