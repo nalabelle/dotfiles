@@ -77,6 +77,9 @@ Plugin 'tpope/vim-markdown'
 " session saving
 Plugin 'tpope/vim-obsession'
 
+" vim-autoformat
+Plugin 'Chiel92/vim-autoformat'
+
 " session helper
 "Plugin 'dhruvasagar/vim-prosession'
 
@@ -86,8 +89,8 @@ Plugin 'tpope/vim-obsession'
 "" Make Vim recognize xterm escape sequences for Page and Arrow
 " keys, combined with any modifiers such as Shift, Control, and Alt.
 " See http://unix.stackexchange.com/questions/29907/how-to-get-vim-to-work-with-tmux-properly
-  " Page keys http://sourceforge.net/p/tmux/tmux-code/ci/master/tree/FAQ
-  " Arrow keys http://unix.stackexchange.com/a/34723
+" Page keys http://sourceforge.net/p/tmux/tmux-code/ci/master/tree/FAQ
+" Arrow keys http://unix.stackexchange.com/a/34723
 "
 Plugin 'nacitar/terminalkeys.vim'
 
@@ -191,12 +194,12 @@ let g:bufferline_echo = 0
 
 " Leave insert mode immediately
 if ! has('gui_running')
-    set ttimeoutlen=10
-    augroup FastEscape
-        autocmd!
-        au InsertEnter * set timeoutlen=0
-        au InsertLeave * set timeoutlen=1000
-    augroup END
+  set ttimeoutlen=10
+  augroup FastEscape
+    autocmd!
+    au InsertEnter * set timeoutlen=0
+    au InsertLeave * set timeoutlen=1000
+  augroup END
 endif
 
 " Visual Indent from vim-indent-guides
@@ -214,9 +217,9 @@ call SetColorColumns()
 
 " Git Blame
 function! GitBlameCurrentLine()
-    let l:file = expand('%')
-    let l:lnum = line(".")
-    execute "!clear && git show $(git blame -w " . l:file . " -L " . l:lnum . "," . l:lnum . " | awk '{ print $1 }')"
+  let l:file = expand('%')
+  let l:lnum = line(".")
+  execute "!clear && git show $(git blame -w " . l:file . " -L " . l:lnum . "," . l:lnum . " | awk '{ print $1 }')"
 endf
 
 function! ToggleFormatting()
@@ -226,6 +229,10 @@ function! ToggleFormatting()
 endf
 
 map <Leader>o :silent !open -jg "%"<CR>
+map <Leader>f :Autoformat<CR>
+" Output more info for autoformat
+let g:autoformat_verbosemode=1
+map <Leader>m :messages<CR>
 
 " https://raw.github.com/sdball/dotfiles/master/vim/vimrc
 " blocks arrow keys for forced learning

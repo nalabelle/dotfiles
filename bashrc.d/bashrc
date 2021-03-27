@@ -4,6 +4,7 @@ ADDITIONAL_PATHS=(
   "$DOTFILES_PATH/bin"
   #osx: homebrew mysql-client
   /usr/local/opt/mysql-client/bin
+  "$HOME/.local/bin"
 )
 
 BASH_COMPLETION=(
