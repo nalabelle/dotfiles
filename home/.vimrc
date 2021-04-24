@@ -77,9 +77,6 @@ Plugin 'tpope/vim-markdown'
 " session saving
 Plugin 'tpope/vim-obsession'
 
-" vim-autoformat
-Plugin 'Chiel92/vim-autoformat'
-
 " session helper
 "Plugin 'dhruvasagar/vim-prosession'
 
@@ -96,6 +93,8 @@ Plugin 'nacitar/terminalkeys.vim'
 
 " linting
 Plugin 'dense-analysis/ale'
+
+Plugin 'cespare/vim-toml'
 
 call vundle#end()
 
@@ -229,9 +228,7 @@ function! ToggleFormatting()
 endf
 
 map <Leader>o :silent !open -jg "%"<CR>
-map <Leader>f :Autoformat<CR>
-" Output more info for autoformat
-let g:autoformat_verbosemode=1
+map <Leader>f :ALEFix<CR>
 map <Leader>m :messages<CR>
 
 " https://raw.github.com/sdball/dotfiles/master/vim/vimrc
@@ -309,3 +306,34 @@ if has('gui_running')
   endif
 endif
 
+" ALE fixers
+function! Retab(buffer) abort
+  retab
+endfunction
+
+function! AutoIndent(buffer) abort
+  " Mark cursor, then go to the middle, format, then unwind the cursor stack
+  exe 'normal! mc;M;mm;gg=G;`m;`c'
+endfunction
+
+call ale#Set('toml_sort_executable', 'toml-sort')
+function! TomlSort(buffer) abort
+  let l:executable = ale#Var(a:buffer, 'toml_sort_executable')
+  let l:filename = ale#Escape(bufname(a:buffer))
+  let l:exec_args = ' --all'
+
+  let l:result = {
+        \   'command': ale#Escape(l:executable) . l:exec_args
+        \}
+
+  return l:result
+endfunction
+
+call ale#fix#registry#Add('retab', 'Retab', [], 'Retabs as per vim settings')
+call ale#fix#registry#Add('auto_indent', 'AutoIndent', [], 'vim auto-indent, gg=G')
+call ale#fix#registry#Add('toml_sort', 'TomlSort', ['toml'], 'Toml sort')
+
+let g:ale_fixers = {'*': ['retab', 'auto_indent', 'remove_trailing_lines', 'trim_whitespace']}
+let g:ale_fixers.python = ['isort', 'black']
+let g:ale_fixers.toml = ['toml_sort']
+let g:ale_fix_on_save = 1
