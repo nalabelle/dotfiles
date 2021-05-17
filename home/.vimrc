@@ -333,7 +333,7 @@ call ale#fix#registry#Add('retab', 'Retab', [], 'Retabs as per vim settings')
 call ale#fix#registry#Add('auto_indent', 'AutoIndent', [], 'vim auto-indent, gg=G')
 call ale#fix#registry#Add('toml_sort', 'TomlSort', ['toml'], 'Toml sort')
 
-let g:ale_fixers = {'*': ['retab', 'auto_indent', 'remove_trailing_lines', 'trim_whitespace']}
+let g:ale_fixers = {'*': ['retab', 'remove_trailing_lines', 'trim_whitespace']}
 let g:ale_fixers.python = ['isort', 'black']
 let g:ale_fixers.toml = ['toml_sort']
 let g:ale_fix_on_save = 1
