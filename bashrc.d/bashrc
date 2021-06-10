@@ -18,6 +18,7 @@ ADDITIONAL_SCRIPTS=(
   #osx: homebrew asdf
   # maybe move to something using `brew --prefix`?
   /usr/local/opt/asdf/asdf.sh
+  "$HOME/.config/broot/launcher/bash/br"
 )
 
 _path "${ADDITIONAL_PATHS[@]}"
@@ -140,4 +141,3 @@ complete -W "$(cut -f 1 -d ' ' "$HOME/.ssh/known_hosts" | \
 
 unset ADDITIONAL_PATHS
 unset BASH_COMPLETION
-

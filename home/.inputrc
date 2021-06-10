@@ -27,9 +27,10 @@ set completion-ignore-case On
 set menu-complete-display-prefix On
 
 set keymap vi-command
-  #search history in command mode with up/down
-  "k": history-search-backward
-  "j": history-search-forward
+
+#search history in command mode with up/down
+"k": history-search-backward
+"j": history-search-forward
 
 # don't turn ~ into a path
 #set expand-tilde off
