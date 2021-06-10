@@ -96,6 +96,9 @@ Plugin 'dense-analysis/ale'
 
 Plugin 'cespare/vim-toml'
 
+" NERDTree
+Plugin 'preservim/nerdtree'
+
 call vundle#end()
 
 
