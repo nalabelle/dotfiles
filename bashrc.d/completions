@@ -5,6 +5,10 @@ if command -v flux > /dev/null; then
   . <(flux completion bash)
 fi
 
+if command -v kubectl > /dev/null; then
+  source <(kubectl completion bash)
+fi
+
 if command -v docker-compose > /dev/null; then
   # shellcheck source=../bash_completion/docker-compose
   . "$DOTFILES_PATH"/bash_completion/docker-compose
