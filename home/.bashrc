@@ -39,3 +39,5 @@ _source "${BASHRCD[@]}"
 unset BASHRCD
 
 set +uo pipefail
+
+complete -C /home/nalabelle/.local/bin/terraform terraform
