@@ -5,6 +5,7 @@ ADDITIONAL_PATHS=(
   #osx: homebrew mysql-client
   /usr/local/opt/mysql-client/bin
   "$HOME/.local/bin"
+  "$HOME/.poetry/bin"
 )
 
 BASH_COMPLETION=(
