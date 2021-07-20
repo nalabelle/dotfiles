@@ -339,4 +339,4 @@ call ale#fix#registry#Add('toml_sort', 'TomlSort', ['toml'], 'Toml sort')
 let g:ale_fixers = {'*': ['retab', 'remove_trailing_lines', 'trim_whitespace']}
 let g:ale_fixers.python = ['isort', 'black']
 let g:ale_fixers.toml = ['toml_sort']
-let g:ale_fix_on_save = 1
+let g:ale_fix_on_save = 0
