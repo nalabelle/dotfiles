@@ -1,0 +1,7 @@
+#!/bin/bash
+set -ex
+
+branch="$1"
+
+git fetch origin "$branch":refs/remotes/origin/"$branch"
+git checkout -b "$branch" "origin/$branch"
