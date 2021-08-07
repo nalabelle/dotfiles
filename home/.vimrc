@@ -20,68 +20,52 @@ if has("multi_byte")
 else
   echoerr "no unicode!"
 endif
-filetype off        " required for vundle
 set title
 
-" make windows path operators reasonable
-if has("win32")
-  set shellslash
-  set rtp+=~/scoop/apps/vim/current/vimfiles/bundle/Vundle.vim
-  call vundle#begin('~/scoop/apps/vim/current/vimfiles/bundle/')
-else
-  set rtp+=~/.vim/bundle/Vundle.vim
-  call vundle#begin()
+"Install vim-plug
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent execute
+    \ '!curl -fLo ~/.vim/autoload/plug.vim '
+    \ . '--create-dirs '
+    \ . 'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
+"Update plugins
+autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
+  \| PlugInstall --sync | source $MYVIMRC
+\| endif
 
-" Vundle the Vundle
-Plugin 'VundleVim/Vundle.vim'
+if has("win32")
+  " make windows path operators reasonable
+  set shellslash
+  call plug#begin('~/scoop/apps/vim/current/vimfiles/bundle/')
+else
+  call plug#begin('~/.vim/bundle')
+endif
 
 " Other Repositories
 
 " Themes
-Plugin 'xoria256.vim'
+Plug 'vim-scripts/xoria256.vim'
 
 " ctrl-p for finding files
-Plugin 'ctrlpvim/ctrlp.vim'
+"Plug 'ctrlpvim/ctrlp.vim'
 
-" vim-airline
-" like powerline
-Plugin 'vim-airline/vim-airline'
-Plugin 'vim-airline/vim-airline-themes'
+Plug 'vim-airline/vim-airline'
+  Plug 'vim-airline/vim-airline-themes'
 
-" vim-bufferline
-" show the buffers in the statusline or commandbar
-Plugin 'bling/vim-bufferline'
+" vim-bufferline - show the buffers in the statusline or commandbar
+Plug 'bling/vim-bufferline'
 
-" vim-fugtive
-" git things for vim!
-Plugin 'tpope/vim-fugitive'
-
-" vim-coffee-script
-" support coffee script, comes with a lot of things
-Plugin 'kchmck/vim-coffee-script'
+" vim-fugtive - git things for vim!
+Plug 'tpope/vim-fugitive'
 
 " indent guides for visually showing indent
-Plugin 'nathanaelkane/vim-indent-guides'
-
-" racket support
-Plugin 'wlangstroth/vim-racket'
-
-" golang
-Plugin 'fatih/vim-go'
-
-" markdown
-Plugin 'tpope/vim-markdown'
-
-" session saving
-Plugin 'tpope/vim-obsession'
-
-" session helper
-"Plugin 'dhruvasagar/vim-prosession'
+Plug 'nathanaelkane/vim-indent-guides'
 
 " auto set paste
-" Plugin 'ConradIrwin/vim-bracketed-paste'
+" Plug 'ConradIrwin/vim-bracketed-paste'
 "
 "" Make Vim recognize xterm escape sequences for Page and Arrow
 " keys, combined with any modifiers such as Shift, Control, and Alt.
@@ -89,17 +73,33 @@ Plugin 'tpope/vim-obsession'
 " Page keys http://sourceforge.net/p/tmux/tmux-code/ci/master/tree/FAQ
 " Arrow keys http://unix.stackexchange.com/a/34723
 "
-Plugin 'nacitar/terminalkeys.vim'
+Plug 'nacitar/terminalkeys.vim'
 
 " linting
-Plugin 'dense-analysis/ale'
+Plug 'dense-analysis/ale'
 
-Plugin 'cespare/vim-toml'
 
 " NERDTree
-Plugin 'preservim/nerdtree'
+Plug 'preservim/nerdtree'
 
-call vundle#end()
+"languages
+Plug 'cespare/vim-toml'
+Plug 'derekwyatt/vim-scala'
+Plug 'fatih/vim-go'
+Plug 'tpope/vim-markdown'
+Plug 'wlangstroth/vim-racket'
+
+" Automates Autocomplete
+Plug 'lifepillar/vim-mucomplete'
+
+if executable('node') && executable('yarn')
+  Plug 'neoclide/coc.nvim', {'branch': 'release'}
+  if executable('javac')
+    Plug 'scalameta/coc-metals', {'do': 'yarn install --frozen-lockfile'}
+  endif
+endif
+
+call plug#end()
 
 
 set noexrc          " don't use local config files
@@ -340,3 +340,17 @@ let g:ale_fixers = {'*': ['retab', 'remove_trailing_lines', 'trim_whitespace']}
 let g:ale_fixers.python = ['isort', 'black']
 let g:ale_fixers.toml = ['toml_sort']
 let g:ale_fix_on_save = 0
+
+set completeopt+=menuone
+set completeopt+=noselect
+
+let g:mucomplete#enable_auto_at_startup = 1
+let g:mucomplete#tab_when_no_results = 1
+
+
+if has("autocmd") && exists("+omnifunc")
+  autocmd Filetype *
+    \ if &omnifunc == "" |
+    \ setlocal omnifunc=syntaxcomplete#Complete |
+    \ endif
+endif
