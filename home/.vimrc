@@ -94,7 +94,7 @@ Plug 'lifepillar/vim-mucomplete'
 
 if executable('node') && executable('yarn')
   Plug 'neoclide/coc.nvim', {'branch': 'release'}
-  if executable('javac')
+  if executable('javac') && executable('scala')
     Plug 'scalameta/coc-metals', {'do': 'yarn install --frozen-lockfile'}
   endif
 endif
