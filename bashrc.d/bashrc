@@ -13,12 +13,14 @@ BASH_COMPLETION=(
   /usr/share/bash-completion/bash_completion
   /usr/local/etc/profile.d/bash_completion.sh
   /usr/local/etc/bash_completion.d
+  "$HOME/.asdf/completions/asdf.bash"
 )
 
 ADDITIONAL_SCRIPTS=(
   #osx: homebrew asdf
   # maybe move to something using `brew --prefix`?
   /usr/local/opt/asdf/asdf.sh
+  "$HOME/.asdf/asdf.sh"
   "$HOME/.asdf/plugins/java/set-java-home.bash"
   "$HOME/.config/broot/launcher/bash/br"
 )
