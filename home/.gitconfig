@@ -2,22 +2,22 @@
   name = nalabelle
   email = nalabelle@gmail.com
 [core]
-	editor = vim
+  editor = vim
   excludesfile = ~/.gitignore_global
 [color]
-	ui = true
+  ui = true
 [credential]
-	helper = osxkeychain
+  helper = osxkeychain
 [pull]
-	rebase = true
+  rebase = true
 [push]
-	default = simple
+  default = simple
 [diff]
-	tool = vimdiff
+  tool = vimdiff
 [include]
   path = .gitconfig_local
 [fetch]
-	prune = true
+  prune = true
 [alias]
   tld = rev-parse --show-toplevel
   fpush = push --force-with-lease
@@ -26,3 +26,5 @@
   #origin/$(git branch --show-current)..${2:-${1:-HEAD}}"
   logf = log-compare --abbrev-commit --format='tformat:%C(auto,blue)%m%C(auto) %h %s%d %C(auto,dim)%cr'
   logr = logf --reverse
+[init]
+  defaultBranch = main
