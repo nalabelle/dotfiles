@@ -6,6 +6,7 @@ ADDITIONAL_PATHS=(
   /usr/local/opt/mysql-client/bin
   "$HOME/.local/bin"
   "$HOME/.poetry/bin"
+  "$HOME/.krew/bin"
 )
 
 BASH_COMPLETION=(
