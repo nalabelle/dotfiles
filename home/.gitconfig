@@ -28,3 +28,7 @@
   logr = logf --reverse
 [init]
   defaultBranch = main
+[protocol]
+	version = 2
+[rebase]
+	autoStash = true
