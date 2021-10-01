@@ -26,6 +26,13 @@ ADDITIONAL_SCRIPTS=(
   "$HOME/.config/broot/launcher/bash/br"
 )
 
+if command -v asdf >/dev/null; then
+  _krew="$(asdf where krew 2>/dev/null)"
+  if [ -n "$_krew" ] && [ -d "$_krew/bin" ]; then
+    _path "$_krew/bin"
+  fi
+fi
+
 _path "${ADDITIONAL_PATHS[@]}"
 _source "${BASH_COMPLETION[@]}"
 _source "${ADDITIONAL_SCRIPTS[@]}"
