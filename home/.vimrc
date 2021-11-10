@@ -78,6 +78,9 @@ Plug 'nacitar/terminalkeys.vim'
 " linting
 Plug 'dense-analysis/ale'
 
+" searching
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
 
 " NERDTree
 Plug 'preservim/nerdtree'
@@ -88,6 +91,7 @@ Plug 'derekwyatt/vim-scala'
 Plug 'fatih/vim-go'
 Plug 'tpope/vim-markdown'
 Plug 'wlangstroth/vim-racket'
+Plug 'wfxr/protobuf.vim'
 
 " Automates Autocomplete
 Plug 'lifepillar/vim-mucomplete'
@@ -103,7 +107,10 @@ call plug#end()
 
 
 set noexrc          " don't use local config files
-set cpoptions=Be    " magic?
+" http://vimdoc.sourceforge.net/htmldoc/options.html#'cpoptions'
+set cpoptions=Ben
+" set default folding, override later
+set foldmethod=indent
 
 " color options
 colo xoria256
@@ -163,6 +170,11 @@ set shiftwidth=2    " number of spaces to use for each step of indent
 set softtabstop=2   " number of spaces that tab counts for when editing
 set tabstop=2       " number of spaces that tab counts for in a file
 
+" default folding
+setlocal foldmethod=syntax
+set foldlevelstart=99
+let perl_fold=1
+
 " https://raw.github.com/sdball/dotfiles/master/vim/vimrc
 " highlight trailing whitespace
 highlight ExtraWhitespace ctermbg=red guibg=red
@@ -180,7 +192,8 @@ highlight ColorColumn ctermbg=233 guibg=#121212
 
 set number
 set list
-set showbreak=↪️
+set linebreak
+let &showbreak = '↪️  '
 set listchars=tab:→…,trail:•,nbsp:␣,extends:⟩,precedes:⟨,eol:¶
 
 " Always display status line
@@ -188,11 +201,6 @@ set laststatus=2
 " Don't show mode in the command bar
 set noshowmode
 
-" Airline customization
-let g:airline_theme='bubblegum'
-
-" Bufferline shows the buffers
-let g:bufferline_echo = 0
 
 " Leave insert mode immediately
 if ! has('gui_running')
@@ -262,6 +270,7 @@ map <Leader>b :call GitBlameCurrentLine()<CR>
 " open splits to right and bottom
 set splitbelow
 set splitright
+
 
 " ctrlp bump file limits
 let g:ctrlp_max_files=0
@@ -354,3 +363,47 @@ if has("autocmd") && exists("+omnifunc")
     \ setlocal omnifunc=syntaxcomplete#Complete |
     \ endif
 endif
+
+if has("autocmd")
+  " drop into the last buffer to avoid E173 "more files to edit" on :q
+  autocmd QuitPre * blast
+endif
+
+" NERDTree
+nnoremap <c-t> :NERDTreeToggle<cr>
+nnoremap <c-f> :NERDTreeFind<cr>
+
+" Fzf
+let g:fzf_buffers_jump = 1
+let g:fzf_command_prefix = 'Fzf'
+nnoremap <tab> :FzfBuffer<cr>
+nnoremap <leader>e :FzfFiles<cr>
+nnoremap <leader>/ :FzfBLines<cr>
+
+" vim-bufferline
+" :help bufferline
+let g:bufferline_echo = 0
+" bufferline aligns to the right in airline, so you want to pin your current
+" buffer to the right for it to be usable with many open buffers
+let g:bufferline_fixed_index = -2
+let g:bufferline_rotate = 1
+
+" Airline
+let g:airline_theme='bubblegum'
+let g:airline_skip_empty_sections = 1
+let g:airline_highlighting_cache = 1
+let g:airline_mode_map = {
+    \ 'c'      : 'C',
+    \ 'i'      : 'I',
+    \ 'n'      : 'N',
+    \ 'v'      : 'V',
+    \ }
+
+if !exists('g:airline_symbols')
+  let g:airline_symbols = {}
+endif
+let g:airline_symbols.linenr = '☰ '
+let g:airline_symbols.colnr = '||'
+let g:airline_symbols.maxlinenr = ''
+let g:airline_symbols.branch = ''
+let g:airline_symbols.readonly = 'RO'
