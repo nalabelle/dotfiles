@@ -1,0 +1,10 @@
+#!/bin/bash
+
+if [ $# -eq 0 ];
+  then echo 'Filename missing!';
+  else tracked="$(git ls-files "${1}")";
+  if [[ -z ${tracked} ]];
+    then echo 'File not tracked';
+    else echo 'File tracked';
+  fi;
+fi;
