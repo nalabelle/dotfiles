@@ -378,6 +378,7 @@ let g:fzf_buffers_jump = 1
 let g:fzf_command_prefix = 'Fzf'
 nnoremap <tab> :FzfBuffer<cr>
 nnoremap <leader>e :FzfFiles<cr>
+nnoremap <leader>E :FzfGFiles<cr>
 nnoremap <leader>/ :FzfBLines<cr>
 
 " vim-bufferline
