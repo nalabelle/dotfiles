@@ -12,7 +12,7 @@
 [pull]
   rebase = true
 [push]
-	default = current
+	default = upstream
 [diff]
   tool = vimdiff
 [include]
