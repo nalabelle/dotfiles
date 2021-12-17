@@ -172,6 +172,7 @@ set tabstop=2       " number of spaces that tab counts for in a file
 
 " default folding
 setlocal foldmethod=syntax
+set foldlevel=99
 set foldlevelstart=99
 let perl_fold=1
 

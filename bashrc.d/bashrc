@@ -35,7 +35,9 @@ fi
 
 _path "${ADDITIONAL_PATHS[@]}"
 _source "${BASH_COMPLETION[@]}"
+set +u
 _source "${ADDITIONAL_SCRIPTS[@]}"
+set -u
 
 export GOPATH="$HOME/go"
 _path "${GOPATH}/bin"
