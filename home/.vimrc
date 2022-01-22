@@ -22,95 +22,11 @@ else
 endif
 set title
 
-"Install vim-plug
-if empty(glob('~/.vim/autoload/plug.vim'))
-  silent execute
-    \ '!curl -fLo ~/.vim/autoload/plug.vim '
-    \ . '--create-dirs '
-    \ . 'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
-endif
-
-"Update plugins
-autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
-  \| PlugInstall --sync | source $MYVIMRC
-\| endif
-
-if has("win32")
-  " make windows path operators reasonable
-  set shellslash
-  call plug#begin('~/scoop/apps/vim/current/vimfiles/bundle/')
-else
-  call plug#begin('~/.vim/bundle')
-endif
-
-" Other Repositories
-
-" Themes
-Plug 'vim-scripts/xoria256.vim'
-
-" ctrl-p for finding files
-"Plug 'ctrlpvim/ctrlp.vim'
-
-Plug 'vim-airline/vim-airline'
-  Plug 'vim-airline/vim-airline-themes'
-
-" vim-bufferline - show the buffers in the statusline or commandbar
-Plug 'bling/vim-bufferline'
-
-" vim-fugtive - git things for vim!
-Plug 'tpope/vim-fugitive'
-
-" indent guides for visually showing indent
-Plug 'nathanaelkane/vim-indent-guides'
-
-" auto set paste
-" Plug 'ConradIrwin/vim-bracketed-paste'
-"
-"" Make Vim recognize xterm escape sequences for Page and Arrow
-" keys, combined with any modifiers such as Shift, Control, and Alt.
-" See http://unix.stackexchange.com/questions/29907/how-to-get-vim-to-work-with-tmux-properly
-" Page keys http://sourceforge.net/p/tmux/tmux-code/ci/master/tree/FAQ
-" Arrow keys http://unix.stackexchange.com/a/34723
-"
-Plug 'nacitar/terminalkeys.vim'
-
-" linting
-Plug 'dense-analysis/ale'
-
-" searching
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-Plug 'junegunn/fzf.vim'
-
-" NERDTree
-Plug 'preservim/nerdtree'
-
-"languages
-Plug 'cespare/vim-toml'
-Plug 'derekwyatt/vim-scala'
-Plug 'fatih/vim-go'
-Plug 'tpope/vim-markdown'
-Plug 'wlangstroth/vim-racket'
-Plug 'wfxr/protobuf.vim'
-
-" Automates Autocomplete
-Plug 'lifepillar/vim-mucomplete'
-
-if executable('node') && executable('yarn')
-  Plug 'neoclide/coc.nvim', {'branch': 'release'}
-  if executable('javac') && executable('scala')
-    Plug 'scalameta/coc-metals', {'do': 'yarn install --frozen-lockfile'}
-  endif
-endif
-
-call plug#end()
-
+source ~/.vim/plug.vim
 
 set noexrc          " don't use local config files
 " http://vimdoc.sourceforge.net/htmldoc/options.html#'cpoptions'
 set cpoptions=Ben
-" set default folding, override later
-set foldmethod=indent
 
 " color options
 colo xoria256
@@ -169,12 +85,6 @@ set shiftround      " round indent to multiple of shiftwidth
 set shiftwidth=2    " number of spaces to use for each step of indent
 set softtabstop=2   " number of spaces that tab counts for when editing
 set tabstop=2       " number of spaces that tab counts for in a file
-
-" default folding
-setlocal foldmethod=syntax
-set foldlevel=99
-set foldlevelstart=99
-let perl_fold=1
 
 " https://raw.github.com/sdball/dotfiles/master/vim/vimrc
 " highlight trailing whitespace
@@ -236,6 +146,7 @@ endf
 function! ToggleFormatting()
   set number!
   set list!
+  set foldcolumn=0
   call SetColorColumns()
 endf
 
@@ -272,10 +183,6 @@ map <Leader>b :call GitBlameCurrentLine()<CR>
 set splitbelow
 set splitright
 
-
-" ctrlp bump file limits
-let g:ctrlp_max_files=0
-let g:ctrlp_max_depth=40
 
 "Cursor settings:
 
@@ -319,6 +226,15 @@ if has('gui_running')
   endif
 endif
 
+" Folds
+" note: set foldcolumn=X to see the folds
+set foldmethod=indent
+set foldlevel=99
+set foldlevelstart=99
+let g:fastfold_minlines = 0
+let g:fastfold_savehook = 1
+set foldcolumn=7
+
 " ALE fixers
 function! Retab(buffer) abort
   retab
@@ -329,40 +245,32 @@ function! AutoIndent(buffer) abort
   exe 'normal! mc;M;mm;gg=G;`m;`c'
 endfunction
 
-call ale#Set('toml_sort_executable', 'toml-sort')
-function! TomlSort(buffer) abort
-  let l:executable = ale#Var(a:buffer, 'toml_sort_executable')
-  let l:filename = ale#Escape(bufname(a:buffer))
-  let l:exec_args = ' --all'
-
-  let l:result = {
-        \   'command': ale#Escape(l:executable) . l:exec_args
-        \}
-
-  return l:result
-endfunction
 
 call ale#fix#registry#Add('retab', 'Retab', [], 'Retabs as per vim settings')
 call ale#fix#registry#Add('auto_indent', 'AutoIndent', [], 'vim auto-indent, gg=G')
-call ale#fix#registry#Add('toml_sort', 'TomlSort', ['toml'], 'Toml sort')
 
 let g:ale_fixers = {'*': ['retab', 'remove_trailing_lines', 'trim_whitespace']}
 let g:ale_fixers.python = ['isort', 'black']
-let g:ale_fixers.toml = ['toml_sort']
 let g:ale_fix_on_save = 0
 
+set completeopt+=longest
 set completeopt+=menuone
-set completeopt+=noselect
+set completeopt+=noinsert
+"set completeopt+=noselect
 
 let g:mucomplete#enable_auto_at_startup = 1
 let g:mucomplete#tab_when_no_results = 1
 
+"selecting an autocomplete option should not insert a newline
+inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+" typeahead
+inoremap <expr> <C-n> pumvisible() ? '<C-n>' :
+  \ '<C-n><C-r>=pumvisible() ? "\<lt>Down>" : ""<CR>'
+inoremap <expr> <M-,> pumvisible() ? '<C-n>' :
+  \ '<C-x><C-o><C-n><C-p><C-r>=pumvisible() ? "\<lt>Down>" : ""<CR>'
 
-if has("autocmd") && exists("+omnifunc")
-  autocmd Filetype *
-    \ if &omnifunc == "" |
-    \ setlocal omnifunc=syntaxcomplete#Complete |
-    \ endif
+if exists("+omnifunc")
+  set omnifunc=syntaxcomplete#Complete
 endif
 
 if has("autocmd")
