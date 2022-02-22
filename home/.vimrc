@@ -248,15 +248,13 @@ endfunction
 
 call ale#fix#registry#Add('retab', 'Retab', [], 'Retabs as per vim settings')
 call ale#fix#registry#Add('auto_indent', 'AutoIndent', [], 'vim auto-indent, gg=G')
-
 let g:ale_fixers = {'*': ['retab', 'remove_trailing_lines', 'trim_whitespace']}
-let g:ale_fixers.python = ['isort', 'black']
 let g:ale_fix_on_save = 0
 
-set completeopt+=longest
+"set completeopt+=longest
 set completeopt+=menuone
 set completeopt+=noinsert
-"set completeopt+=noselect
+set completeopt+=noselect
 
 let g:mucomplete#enable_auto_at_startup = 1
 let g:mucomplete#tab_when_no_results = 1
@@ -277,6 +275,9 @@ if has("autocmd")
   " drop into the last buffer to avoid E173 "more files to edit" on :q
   autocmd QuitPre * blast
 endif
+
+" vim-go
+let g:go_code_completion_enabled = 0
 
 " NERDTree
 nnoremap <c-t> :NERDTreeToggle<cr>
@@ -317,3 +318,5 @@ let g:airline_symbols.colnr = '||'
 let g:airline_symbols.maxlinenr = ''
 let g:airline_symbols.branch = ''
 let g:airline_symbols.readonly = 'RO'
+
+let g:mkdp_filetypes = ['markdown', 'page']

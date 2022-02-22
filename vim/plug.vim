@@ -62,7 +62,7 @@ Plug 'junegunn/fzf.vim'
 Plug 'preservim/nerdtree'
 
 "languages
-Plug 'cespare/vim-toml'
+Plug 'cespare/vim-toml', { 'branch': 'main' }
 Plug 'derekwyatt/vim-scala'
 Plug 'fatih/vim-go'
 Plug 'tpope/vim-markdown'
@@ -71,6 +71,9 @@ Plug 'wfxr/protobuf.vim'
 
 " Automates Autocomplete
 Plug 'lifepillar/vim-mucomplete'
+
+" Markdown Previews
+Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
 
 if executable('node') && executable('yarn')
   Plug 'neoclide/coc.nvim', {'branch': 'release'}
