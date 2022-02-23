@@ -2,7 +2,7 @@
   name = nalabelle
   email = nalabelle@gmail.com
 [core]
-  editor = vim
+  editor = vim --clean
   excludesfile = ~/.gitignore_global
   untrackedCache = true
 [color]

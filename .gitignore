@@ -1,1 +1,9 @@
 *.bak
+# VIM
+## installed automatically via .vimrc
+vim/autoload/plug.vim
+vim/bundle
+## local files
+vim/backup
+vim/undo
+vim/swap
