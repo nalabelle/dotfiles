@@ -1,0 +1,28 @@
+#!/bin/bash
+
+_asdf_paths() {
+  find ~/.asdf/installs -name 'bin' -type d
+}
+
+#BREW ASDF
+if command -v brew > /dev/null 2>&1; then
+  asdf_path="$(brew --prefix)/opt/asdf/libexec/asdf.sh"
+  _source "$asdf_path"
+fi
+
+
+_asdf_scripts=(
+  "$HOME/.asdf/asdf.sh"
+  "$HOME/.asdf/plugins/java/set-java-home.bash"
+  "$HOME/.asdf/completions/asdf.bash"
+)
+
+set +u
+_source "${_asdf_scripts[@]}"
+set -u
+
+unset _asdf_scripts
+
+for path in $(_asdf_paths); do
+  _path "$path"
+done

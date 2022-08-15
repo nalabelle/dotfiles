@@ -14,24 +14,11 @@ BASH_COMPLETION=(
   /usr/share/bash-completion/bash_completion
   /usr/local/etc/profile.d/bash_completion.sh
   /usr/local/etc/bash_completion.d
-  "$HOME/.asdf/completions/asdf.bash"
 )
 
 ADDITIONAL_SCRIPTS=(
-  #osx: homebrew asdf
-  # maybe move to something using `brew --prefix`?
-  /usr/local/opt/asdf/asdf.sh
-  "$HOME/.asdf/asdf.sh"
-  "$HOME/.asdf/plugins/java/set-java-home.bash"
   "$HOME/.config/broot/launcher/bash/br"
 )
-
-if command -v asdf >/dev/null; then
-  _krew="$(asdf where krew 2>/dev/null)"
-  if [ -n "$_krew" ] && [ -d "$_krew/bin" ]; then
-    _path "$_krew/bin"
-  fi
-fi
 
 _path "${ADDITIONAL_PATHS[@]}"
 _source "${BASH_COMPLETION[@]}"
@@ -100,6 +87,7 @@ if [ "$color_prompt" = yes ]; then
       eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
     fi
     alias ls='ls --color=always'
+    #shellcheck disable=SC2262
     alias grep='grep --color=always'
   fi
 
@@ -110,6 +98,7 @@ if [ "$color_prompt" = yes ]; then
     alias less='less -F -S -R -M -i'
   fi
 
+  #shellcheck disable=SC2263
   if diff --help | grep '\-\-color' > /dev/null || false; then
     alias diff='diff --color=always'
   fi

@@ -1,7 +1,9 @@
+#!/bin/bash
+
 # ~/.bashrc: executed by bash(1) for non-login shells.
 set -uo pipefail
 
-DOTFILES_PATH=$(realpath "$(dirname "$(realpath "${BASH_SOURCE[0]}")")/..")
+DOTFILES_PATH="$HOME/.homesick/repos/dotfiles/"
 export DOTFILES_PATH
 
 BASHRCD=(
