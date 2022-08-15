@@ -1,0 +1,6 @@
+k9s                          https://github.com/looztra/asdf-k9s.git
+krew                         https://github.com/jimmidyson/asdf-krew.git
+kubectl                      https://github.com/Banno/asdf-kubectl.git
+poetry                       https://github.com/asdf-community/asdf-poetry.git
+terraform                    https://github.com/Banno/asdf-hashicorp.git
+shellcheck                   https://github.com/luizm/asdf-shellcheck.git
