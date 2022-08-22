@@ -75,6 +75,13 @@ Plug 'lifepillar/vim-mucomplete'
 " Markdown Previews
 Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
 
+" HCL
+"Plug 'jvirtanen/vim-hcl'
+
+" Polyglot (Multilanguage)
+Plug 'sheerun/vim-polyglot'
+
+
 if executable('node') && executable('yarn')
   Plug 'neoclide/coc.nvim', {'branch': 'release'}
   if executable('javac') && executable('scala')
