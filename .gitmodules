@@ -1,0 +1,4 @@
+[submodule "shell/zsh/zplug"]
+	path = shell/zsh/zplug
+	url = https://github.com/zplug/zplug.git
+	shallow = true
