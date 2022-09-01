@@ -1,0 +1,3 @@
+source ~/.zplug/init.zsh
+
+zplug "jeffreytse/zsh-vi-mode"
