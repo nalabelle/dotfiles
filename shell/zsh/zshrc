@@ -1,3 +1,2 @@
-source ~/.zplug/init.zsh
-
-zplug "jeffreytse/zsh-vi-mode"
+# https://github.com/jeffreytse/zsh-vi-mode
+. ~/.zsh-plugins/zsh-vi-mode/zsh-vi-mode.plugin.zsh

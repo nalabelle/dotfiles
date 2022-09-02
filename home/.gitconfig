@@ -34,3 +34,5 @@
   version = 2
 [rebase]
   autoStash = true
+[diff "sopsdiffer"]
+	textconv = "sops -d"

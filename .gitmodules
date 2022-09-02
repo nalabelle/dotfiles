@@ -1,4 +1,4 @@
-[submodule "shell/zsh/zplug"]
-	path = shell/zsh/zplug
-	url = https://github.com/zplug/zplug.git
+[submodule "shell/zsh/plugins/zsh-vi-mode"]
+	path = shell/zsh/plugins/zsh-vi-mode
+	url = https://github.com/jeffreytse/zsh-vi-mode.git
 	shallow = true
