@@ -12,11 +12,10 @@ if [ -n "$(command -v brew)" ]; then
 fi
 
 if [ -d "$HOME/.homesick/repos/homeshick" ]; then
-  _source "$HOME/.homesick/repos/homeshick/homeshick.sh"
-  _source "$HOME/.homesick/repos/homeshick/completions/homeshick-completion.bash"
+  +path.source "$HOME/.homesick/repos/homeshick/homeshick.sh"
+  +path.source "$HOME/.homesick/repos/homeshick/completions/homeshick-completion.bash"
 fi
 
 if [ -n "$(command -v homeshick)" ]; then
   homeshick --quiet refresh
 fi
-

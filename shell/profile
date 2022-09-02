@@ -1,0 +1,36 @@
+# shellcheck shell=sh external-sources=false disable=SC1091
+
+# Environment
+export XDG_CONFIG_HOME="$HOME/.config"
+export PYTHONPYCACHEPREFIX="$HOME/.cache/pycache"
+export GOPATH="$HOME/go"
+export PERLBREW_ROOT="$HOME/.perlbrew"
+
+DOTFILES_PATH="$HOME/.homesick/repos/dotfiles"
+. "$DOTFILES_PATH/shell/generic/path_utilities"
+
++path.prepend "PATH" \
+  "$DOTFILES_PATH/bin" \
+  "$HOME/.local/bin"
+
+
++path.append "PATH" \
+  "$HOME/.krew/bin" \
+  "$HOME/.poetry/bin" \
+  "${GOPATH}/bin"
+
++path.source \
+  "$HOME/.config/broot/launcher/bash/br"
+
+# TODO osx: homebrew mysql-client
+#/usr/local/opt/mysql-client/bin
+
+# If not running interactively, bail here
+if [ -z "$PS1" ]; then
+  return
+fi
+
+# Interactive Environment
+export EDITOR=vim
+export PAGER=less
+export LESSHISTSIZE=0

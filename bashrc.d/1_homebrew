@@ -9,5 +9,5 @@ if [ -d /opt/homebrew ]; then
 fi
 
 if command -v brew > /dev/null 2>&1; then
-  _source "$(brew --prefix)/etc/bash_completion.d"
+  +path.source "$(brew --prefix)"/etc/bash_completion.d/*
 fi

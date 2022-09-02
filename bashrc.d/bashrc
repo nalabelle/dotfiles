@@ -1,45 +1,16 @@
 #!/bin/bash
 
-ADDITIONAL_PATHS=(
-  "$DOTFILES_PATH/bin"
-  #osx: homebrew mysql-client
-  /usr/local/opt/mysql-client/bin
-  "$HOME/.local/bin"
-  "$HOME/.poetry/bin"
-  "$HOME/.krew/bin"
-)
-
-BASH_COMPLETION=(
-  /etc/bash_completion
-  /usr/share/bash-completion/bash_completion
-  /usr/local/etc/profile.d/bash_completion.sh
-  /usr/local/etc/bash_completion.d
-)
-
-ADDITIONAL_SCRIPTS=(
-  "$HOME/.config/broot/launcher/bash/br"
-)
-
-_path "${ADDITIONAL_PATHS[@]}"
-_source "${BASH_COMPLETION[@]}"
-set +u
-_source "${ADDITIONAL_SCRIPTS[@]}"
-set -u
-
-export GOPATH="$HOME/go"
-_path "${GOPATH}/bin"
-
-export PERLBREW_ROOT="$HOME/.perlbrew"
-set +u
-_source "$PERLBREW_ROOT/etc/bashrc"
-set +x
-
-export PYTHONPYCACHEPREFIX="$HOME/.cache/pycache"
-
 # If not running interactively, bail here
 if [ -z "$PS1" ]; then
   return
 fi
+
+# Bash Completions
++path.source \
+  /etc/bash_completion \
+  /usr/share/bash-completion/bash_completion \
+  /usr/local/etc/profile.d/bash_completion.sh \
+  /usr/local/etc/bash_completion.d/* \
 
 # share history across all sessions
 export SHELL_SESSION_HISTORY=0
@@ -116,14 +87,6 @@ man() {
       LESS_TERMCAP_ue="$(printf "\001\033[0m\002")" \
       LESS_TERMCAP_us="$(printf "\001\033[1;32m\002")" \
       man "$@"
-}
-
-cd-git-root() {
-  cd "$(git rev-parse --show-toplevel)" || return
-}
-
-cd-dotfiles() {
-  cd "$DOTFILES_PATH" || return
 }
 
 docker-pause-all() {
