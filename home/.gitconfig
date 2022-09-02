@@ -29,7 +29,7 @@
   logr = logf --reverse
 [init]
   defaultBranch = main
-  templateDir = ~/.git-config/template
+  templateDir = ~/.config/git/template
 [protocol]
   version = 2
 [rebase]

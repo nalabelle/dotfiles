@@ -3,13 +3,13 @@
 ZDOTDIR="$HOME/.config/zsh"
 
 # https://github.com/jeffreytse/zsh-vi-mode
-. ~/.zsh-plugins/zsh-vi-mode/zsh-vi-mode.plugin.zsh
+. $ZDOTDIR/plugins/zsh-vi-mode/zsh-vi-mode.plugin.zsh
 
 # https://github.com/Tarrasch/zsh-bd
-. ~/.zsh-plugins/zsh-bd/bd.zsh
+. $ZDOTDIR/plugins/zsh-bd/bd.zsh
 
 # https://github.com/zsh-users/zsh-syntax-highlighting
-. ~/.zsh-plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+. $ZDOTDIR/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 # https://linux.die.net/man/1/zshoptions
 
@@ -18,14 +18,31 @@ setopt autocd
 
 # Globbing
 setopt nocaseglob
+setopt extendedglob
+setopt globdots
+# Sends unmatched globs to the command
+setopt no_nomatch
 
 # History
-HISTFILE=${ZDOTDIR:-$HOME}/.zsh_history
+HISTFILE="$ZDOTDIR/.zsh_history"
+# How many commands in the history file
+SAVEHIST=5000
+# How many commands in session history
+HISTSIZE=2000
+setopt appendhistory
+setopt histexpiredupsfirst
+setopt histfindnodups
 setopt histignorealldups
 setopt histignoredups
 setopt histnostore
 setopt histreduceblanks
 setopt incappendhistory
 setopt sharehistory
+
+# Put the !! command in the prompt for changing
+setopt histverify
+
+# Corrections
+setopt correct
 
 autoload -U compinit; compinit
