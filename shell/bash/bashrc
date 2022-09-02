@@ -1,12 +1,6 @@
 # shellcheck shell=bash
 # shellcheck external-sources=false disable=SC1091
 
-# see bash_profile
-if [ -f "$HOME/.profile" ]; then
-  . "$HOME/.profile"
-fi
-
-
 +path.source \
   "$PERLBREW_ROOT/etc/bashrc" \
 

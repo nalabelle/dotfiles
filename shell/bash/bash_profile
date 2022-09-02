@@ -7,6 +7,11 @@
 # In sh mode, profile is read...
 # https://www.gnu.org/software/bash/manual/html_node/Bash-Startup-Files.html#Bash-Startup-Files
 
+# see bash_profile
+if [ -f "$HOME/.profile" ]; then
+  . "$HOME/.profile"
+fi
+
 # Basically, point this at bashrc, let it load .profile, so it can be consistent
 # and then have that drop out before setting anything interactive
 
