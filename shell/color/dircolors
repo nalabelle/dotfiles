@@ -1,5 +1,6 @@
 # Most of this sourced from : https://github.com/seebi/dircolors-solarized
 # See also: https://www.mail-archive.com/bug-coreutils@gnu.org/msg11030.html
+# dir_colors conf manual: https://linux.die.net/man/5/dir_colors
 #
 # Attribute codes:
 #   00=none 01=bold 04=underscore 05=blink 07=reverse 08=concealed

@@ -1,4 +1,5 @@
 # shellcheck shell=sh external-sources=false disable=SC1091
+# vim:filetype=bash
 
 # Support Utilities
 DOTFILES_PATH="$HOME/.homesick/repos/dotfiles"
@@ -21,6 +22,7 @@ DOTFILES_PATH="$HOME/.homesick/repos/dotfiles"
   "$DOTFILES_PATH/shell/generic/homebrew" \
   "$DOTFILES_PATH/shell/generic/asdf" \
   "$DOTFILES_PATH/shell/generic/homeshick" \
+  "$DOTFILES_PATH/shell/generic/fzf" \
   "$HOME/.config/broot/launcher/bash/br" \
 
 # If not running interactively, bail here
@@ -35,6 +37,7 @@ export LESSHISTSIZE=0
 
 # share history across all sessions
 export SHELL_SESSION_HISTORY=0
+
 # don't put duplicate lines in the history
 export HISTCONTROL=ignoreboth
 

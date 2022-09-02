@@ -23,6 +23,7 @@ repos:
     hooks:
       - id: forbid-binary
       - id: script-must-have-extension
+        exclude: ^home\/\..+$
       - id: script-must-not-have-extension
       - id: shellcheck
 #  - repo: https://github.com/kynan/nbstripout

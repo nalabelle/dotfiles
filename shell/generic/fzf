@@ -1,0 +1,13 @@
+# shellcheck shell=bash
+# vim:filetype=bash
+
+dir="$(+any.exists "$(+brew.path fzf)/shell" "/usr/share/fzf")"
+[ -d "$dir" ] || return
+
++shell.zsh && +path.source "${dir}/key-bindings.zsh"
++shell.bash && +path.source "${dir}/key-bindings.bash"
+
++zsh.completion "$dir/completion.zsh"
++bash.completion "$dir/completion.bash"
+
+unset dir

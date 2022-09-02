@@ -1,4 +1,31 @@
+# vim:filetype=zsh
+
+ZDOTDIR="$HOME/.config/zsh"
+
 # https://github.com/jeffreytse/zsh-vi-mode
 . ~/.zsh-plugins/zsh-vi-mode/zsh-vi-mode.plugin.zsh
+
+# https://github.com/Tarrasch/zsh-bd
+. ~/.zsh-plugins/zsh-bd/bd.zsh
+
+# https://github.com/zsh-users/zsh-syntax-highlighting
+. ~/.zsh-plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+# https://linux.die.net/man/1/zshoptions
+
+# Convenience
+setopt autocd
+
+# Globbing
+setopt nocaseglob
+
+# History
+HISTFILE=${ZDOTDIR:-$HOME}/.zsh_history
+setopt histignorealldups
+setopt histignoredups
+setopt histnostore
+setopt histreduceblanks
+setopt incappendhistory
+setopt sharehistory
 
 autoload -U compinit; compinit

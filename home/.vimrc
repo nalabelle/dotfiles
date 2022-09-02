@@ -38,6 +38,10 @@ syntax on
 " trigger filetype detection things
 filetype plugin indent on
 
+" allow modelines
+set modeline
+set modelines=5
+
 " allow backspacing over autoindent, linebreaks, and start of insert
 set backspace=indent,eol,start
 
