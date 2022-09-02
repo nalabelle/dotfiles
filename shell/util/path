@@ -1,4 +1,6 @@
 # shellcheck shell=bash
+# vim:filetype=bash
+#
 # This is technically bash and zsh compatible
 # Original Source: https://unix.stackexchange.com/a/622591
 

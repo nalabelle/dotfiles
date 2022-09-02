@@ -1,14 +1,12 @@
 # shellcheck shell=sh external-sources=false disable=SC1091
 
-# Environment
-export XDG_CONFIG_HOME="$HOME/.config"
-export PYTHONPYCACHEPREFIX="$HOME/.cache/pycache"
-export GOPATH="$HOME/go"
-export PERLBREW_ROOT="$HOME/.perlbrew"
-
+# Support Utilities
 DOTFILES_PATH="$HOME/.homesick/repos/dotfiles"
 . "$DOTFILES_PATH/shell/util/path"
 . "$DOTFILES_PATH/shell/util/shell"
+
+# Environment
++path.source "$DOTFILES_PATH/shell/paths"
 
 +path.prepend "PATH" \
   "$DOTFILES_PATH/bin" \
@@ -25,16 +23,27 @@ DOTFILES_PATH="$HOME/.homesick/repos/dotfiles"
   "$DOTFILES_PATH/shell/generic/homeshick" \
   "$HOME/.config/broot/launcher/bash/br" \
 
-# TODO osx: homebrew mysql-client
-#/usr/local/opt/mysql-client/bin
-
 # If not running interactively, bail here
-[ -n "$PS1" ] || return
++shell.non-interactive return
 
-# Interactive Environment
+# Defaults
 export EDITOR=vim
 export PAGER=less
+
+# Don't store less history
 export LESSHISTSIZE=0
+
+# share history across all sessions
+export SHELL_SESSION_HISTORY=0
+# don't put duplicate lines in the history
+export HISTCONTROL=ignoreboth
 
 #remove escape lag in vi mode
 export KEYTIMEOUT=1
+
+# set color
+case $TERM in
+  *'color'* )
+    +path.source "$DOTFILES_PATH/shell/color/init"
+    ;;
+esac

@@ -1,0 +1,13 @@
+# shellcheck shell=bash
+# vim:filetype=bash
+
+
+# Config
+export XDG_CONFIG_HOME="$HOME/.config"
+
+# Caches
+export PYTHONPYCACHEPREFIX="$HOME/.cache/pycache"
+
+# Coding
+export GOPATH="$HOME/go"
+export PERLBREW_ROOT="$HOME/.perlbrew"

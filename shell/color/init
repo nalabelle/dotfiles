@@ -1,0 +1,58 @@
+# shellcheck shell=bash
+# vim:filetype=bash
+
+# Always, becuase one of the sore spots is less, and we're handling that
+diff_options="--color=always"
+grep_options="--color=always"
+less_options="-R"
+ls_options="--color=always"
+
+x_dircolors="$(+any.executable gdircolors dircolors)"
+x_ls="$(+any.executable gls ls)"
+
+# This prevents polluting env with a giant LS_COLORS string...
+ls_colors=""
+if [ -n "$x_dircolors" ]; then
+  if [ -r "$HOME/.dircolors" ]; then
+    ls_colors="$(${x_dircolors} -b ~/.dircolors | head -n1)"
+  else
+    ls_colors="$(${x_dircolors} -b | head -n1)"
+  fi
+  ls_colors=${ls_colors:0:-1}
+fi
+
+# enable color support of ls non-gnu
+if [[ "$OSTYPE" == "darwin"* || "$OSTYPE" == "freebsd"* ]]; then
+  #alias ls='CLICOLOR_FORCE=1 ls -G'
+  less_options="-F -S -M -i ${less_options}"
+fi
+
+#added to GNU diffutils 3.4 in 2016-08-08, not present in non-GNU
+if diff --help | grep '\-\-color' > /dev/null 2>&1; then
+  alias diff="diff ${diff_options}"
+elif command -v colordiff > /dev/null 2>&1; then
+  alias diff="colordiff"
+fi
+
+alias grep="grep ${grep_options}"
+alias less="less ${less_options}"
+alias ls="${ls_colors} ${x_ls} ${ls_options}"
+
+
+# let's color our man pages
+# from archlinux wiki:
+man() {
+  env LESS_TERMCAP_mb="$(printf "\001\033[1;31m\002")" \
+      LESS_TERMCAP_md="$(printf "\001\033[1;31m\002")" \
+      LESS_TERMCAP_me="$(printf "\001\033[0m\002")" \
+      LESS_TERMCAP_se="$(printf "\001\033[0m\002")" \
+      LESS_TERMCAP_so="$(printf "\001\033[1;44;33m\002")" \
+      LESS_TERMCAP_ue="$(printf "\001\033[0m\002")" \
+      LESS_TERMCAP_us="$(printf "\001\033[1;32m\002")" \
+      man "$@"
+}
+
+
+unset ls_options grep_options less_options diff_options
+unset x_dircolors x_ls
+unset ls_colors

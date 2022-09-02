@@ -1,8 +1,14 @@
-# shellcheck=bash
+# shellcheck shell=bash
+# vim:filetype=bash
+
 # bash and zsh compatible
-#
+
 +shell.interactive() {
-  [ -z "$PS1" ] || eval "$@"
+  [ -n "$PS1" ] && eval "$@"
+}
+
++shell.non-interactive() {
+  [ -z "$PS1" ] && eval "$@"
 }
 
 +shell.zsh() {
@@ -13,8 +19,24 @@
   [[ "$BASH_VERSION" ]] || false
 }
 
++any.exists() {
+  local filename
+  for filename in "${@}"; do
+    [ -r "$filename" ] && echo "$filename" && return
+  done
+}
+
++any.executable() {
+  local filename
+  for filename in "${@}"; do
+    command -v "$filename" > /dev/null 2>&1 \
+      && echo "$filename" \
+      && return
+  done
+}
+
 +bash.completion() {
-  local path="$@"
+  local path="$1"
 
   [ -n "$PS1" ] || return
   +shell.bash || return
@@ -26,7 +48,7 @@
 }
 
 +zsh.completion() {
-  local path="${@}"
+  local path="$1"
 
   [ -n "$PS1" ] || return
   +shell.zsh || return

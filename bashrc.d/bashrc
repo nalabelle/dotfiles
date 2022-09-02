@@ -12,11 +12,6 @@ fi
   /usr/local/etc/profile.d/bash_completion.sh \
   /usr/local/etc/bash_completion.d/* \
 
-# share history across all sessions
-export SHELL_SESSION_HISTORY=0
-# don't put duplicate lines in the history
-export HISTCONTROL=ignoreboth
-
 # append to the history file, don't overwrite it
 # for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
 shopt -s histappend
@@ -27,65 +22,6 @@ shopt -s checkwinsize
 
 #use vi mode instead of emacs
 set -o vi
-
-# set color
-color_prompt=
-case $TERM in
-  *'color'* )
-    color_prompt=yes
-    ;;
-esac
-
-if [ -z "$color_prompt" ]; then
-  _tput="$(which tput)"
-  if [ -n "$_tput" ] && [ -x /usr/bin/tput ]; then
-    if tput setaf 1 >&/dev/null; then
-      color_prompt=yes
-    else
-      if [ "$($_tput colors)" -gt 8 ]; then
-        color_prompt=yes
-      fi
-    fi
-  fi
-fi
-
-if [ "$color_prompt" = yes ]; then
-  # enable color support of ls and also add handy aliases
-  if [ -x /usr/bin/dircolors ]; then
-    if [ -r "$HOME/.dircolors" ]; then
-      eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
-    fi
-    alias ls='ls --color=always'
-    #shellcheck disable=SC2262
-    alias grep='grep --color=always'
-  fi
-
-  # enable color support of ls for OSX
-  if [[ "$OSTYPE" == "darwin"* || "$OSTYPE" == "freebsd"* ]]; then
-    alias ls='CLICOLOR_FORCE=1 ls -G'
-    alias grep='grep --color=always'
-    alias less='less -F -S -R -M -i'
-  fi
-
-  #shellcheck disable=SC2263
-  if diff --help | grep '\-\-color' > /dev/null || false; then
-    alias diff='diff --color=always'
-  fi
-fi
-
-
-# let's color our man pages
-# from archlinux wiki:
-man() {
-  env LESS_TERMCAP_mb="$(printf "\001\033[1;31m\002")" \
-      LESS_TERMCAP_md="$(printf "\001\033[1;31m\002")" \
-      LESS_TERMCAP_me="$(printf "\001\033[0m\002")" \
-      LESS_TERMCAP_se="$(printf "\001\033[0m\002")" \
-      LESS_TERMCAP_so="$(printf "\001\033[1;44;33m\002")" \
-      LESS_TERMCAP_ue="$(printf "\001\033[0m\002")" \
-      LESS_TERMCAP_us="$(printf "\001\033[1;32m\002")" \
-      man "$@"
-}
 
 docker-pause-all() {
   local containers

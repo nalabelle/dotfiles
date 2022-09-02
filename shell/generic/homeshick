@@ -1,4 +1,6 @@
 # shellcheck shell=bash
+# vim:filetype=bash
+
 
 dir="$HOME/.homesick/repos/homeshick"
 if [ -d "$dir" ]; then
