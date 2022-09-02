@@ -27,8 +27,6 @@ shopt -s checkwinsize
 
 #use vi mode instead of emacs
 set -o vi
-#remove escape lag
-export KEYTIMEOUT=1
 
 # set color
 color_prompt=

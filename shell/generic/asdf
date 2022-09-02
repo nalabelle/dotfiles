@@ -1,0 +1,19 @@
+# shellcheck shell=bash
+
+dir="$HOME/.asdf"
+if [ -r "$dir/asdf.sh" ]; then
+  +path.source "$dir/asdf.sh"
+  +bash.completion "$dir/completions/asdf.bash"
+  +zsh.completion "$dir/completions"
+elif [ ! -d "$dir" ] && command -v brew > /dev/null 2>&1; then
+  +path.source "$(brew --prefix asdf)/libexec/asdf.sh"
+  +bash.completion "$(brew --prefix asdf)/etc/bash_completion.d/asdf.bash"
+  # zsh completion needs to happen via homebrew
+  # https://docs.brew.sh/Shell-Completion#configuring-completions-in-zsh
+fi
++path.prepend "PATH" "$HOME/.asdf/shims"
+
+# might need this if I use java again..
+# "$dir/plugins/java/set-java-home.bash"
+
+unset dir

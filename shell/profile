@@ -7,30 +7,34 @@ export GOPATH="$HOME/go"
 export PERLBREW_ROOT="$HOME/.perlbrew"
 
 DOTFILES_PATH="$HOME/.homesick/repos/dotfiles"
-. "$DOTFILES_PATH/shell/generic/path_utilities"
+. "$DOTFILES_PATH/shell/util/path"
+. "$DOTFILES_PATH/shell/util/shell"
 
 +path.prepend "PATH" \
   "$DOTFILES_PATH/bin" \
-  "$HOME/.local/bin"
-
+  "$HOME/.local/bin" \
 
 +path.append "PATH" \
   "$HOME/.krew/bin" \
   "$HOME/.poetry/bin" \
-  "${GOPATH}/bin"
+  "${GOPATH}/bin" \
 
 +path.source \
-  "$HOME/.config/broot/launcher/bash/br"
+  "$DOTFILES_PATH/shell/generic/homebrew" \
+  "$DOTFILES_PATH/shell/generic/asdf" \
+  "$DOTFILES_PATH/shell/generic/homeshick" \
+  "$HOME/.config/broot/launcher/bash/br" \
 
 # TODO osx: homebrew mysql-client
 #/usr/local/opt/mysql-client/bin
 
 # If not running interactively, bail here
-if [ -z "$PS1" ]; then
-  return
-fi
+[ -n "$PS1" ] || return
 
 # Interactive Environment
 export EDITOR=vim
 export PAGER=less
 export LESSHISTSIZE=0
+
+#remove escape lag in vi mode
+export KEYTIMEOUT=1

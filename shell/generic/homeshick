@@ -1,0 +1,11 @@
+# shellcheck shell=bash
+
+dir="$HOME/.homesick/repos/homeshick"
+if [ -d "$dir" ]; then
+  +path.source "$dir/homeshick.sh"
+  +bash.completion "$dir/completions/homeshick-completion.bash"
+  +zsh.completion "$dir/completions"
+  +shell.interactive "homeshick --quiet refresh"
+fi
+
+unset dir

@@ -1,0 +1,35 @@
+# shellcheck=bash
+# bash and zsh compatible
+#
++shell.interactive() {
+  [ -z "$PS1" ] || eval "$@"
+}
+
++shell.zsh() {
+  [[ "$ZSH_VERSION" ]] || false
+}
+
++shell.bash() {
+  [[ "$BASH_VERSION" ]] || false
+}
+
++bash.completion() {
+  local path="$@"
+
+  [ -n "$PS1" ] || return
+  +shell.bash || return
+  if [ -d "$path" ]; then
+    +path.source "$path"/*
+    return
+  fi
+  +path.source "$path"
+}
+
++zsh.completion() {
+  local path="${@}"
+
+  [ -n "$PS1" ] || return
+  +shell.zsh || return
+  [ -d "$path" ] || return
+  fpath=($fpath "$path")
+}

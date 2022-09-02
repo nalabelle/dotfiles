@@ -1,0 +1,20 @@
+# shellcheck shell=bash
+
+dir="/opt/homebrew"
+if [ ! -d "$dir" ] && [ -d "$HOME/.linuxbrew" ]; then
+  dir="$HOME/.linuxbrew"
+fi
+
+if [ -d "$dir" ]; then
+  eval "$($dir/bin/brew shellenv)"
+fi
+
+unset dir
+
+if command -v brew > /dev/null 2>&1; then
+  prefix="$(brew --prefix)"
+  +bash.completion "${prefix}/etc/profile.d/bash_completion.sh"
+  +bash.completion "${prefix}/etc/profile.d/bash_completion.d"
+  +zsh.completion "${prefix}/share/zsh/site-functions"
+  unset prefix
+fi
