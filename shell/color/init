@@ -36,6 +36,8 @@ alias grep="grep ${grep_options}"
 alias less="less ${less_options}"
 alias ls="${ls_colors} ${x_ls} ${ls_options}"
 
+# Set zsh completion colors for ls
++shell.zsh && zstyle ':completion:*' list-colors ${(s.:.)ls_colors}
 
 # let's color our man pages
 # from archlinux wiki:

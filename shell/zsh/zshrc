@@ -24,7 +24,7 @@ setopt globdots
 setopt no_nomatch
 
 # History
-HISTFILE="$ZDOTDIR/.zsh_history"
+HISTFILE="$ZDOTDIR/zsh_history"
 # How many commands in the history file
 SAVEHIST=5000
 # How many commands in session history
@@ -45,4 +45,26 @@ setopt histverify
 # Corrections
 setopt correct
 
+zstyle ':vcs_info:*' enable git svn
+
+
+#zstyle ':vcs_info:git*' formats "%r/%S %b (%a) %m%u%c "
+zstyle ':vcs_info:git*' formats " [%b] %a%m%u%c"
+#zsytle '
+
+# Prompt
+
+setopt prompt_subst
+PROMPT='%F{32}%n@%m%F{000}:%F{034}%0~%F{000}${vcs_info_msg_0_}%# '
+#\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]${_ps1_git_prompt-}\n\$ "
+
+precmd() {
+  vcs_info
+  colors
+  promptinit
+}
+
+autoload -U promptinit
+autoload -U colors
+autoload -Uz vcs_info
 autoload -U compinit; compinit

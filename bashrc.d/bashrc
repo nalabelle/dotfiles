@@ -12,6 +12,19 @@ fi
   /usr/local/etc/profile.d/bash_completion.sh \
   /usr/local/etc/bash_completion.d/* \
 
+# Move history file away from default
+mkdir -p ~/.config/bash > /dev/null 2>&1
+export HISTFILE=~/.config/bash/bash_history
+
+export HISTSIZE=2000
+export HISTFILESIZE=5000
+
+# share history across all sessions
+export SHELL_SESSION_HISTORY=0
+
+# don't put duplicate lines in the history
+export HISTCONTROL=ignoreboth
+
 # append to the history file, don't overwrite it
 # for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
 shopt -s histappend

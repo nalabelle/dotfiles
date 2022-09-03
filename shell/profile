@@ -35,12 +35,6 @@ export PAGER=less
 # Don't store less history
 export LESSHISTSIZE=0
 
-# share history across all sessions
-export SHELL_SESSION_HISTORY=0
-
-# don't put duplicate lines in the history
-export HISTCONTROL=ignoreboth
-
 #remove escape lag in vi mode
 export KEYTIMEOUT=1
 
