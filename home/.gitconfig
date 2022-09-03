@@ -1,6 +1,6 @@
 [user]
   name = nalabelle
-  email = nalabelle@gmail.com
+  email = git@nalabelle.com
 [core]
   editor = vim --clean
   excludesfile = ~/.gitignore_global
