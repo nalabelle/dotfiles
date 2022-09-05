@@ -1,4 +1,5 @@
 # shellcheck shell=bash
+# vim:filetype=bash
 
 dir="/opt/homebrew"
 if [ ! -d "$dir" ] && [ -d "$HOME/.linuxbrew" ]; then
