@@ -17,5 +17,9 @@ if command -v brew > /dev/null 2>&1; then
   +bash.completion "${prefix}/etc/profile.d/bash_completion.sh"
   +bash.completion "${prefix}/etc/profile.d/bash_completion.d"
   +zsh.completion "${prefix}/share/zsh/site-functions"
+
+  +path.source "${prefix}"/etc/brew-wrap
   unset prefix
 fi
+
+
