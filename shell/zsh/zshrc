@@ -49,13 +49,13 @@ zstyle ':vcs_info:*' enable git svn
 
 
 #zstyle ':vcs_info:git*' formats "%r/%S %b (%a) %m%u%c "
-zstyle ':vcs_info:git*' formats " [%b] %a%m%u%c"
+zstyle ':vcs_info:git*' formats '%{%F{yellow}%} [%b] %a%m%u%c%{%F%}'
 #zsytle '
 
 # Prompt
 
 setopt prompt_subst
-PROMPT='%F{32}%n@%m%F{000}:%F{034}%0~%F{000}${vcs_info_msg_0_}%# '
+PROMPT='%{%F{032}%}%n@%m%{%F%}:%{$fg[blue]%}%0~%{%F{000}%}${vcs_info_msg_0_}%{$fg[white]%}%# %{%f%}'
 #\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]${_ps1_git_prompt-}\n\$ "
 
 precmd() {
