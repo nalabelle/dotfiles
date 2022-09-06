@@ -8,6 +8,12 @@ export XDG_CONFIG_HOME="$HOME/.config"
 # Caches
 export PYTHONPYCACHEPREFIX="$HOME/.cache/pycache"
 
-# Coding
+## Coding
 export GOPATH="$HOME/go"
-export PERLBREW_ROOT="$HOME/.perlbrew"
+
+# Perl
+export PERLBREW_ROOT="$HOME/.config/perl/perlbrew"
+
+# Rust
+export RUSTUP_HOME="$HOME/.config/rust/rustup"
+export CARGO_HOME="$HOME/.config/rust/cargo"
