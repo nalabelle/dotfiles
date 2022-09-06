@@ -12,12 +12,12 @@ DOTFILES_PATH="$HOME/.homesick/repos/dotfiles"
 +path.prepend "PATH" \
   "$DOTFILES_PATH/bin" \
   "$HOME/.local/bin" \
-  "$CARGO_HOME/bin" \
 
 +path.append "PATH" \
   "$HOME/.krew/bin" \
   "$HOME/.poetry/bin" \
   "${GOPATH}/bin" \
+  "$CARGO_HOME/bin" \
 
 +path.source \
   "$DOTFILES_PATH/shell/generic/homebrew" \
