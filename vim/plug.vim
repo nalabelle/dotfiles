@@ -77,10 +77,7 @@ Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': 
 
 " HCL
 "Plug 'jvirtanen/vim-hcl'
-
-" Polyglot (Multilanguage)
-Plug 'sheerun/vim-polyglot'
-
+Plug 'hashivim/vim-terraform'
 
 if executable('node') && executable('yarn')
   Plug 'neoclide/coc.nvim', {'branch': 'release'}
