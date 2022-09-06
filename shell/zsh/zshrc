@@ -3,7 +3,13 @@
 ZDOTDIR="$HOME/.config/zsh"
 
 # https://github.com/jeffreytse/zsh-vi-mode
-. $ZDOTDIR/plugins/zsh-vi-mode/zsh-vi-mode.plugin.zsh
+#. $ZDOTDIR/plugins/zsh-vi-mode/zsh-vi-mode.plugin.zsh
+bindkey -v
+# allow backspacing over characters to left
+bindkey -v '^?' backward-delete-char
+
+# https://github.com/zsh-users/zsh-autosuggestions
+. $ZDOTDIR/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 # https://github.com/Tarrasch/zsh-bd
 . $ZDOTDIR/plugins/zsh-bd/bd.zsh
@@ -45,6 +51,23 @@ setopt histverify
 # Corrections
 setopt correct
 
+key=(
+  BackSpace  "${terminfo[kbs]}"
+  Home       "${terminfo[khome]}"
+  End        "${terminfo[kend]}"
+  Insert     "${terminfo[kich1]}"
+  Delete     "${terminfo[kdch1]}"
+  Up         "${terminfo[kcuu1]}"
+  Down       "${terminfo[kcud1]}"
+  Left       "${terminfo[kcub1]}"
+  Right      "${terminfo[kcuf1]}"
+  PageUp     "${terminfo[kpp]}"
+  PageDown   "${terminfo[knp]}"
+)
+
+
+
+
 zstyle ':vcs_info:*' enable git svn
 
 
@@ -68,3 +91,5 @@ autoload -U promptinit
 autoload -U colors
 autoload -Uz vcs_info
 autoload -U compinit; compinit
+
++cmd.exists direnv && eval "$(direnv hook zsh)"
