@@ -8,7 +8,11 @@ export XDG_CONFIG_HOME="$HOME/.config"
 # Caches
 export PYTHONPYCACHEPREFIX="$HOME/.cache/pycache"
 
+# Enviroment
+export HOMEBREW_BUNDLE_FILE="$HOME/.config/homebrew/Brewfile"
+
 ## Coding
+# Go
 export GOPATH="$HOME/go"
 
 # Perl

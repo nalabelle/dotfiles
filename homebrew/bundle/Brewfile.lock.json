@@ -1,0 +1,35 @@
+{
+  "entries": {
+    "tap": {
+      "homebrew/core": {
+        "revision": "fb01473e85b324555989bedfff8031ee2a2c8cd8"
+      }
+    },
+    "brew": {
+      "asdf": {
+        "version": "0.10.2",
+        "bottle": {
+          "rebuild": 0,
+          "root_url": "https://ghcr.io/v2/homebrew/core",
+          "files": {
+            "all": {
+              "cellar": ":any_skip_relocation",
+              "url": "https://ghcr.io/v2/homebrew/core/asdf/blobs/sha256:615cab908dd9c0c0e6ad2bf4734e1469d11ec7623a2491d406c63a2779806f02",
+              "sha256": "615cab908dd9c0c0e6ad2bf4734e1469d11ec7623a2491d406c63a2779806f02"
+            }
+          }
+        }
+      }
+    }
+  },
+  "system": {
+    "linux": {
+      "Ubuntu 22.04.1 LTS (jammy)": {
+        "HOMEBREW_VERSION": "3.5.10",
+        "HOMEBREW_PREFIX": "/home/nalabelle/.linuxbrew",
+        "Homebrew/linuxbrew-core": "fb01473e85b324555989bedfff8031ee2a2c8cd8",
+        "GCC": "11.2.0"
+      }
+    }
+  }
+}

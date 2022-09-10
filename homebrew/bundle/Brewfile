@@ -1,5 +1,5 @@
 
 # tap repositories and their packages
 
-tap homebrew/core
-brew asdf
+tap "homebrew/core"
+brew "asdf"
