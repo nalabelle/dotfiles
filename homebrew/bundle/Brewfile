@@ -3,3 +3,5 @@
 
 tap "homebrew/core"
 brew "asdf"
+brew "python"
+brew "poetry"
