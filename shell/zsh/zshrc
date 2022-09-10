@@ -92,4 +92,4 @@ autoload -U colors
 autoload -Uz vcs_info
 autoload -U compinit; compinit
 
-+cmd.exists direnv && eval "$(direnv hook zsh)"
+command -v direnv > /dev/null 2>&1 && eval "$(direnv hook zsh)"
