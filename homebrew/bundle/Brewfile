@@ -3,5 +3,8 @@
 
 tap "homebrew/core"
 brew "asdf"
-brew "python"
+brew "direnv"
+brew "jq"
+brew "mkcert"
 brew "poetry"
+brew "python"
