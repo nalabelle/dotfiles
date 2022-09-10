@@ -7,8 +7,16 @@ grep_options="--color=always"
 less_options="-R"
 ls_options="--color=always"
 
-x_dircolors="$(+any.executable gdircolors dircolors)"
-x_ls="$(+any.executable gls ls)"
+x_dircolors="dircolors"
+x_ls="ls"
+
+if [[ "$OSTYPE" == "darwin"* || "$OSTYPE" == "freebsd"* ]]; then
+  x_ls="$(+any.executable gls ls)"
+  x_dircolors="$(+any.executable gdircolors dircolors)"
+  # enable color support of ls non-gnu
+  #alias ls='CLICOLOR_FORCE=1 ls -G'
+  less_options="-F -S -M -i ${less_options}"
+fi
 
 # This prevents polluting env with a giant LS_COLORS string...
 ls_colors=""
@@ -17,12 +25,6 @@ if [ -n "$x_dircolors" ]; then
   ls_colors="$(${x_dircolors} -b $dircolors_conf | head -n1)"
   ls_colors=${ls_colors:0:-1}
   unset dircolors_conf
-fi
-
-# enable color support of ls non-gnu
-if [[ "$OSTYPE" == "darwin"* || "$OSTYPE" == "freebsd"* ]]; then
-  #alias ls='CLICOLOR_FORCE=1 ls -G'
-  less_options="-F -S -M -i ${less_options}"
 fi
 
 #added to GNU diffutils 3.4 in 2016-08-08, not present in non-GNU
