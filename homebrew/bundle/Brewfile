@@ -7,4 +7,11 @@ brew "direnv"
 brew "jq"
 brew "mkcert"
 brew "poetry"
+brew "pre-commit"
 brew "python"
+
+# kubernetes
+brew "k9s"
+brew "kubectl"
+brew "krew"
+brew "fluxctl"

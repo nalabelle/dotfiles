@@ -1,5 +1,4 @@
 --cask homebrew/cask/docker
-asdf
 awscli
 bash
 coreutils
@@ -8,8 +7,6 @@ font-fantasque-sans-mono-nerd-font
 git
 homeshick
 iterm2
-jq
-mkcert
 readline
 shellcheck
 tmux
