@@ -4,6 +4,7 @@
 tap "homebrew/core"
 brew "asdf"
 brew "direnv"
+brew "fzf"
 brew "jq"
 brew "mkcert"
 brew "poetry"
