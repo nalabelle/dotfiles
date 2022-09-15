@@ -3,6 +3,9 @@
     "tap": {
       "homebrew/core": {
         "revision": "5f814372382b990d3b624b624bed2af0d5c7806f"
+      },
+      "fluxcd/tap": {
+        "revision": "03e866a6c32cbf94cdb78c200d253687fa9b2b90"
       }
     },
     "brew": {
@@ -463,6 +466,49 @@
             }
           }
         }
+      },
+      "flux": {
+        "version": "0.183.0",
+        "bottle": {
+          "rebuild": 0,
+          "root_url": "https://ghcr.io/v2/homebrew/core",
+          "files": {
+            "arm64_monterey": {
+              "cellar": ":any",
+              "url": "https://ghcr.io/v2/homebrew/core/flux/blobs/sha256:156c9778caadb9503107e3c899ea280799178762c06999362049f435c518cedf",
+              "sha256": "156c9778caadb9503107e3c899ea280799178762c06999362049f435c518cedf"
+            },
+            "arm64_big_sur": {
+              "cellar": ":any",
+              "url": "https://ghcr.io/v2/homebrew/core/flux/blobs/sha256:5d258591a57d285e62696b31c6344e8df65f34e487597b9aff1ba60c33cfcc58",
+              "sha256": "5d258591a57d285e62696b31c6344e8df65f34e487597b9aff1ba60c33cfcc58"
+            },
+            "monterey": {
+              "cellar": ":any",
+              "url": "https://ghcr.io/v2/homebrew/core/flux/blobs/sha256:d401dcb98170a718c04d91ec695bdc5a4ba174efd41d9bebcbcef71978741f45",
+              "sha256": "d401dcb98170a718c04d91ec695bdc5a4ba174efd41d9bebcbcef71978741f45"
+            },
+            "big_sur": {
+              "cellar": ":any",
+              "url": "https://ghcr.io/v2/homebrew/core/flux/blobs/sha256:5266f8f1c85af932ba0b8a25c94597597f2d0acf36d3c18c8b5c7634a995626e",
+              "sha256": "5266f8f1c85af932ba0b8a25c94597597f2d0acf36d3c18c8b5c7634a995626e"
+            },
+            "catalina": {
+              "cellar": ":any",
+              "url": "https://ghcr.io/v2/homebrew/core/flux/blobs/sha256:5c2043469a4d8a6fa280583a253dd6642529148a59cc5c4bd21383954ebf3e03",
+              "sha256": "5c2043469a4d8a6fa280583a253dd6642529148a59cc5c4bd21383954ebf3e03"
+            },
+            "x86_64_linux": {
+              "cellar": ":any_skip_relocation",
+              "url": "https://ghcr.io/v2/homebrew/core/flux/blobs/sha256:43af2f6d8799eb5ae0fa3c00eb02838f597308ca1227fbe8f4834a4f08fe989e",
+              "sha256": "43af2f6d8799eb5ae0fa3c00eb02838f597308ca1227fbe8f4834a4f08fe989e"
+            }
+          }
+        }
+      },
+      "fluxcd/tap/flux": {
+        "version": "0.34.0",
+        "bottle": false
       }
     }
   },

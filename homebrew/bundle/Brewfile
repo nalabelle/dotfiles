@@ -15,4 +15,7 @@ brew "python"
 brew "k9s"
 brew "kubectl"
 brew "krew"
-brew "fluxctl"
+
+tap "fluxcd/tap"
+brew "fluxcd/tap/flux"
+
