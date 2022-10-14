@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+main_branch="$(git remote show origin | awk '/HEAD branch/ {print $NF}')"
+for branch in $(git gone); do
+  git checkout "$branch"
+  git rebase "origin/${main_branch}"
+  git checkout -
+done
