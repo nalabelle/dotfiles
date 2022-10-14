@@ -20,6 +20,8 @@
 [fetch]
   prune = true
 [alias]
+  gone = !git remote prune origin && git branch -vv | grep ': gone]' | awk '{print $1}'
+  gone-prune = !git gone | xargs git branch -d
   tld = rev-parse --show-toplevel
   fpush = push --force-with-lease
   log-compare = log --oneline --boundary --left-right --cherry-mark --decorate
