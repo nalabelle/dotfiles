@@ -28,6 +28,15 @@ Plug 'vim-scripts/xoria256.vim'
 Plug 'vim-airline/vim-airline'
   Plug 'vim-airline/vim-airline-themes'
 
+" vim-maximizer - Allows a quick maximize pane toggle
+Plug 'szw/vim-maximizer'
+
+" vim-win - Helpful shortcuts for window changes, including resize
+Plug 'dstein64/vim-win'
+
+" Helps with deleting buffers
+Plug 'bit101/bufkill'
+
 " vim-bufferline - show the buffers in the statusline or commandbar
 Plug 'bling/vim-bufferline'
 
@@ -39,6 +48,14 @@ Plug 'nathanaelkane/vim-indent-guides'
 
 " calculate folds on save, not while typing
 Plug 'Konfekt/FastFold'
+
+" for easytags
+Plug 'xolox/vim-misc'
+" Adds ctags
+Plug 'xolox/vim-easytags'
+
+" Displays details from LSP
+Plug 'liuchengxu/vista.vim'
 
 " auto set paste
 " Plug 'ConradIrwin/vim-bracketed-paste'
@@ -68,6 +85,7 @@ Plug 'fatih/vim-go'
 Plug 'tpope/vim-markdown'
 Plug 'wlangstroth/vim-racket'
 Plug 'wfxr/protobuf.vim'
+Plug 'earthly/earthly.vim', { 'branch': 'main' }
 
 " Automates Autocomplete
 Plug 'lifepillar/vim-mucomplete'
@@ -84,6 +102,7 @@ if executable('node') && executable('yarn')
   if executable('javac') && executable('scala')
     Plug 'scalameta/coc-metals', {'do': 'yarn install --frozen-lockfile'}
   endif
+  Plug 'fannheyward/coc-pyright'
   let g:coc_start_at_startup = v:false
 endif
 
