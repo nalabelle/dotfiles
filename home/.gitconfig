@@ -7,8 +7,6 @@
   untrackedCache = true
 [color]
   ui = true
-[credential]
-  helper = osxkeychain
 [pull]
   rebase = true
 [push]
@@ -38,3 +36,8 @@
   autoStash = true
 [diff "sopsdiffer"]
 	textconv = "sops -d"
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
