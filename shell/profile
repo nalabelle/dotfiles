@@ -25,6 +25,7 @@ DOTFILES_PATH="$HOME/.homesick/repos/dotfiles"
   "$DOTFILES_PATH/shell/generic/homeshick" \
   "$DOTFILES_PATH/shell/generic/fzf" \
   "$HOME/.config/broot/launcher/bash/br" \
+  "$HOME/.local.profile" \
 
 # If not running interactively, bail here
 +shell.non-interactive return

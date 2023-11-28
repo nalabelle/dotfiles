@@ -6,7 +6,9 @@ if [ -r "$dir/asdf.sh" ]; then
   +path.source "$dir/asdf.sh"
   +bash.completion "$dir/completions/asdf.bash"
   +zsh.completion "$dir/completions"
-elif [ ! -d "$dir" ] && command -v brew > /dev/null 2>&1; then
+elif [ ! -d "$dir" ] \
+  && command -v brew > /dev/null 2>&1 \
+  && brew --prefix asdf > /dev/null 2>&1 ; then
   +path.source "$(brew --prefix asdf)/libexec/asdf.sh"
   +bash.completion "$(brew --prefix asdf)/etc/bash_completion.d/asdf.bash"
   # zsh completion needs to happen via homebrew
