@@ -10,3 +10,6 @@
 	path = shell/zsh/plugins/zsh-autosuggestions
 	url = https://github.com/zsh-users/zsh-autosuggestions.git
 	shallow = true
+[submodule "shell/zsh/plugins/zsh-history-substring-search"]
+	path = shell/zsh/plugins/zsh-history-substring-search
+	url = https://github.com/zsh-users/zsh-history-substring-search
