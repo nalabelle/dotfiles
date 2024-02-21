@@ -97,13 +97,13 @@ Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': 
 "Plug 'jvirtanen/vim-hcl'
 Plug 'hashivim/vim-terraform'
 
-if executable('node') && executable('yarn')
-  Plug 'neoclide/coc.nvim', {'branch': 'release'}
-  if executable('javac') && executable('scala')
-    Plug 'scalameta/coc-metals', {'do': 'yarn install --frozen-lockfile'}
-  endif
-  Plug 'fannheyward/coc-pyright'
-  let g:coc_start_at_startup = v:false
-endif
+"if executable('node') && executable('yarn')
+"  Plug 'neoclide/coc.nvim', {'branch': 'release'}
+"  if executable('javac') && executable('scala')
+"    Plug 'scalameta/coc-metals', {'do': 'yarn install --frozen-lockfile'}
+"  endif
+"  Plug 'fannheyward/coc-pyright'
+"  let g:coc_start_at_startup = v:false
+"endif
 
 call plug#end()
