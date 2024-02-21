@@ -104,7 +104,7 @@ prompt_custom_string_date() {
 }
 
 prompt_custom_header_date() {
-  print -Pn '%(?.%F{green}.%F{red})'
+  print -Pn '\n%(?.%F{green}.%F{red})'
   print -P "$(prompt_custom_string_date)%f"
 }
 
