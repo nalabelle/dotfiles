@@ -84,7 +84,6 @@ zstyle ':vcs_info:*' formats  '%F{grey}[%F{yellow}%b%c%u%F{grey}]%f'
 zstyle ':vcs_info:*' enable git
 zstyle ':vcs_info:git*+set-message:*' hooks git-untracked
 
-
 +vi-git-untracked() {
   if [[ $(git rev-parse --is-inside-work-tree 2> /dev/null) == 'true' ]] && \
      git status --porcelain | grep -m 1 '^??' &>/dev/null
@@ -94,25 +93,77 @@ zstyle ':vcs_info:git*+set-message:*' hooks git-untracked
 }
 
 # Prompt
-X_HEADER='%{$fg[blue]%}%0~%{%F{000}%} ${vcs_info_msg_0_}'
-PROMPT='%{$fg[white]%}%#%f '
-RPROMPT='%F{032}%n@%m%f'
-setopt prompt_subst
+# https://zsh.sourceforge.io/Doc/Release/Prompt-Expansion.html
+# %F/%f start stop foreground color
+# %K/%k start stop background color
 
-+x-print-header() {
-  print -rP "${X_HEADER}"
+X_ZERO='%([BSUbfksu]|([FK]|){*})'
+prompt_custom_string_date() {
+  # via zsh/datetime
+  TZ=UTC strftime "%Y-%m-%d %H:%M:%S.%."
 }
 
-precmd() {
+prompt_custom_header_date() {
+  print -Pn '%(?.%F{green}.%F{red})'
+  print -P "$(prompt_custom_string_date)%f"
+}
+
+prompt_custom_header_rewrite_date() {
+  local date_string=" -> $(prompt_custom_string_date)"
+  local date_string_length=${#${(S%%)date_string//$~X_ZERO/}}
+  local C=$(( $COLUMNS - ($date_string_length + 1) ))
+  print -P "\033[2F\033[${C}C%F{032}${date_string}%f\033[1E"
+
+}
+
+prompt_custom_header() {
+  # path vcs_info
+  local X_HEADER_LEFT="%F{blue}%0~%f ${vcs_info_msg_0_}"
+  # user@machine
+  local X_HEADER_RIGHT="%F{032}%n@%m%f"
+  local X_HEADER_LEFT_LENGTH=${#${(S%%)X_HEADER_LEFT//$~X_ZERO/}}
+  local X_HEADER_RIGHT_LENGTH=${#${(S%%)X_HEADER_RIGHT//$~X_ZERO/}}
+  local X_PRINT_RIGHT
+  local X_PROMPTS_WIDTH
+  (( X_PROMPTS_WIDTH = (1 + $X_HEADER_LEFT_LENGTH + $X_HEADER_RIGHT_LENGTH) ))
+  if [[ "$X_PROMPTS_WIDTH" -ge $COLUMNS ]]; then
+    X_PRINT_RIGHT=""
+  else
+    X_PRINT_RIGHT="${(l:$COLUMNS - $X_PROMPTS_WIDTH:)}${X_HEADER_RIGHT}"
+  fi
+  print -rP - "${X_HEADER_LEFT}${X_PRINT_RIGHT}"
+}
+
+prompt_custom_precmd() {
   vcs_info
-  colors
-  +x-print-header
-  promptinit
 }
 
+prompt_custom_setup() {
+  autoload -Uz vcs_info
+  add-zsh-hook precmd prompt_custom_precmd
+  add-zsh-hook precmd prompt_custom_header_date
+  add-zsh-hook precmd prompt_custom_header
+  prompt_opts=( cr percent sp )
+  PS1='%F{white}%#%f '
+}
+
+prompt_custom_setup "$@"
+
+function _reset-prompt-and-accept-line {
+  prompt_custom_header_rewrite_date
+  zle .accept-line
+}
+zle -N accept-line _reset-prompt-and-accept-line
+
+function _reset-prompt-and-accept-isearch {
+  prompt_custom_header_rewrite_date
+  zle .zle-isearch-exit
+}
+
+zle -N zle-isearch-exit _reset-prompt-and-accept-isearch
+
+zmodload zsh/datetime
 autoload -U promptinit
-autoload -U colors
-autoload -Uz vcs_info
 autoload -U compinit; compinit
 #autoload -U history-search-end
 
