@@ -50,3 +50,5 @@ case $TERM in
     +path.source "$DOTFILES_PATH/shell/color/init"
     ;;
 esac
+
+[ -z "$SSH_AUTH_SOCK" ] && eval "$(ssh-agent -s)" > /dev/null
