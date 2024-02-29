@@ -85,7 +85,7 @@ Plug 'fatih/vim-go'
 Plug 'tpope/vim-markdown'
 Plug 'wlangstroth/vim-racket'
 Plug 'wfxr/protobuf.vim'
-Plug 'earthly/earthly.vim', { 'branch': 'main' }
+Plug 'Glench/Vim-Jinja2-Syntax'
 
 " Automates Autocomplete
 Plug 'lifepillar/vim-mucomplete'
@@ -96,6 +96,7 @@ Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': 
 " HCL
 "Plug 'jvirtanen/vim-hcl'
 Plug 'hashivim/vim-terraform'
+Plug 'earthly/earthly.vim', { 'branch': 'main' }
 
 "if executable('node') && executable('yarn')
 "  Plug 'neoclide/coc.nvim', {'branch': 'release'}
