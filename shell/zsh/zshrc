@@ -79,8 +79,8 @@ zstyle ':vcs_info:*' check-for-changes
 zstyle ':vcs_info:*' unstagedstr ' %F{green}U%f'
 zstyle ':vcs_info:*' check-for-staged-changes
 zstyle ':vcs_info:*' stagedstr ' %F{blue}S%f'
-zstyle ':vcs_info:*' actionformats '%F{grey}[%F{yellow}%b%F{grey}|%F{red}%a%F{grey}]%f%c%u%f'
-zstyle ':vcs_info:*' formats  '%F{grey}[%F{yellow}%b%c%u%F{grey}]%f'
+zstyle ':vcs_info:*' actionformats '%F{008}[%F{yellow}%b%F{008}|%F{red}%a%F{008}]%f%c%u%f'
+zstyle ':vcs_info:*' formats  '%F{008}[%F{yellow}%b%c%u%F{008}]%f'
 zstyle ':vcs_info:*' enable git
 zstyle ':vcs_info:git*+set-message:*' hooks git-untracked
 
@@ -96,6 +96,11 @@ zstyle ':vcs_info:git*+set-message:*' hooks git-untracked
 # https://zsh.sourceforge.io/Doc/Release/Prompt-Expansion.html
 # %F/%f start stop foreground color
 # %K/%k start stop background color
+prompt_custom_header_env() {
+  if [ -n "$CONDA_PROMPT_MODIFIER" ]; then
+    print - " %F{94}conda:$CONDA_PROMPT_MODIFIER%f"
+  fi
+}
 
 X_ZERO='%([BSUbfksu]|([FK]|){*})'
 prompt_custom_string_date() {
@@ -109,27 +114,30 @@ prompt_custom_header_date() {
 }
 
 prompt_custom_header_rewrite_date() {
-  local date_string=" -> $(prompt_custom_string_date)"
+  local date_string="$(prompt_custom_string_date) ->"
   local date_string_length=${#${(S%%)date_string//$~X_ZERO/}}
   local C=$(( $COLUMNS - ($date_string_length + 1) ))
   print -P "\033[2F\033[${C}C%F{032}${date_string}%f\033[1E"
-
+  zle reset-prompt
 }
 
 prompt_custom_header() {
-  # path vcs_info
-  local X_HEADER_LEFT="%F{blue}%0~%f ${vcs_info_msg_0_}"
+  local X_ENV="$(prompt_custom_header_env) "
+  # path env vcs_info
+  local X_HEADER_LEFT="%F{248}%0~%f${X_ENV}${vcs_info_msg_0_}"
   # user@machine
-  local X_HEADER_RIGHT="%F{032}%n@%m%f"
+  local X_HEADER_RIGHT="%F{248}%n@%m%f"
   local X_HEADER_LEFT_LENGTH=${#${(S%%)X_HEADER_LEFT//$~X_ZERO/}}
   local X_HEADER_RIGHT_LENGTH=${#${(S%%)X_HEADER_RIGHT//$~X_ZERO/}}
   local X_PRINT_RIGHT
   local X_PROMPTS_WIDTH
+  local X_PROMPT_SPACER
   (( X_PROMPTS_WIDTH = (1 + $X_HEADER_LEFT_LENGTH + $X_HEADER_RIGHT_LENGTH) ))
+  (( X_PROMPT_SPACER = $COLUMNS - $X_PROMPTS_WIDTH ))
   if [[ "$X_PROMPTS_WIDTH" -ge $COLUMNS ]]; then
     X_PRINT_RIGHT=""
   else
-    X_PRINT_RIGHT="${(l:$COLUMNS - $X_PROMPTS_WIDTH:)}${X_HEADER_RIGHT}"
+    X_PRINT_RIGHT="${(l:$X_PROMPT_SPACER:)}${X_HEADER_RIGHT}"
   fi
   print -rP - "${X_HEADER_LEFT}${X_PRINT_RIGHT}"
 }
