@@ -1,0 +1,58 @@
+# shellcheck shell=sh disable=2034
+# vim:filetype=sh
+
+determine_shell() {
+  case "$SHELL" in
+    *zsh)
+      echo "zsh"
+    ;;
+  esac
+}
+
+mamba_env_from_yaml() {
+  grep 'name: ' environment.yml | sed -e 's/name: //'
+}
+
+determine_mamba_env() {
+  local env
+  env="$(mamba_env_from_yaml)"
+  if [ -z "$env" ]; then
+    env="$(basename "$(pwd)")"
+  fi
+  echo "$env"
+}
+
+ensure_mamba_prefix() {
+  local env="$1"
+  if [ ! -d "$CONDA_ENV_DIRS/$env" ]; then
+    echo "Creating mamba prefix: $CONDA_ENV_DIRS/$env"
+    micromamba create -y -n "$env" -f conda-lock.yml
+  fi
+}
+
+
+layout_mamba() {
+  local shell="$(determine_shell)"
+  local env_name="${1:-}"
+
+  local __mamba_setup="$(micromamba shell hook \
+      --shell "$shell" \
+      --root-prefix "$MAMBA_ROOT_PREFIX" \
+      )"
+      #2> /dev/null)"
+  if [ $? -eq 0 ]; then
+      eval "$__mamba_setup"
+      if [ -z "$env_name" ]; then
+        env_name="$(determine_mamba_env)"
+      fi
+      if [ -n "$env_name" ]; then
+        ensure_mamba_prefix "$env_name"
+        echo "Activating mamba layout $env_name"
+        micromamba activate "$env_name"
+      else
+        echo "Mamba layout requested but no env found"
+      fi
+  else
+      echo "Mamba layout requested but mamba not found"
+  fi
+}
