@@ -24,7 +24,8 @@ determine_mamba_env() {
 
 ensure_mamba_prefix() {
   local env="$1"
-  if [ ! -d "$CONDA_ENV_DIRS/$env" ]; then
+  # TODO: Split this on : and add a fallback
+  if [ ! -d "$CONDA_ENVS_DIRS/$env" ]; then
     echo "Creating mamba prefix: $CONDA_ENV_DIRS/$env"
     micromamba create -y -n "$env" -f conda-lock.yml
   fi
