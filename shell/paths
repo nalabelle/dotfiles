@@ -21,3 +21,6 @@ export PERLBREW_ROOT="$HOME/.config/perl/perlbrew"
 # Rust
 export RUSTUP_HOME="$HOME/.config/rust/rustup"
 export CARGO_HOME="$HOME/.config/rust/cargo"
+
+# Micromamba (Conda/Mamba)
+export MAMBA_ROOT_PREFIX="$HOME/.local/micromamba"
