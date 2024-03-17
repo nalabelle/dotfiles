@@ -14,6 +14,7 @@ DOTFILES_PATH="$HOME/.homesick/repos/dotfiles"
   "$HOME/.local/bin" \
 
 +path.append "PATH" \
+  "$HOME/.nix-profile/bin" \
   "$HOME/.krew/bin" \
   "$HOME/.poetry/bin" \
   "${GOPATH}/bin" \
@@ -31,7 +32,6 @@ DOTFILES_PATH="$HOME/.homesick/repos/dotfiles"
 +shell.non-interactive return
 
 # Environment
-export LC_ALL="en_US.UTF-8"
 export LANG="en_US.UTF-8"
 
 # Defaults
