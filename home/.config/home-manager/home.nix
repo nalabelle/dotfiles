@@ -6,36 +6,37 @@
   home.stateVersion = "23.11";
 
   home.packages = with pkgs; [
-    git
+    # General shell
     curl
-    wget
-    vim
-    tmux
     fzf
+    jq
+    tmux
+    vim
+    wget
     zsh
+
+    # Environment
     direnv
-    nix-direnv
     nix
+    nix-direnv
+
+    # Dev Tools
     ctags
-    podman
-    kubectl
-    fluxcd
-    krew
-    gnumake
-    kyverno
-    pre-commit
     earthly
+    git
+    gnumake
+    mkcert
+    podman
+    pre-commit
+
+    # Kubernetes
+    fluxcd
+    k9s
+    krew
+    kubectl
+    kyverno
   ];
 
   programs.home-manager.enable = true;
-  programs.zsh = {
-    enable = false;
-    enableCompletion = true;
-  };
-  programs.direnv = {
-    enable = false;
-    enableZshIntegration = true;
-    nix-direnv.enable = true;
-  };
 }
 
