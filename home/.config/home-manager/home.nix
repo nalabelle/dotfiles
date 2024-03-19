@@ -10,6 +10,7 @@
     curl
     wget
     vim
+    tmux
     fzf
     zsh
     direnv
@@ -22,6 +23,8 @@
     krew
     gnumake
     kyverno
+    pre-commit
+    earthly
   ];
 
   programs.home-manager.enable = true;
