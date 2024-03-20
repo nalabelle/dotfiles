@@ -13,7 +13,6 @@
     tmux
     vim
     wget
-    zsh
 
     # Environment
     direnv
