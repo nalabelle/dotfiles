@@ -6,8 +6,8 @@ DOTFILES_PATH="$HOME/.homesick/repos/dotfiles"
 . "$DOTFILES_PATH/shell/util/path"
 . "$DOTFILES_PATH/shell/util/shell"
 
-# Environment
-+path.source "$DOTFILES_PATH/shell/paths"
+# Path Configs
+export XDG_CONFIG_HOME="$HOME/.config"
 
 +path.prepend "PATH" \
   "$DOTFILES_PATH/bin" \
@@ -27,8 +27,6 @@ DOTFILES_PATH="$HOME/.homesick/repos/dotfiles"
 
 # Environment
 export LANG="en_US.UTF-8"
-
-# Defaults
 export EDITOR=vim
 export PAGER=less
 

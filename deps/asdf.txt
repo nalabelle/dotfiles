@@ -1,2 +1,0 @@
-terraform                    https://github.com/Banno/asdf-hashicorp.git
-shellcheck                   https://github.com/luizm/asdf-shellcheck.git
