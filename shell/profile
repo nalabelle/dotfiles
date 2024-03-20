@@ -1,5 +1,5 @@
 # shellcheck shell=sh external-sources=false disable=SC1091
-# vim:filetype=bash
+# vim:filetype=sh
 
 # Support Utilities
 DOTFILES_PATH="$HOME/.homesick/repos/dotfiles"
@@ -11,16 +11,16 @@ export XDG_CONFIG_HOME="$HOME/.config"
 
 +path.prepend "PATH" \
   "$DOTFILES_PATH/bin" \
-  "$HOME/.local/bin" \
+  "$HOME/.local/bin"
 
 +path.append "PATH" \
   "$HOME/.nix-profile/bin" \
-  "$CARGO_HOME/bin" \
+  "$CARGO_HOME/bin"
 
 +path.source \
   "$DOTFILES_PATH/shell/generic/homeshick" \
   "$DOTFILES_PATH/shell/generic/fzf" \
-  "$HOME/.config/broot/launcher/bash/br" \
+  "$HOME/.config/broot/launcher/bash/br"
 
 # If not running interactively, bail here
 +shell.non-interactive return
@@ -38,9 +38,9 @@ export KEYTIMEOUT=1
 
 # set color
 case $TERM in
-  *'color'* )
+  *'color'*)
     +path.source "$DOTFILES_PATH/shell/color/init"
     ;;
 esac
 
-[ -z "$SSH_AUTH_SOCK" ] && eval "$(ssh-agent -s)" > /dev/null
+[ -z "$SSH_AUTH_SOCK" ] && eval "$(ssh-agent -s)" >/dev/null

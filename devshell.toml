@@ -1,0 +1,10 @@
+[devshell]
+name = "dotfiles"
+packages = [
+  "shellcheck",
+  "shfmt",
+]
+
+[[env]]
+name = "PROMPT_ENV"
+eval = "devshell:$(basename $PRJ_ROOT)"
