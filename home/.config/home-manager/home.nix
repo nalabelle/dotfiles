@@ -22,10 +22,8 @@
 
     # Dev Tools
     ctags
-    earthly
     git
     gnumake
-    mkcert
     podman
     pre-commit
 

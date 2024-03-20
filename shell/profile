@@ -15,18 +15,12 @@ DOTFILES_PATH="$HOME/.homesick/repos/dotfiles"
 
 +path.append "PATH" \
   "$HOME/.nix-profile/bin" \
-  "$HOME/.krew/bin" \
-  "$HOME/.poetry/bin" \
-  "${GOPATH}/bin" \
   "$CARGO_HOME/bin" \
 
 +path.source \
-  "$DOTFILES_PATH/shell/generic/homebrew" \
-  "$DOTFILES_PATH/shell/generic/asdf" \
   "$DOTFILES_PATH/shell/generic/homeshick" \
   "$DOTFILES_PATH/shell/generic/fzf" \
   "$HOME/.config/broot/launcher/bash/br" \
-  "$HOME/.local.profile" \
 
 # If not running interactively, bail here
 +shell.non-interactive return
