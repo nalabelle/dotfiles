@@ -23,8 +23,6 @@ endif
 set title
 
 
-let g:ale_disable_lsp = 1
-
 source ~/.vim/plug.vim
 
 set noexrc          " don't use local config files
@@ -345,6 +343,9 @@ nnoremap <C-W>z :MaximizerToggle<CR>
 " bufkill
 nnoremap <Leader>d :KillBuffer<CR>
 
+" Toggle fold
+nnoremap <space> za
+
 " COC Settings
 " Use `[g` and `]g` to navigate diagnostics
 " Use `:CocDiagnostics` to get all diagnostics of current buffer in location list
@@ -408,3 +409,5 @@ nnoremap <silent> K :call ShowDocumentation()<CR>
 "command! -nargs=0 OR   :call     CocActionAsync('runCommand', 'editor.action.organizeImport')
 
 "let g:coc_start_at_startup = 1
+let g:local_vimrc = ['vimrc.local']
+call lh#local_vimrc#munge('whitelist', $HOME.'/git')

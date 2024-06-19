@@ -49,7 +49,7 @@ setopt histignoredups
 setopt histnostore
 setopt histreduceblanks
 setopt incappendhistory
-setopt sharehistory
+#setopt sharehistory
 
 # Put the !! command in the prompt for changing
 setopt histverify
@@ -149,27 +149,26 @@ prompt_custom_precmd() {
 
 prompt_custom_setup() {
   autoload -Uz vcs_info
-  add-zsh-hook precmd prompt_custom_precmd
-  add-zsh-hook precmd prompt_custom_header_date
-  add-zsh-hook precmd prompt_custom_header
+  #add-zsh-hook precmd prompt_custom_precmd
+  #add-zsh-hook precmd prompt_custom_header_date
+  #add-zsh-hook precmd prompt_custom_header
   prompt_opts=( cr percent sp )
   PS1='%F{white}%#%f '
 }
 
-prompt_custom_setup "$@"
+#prompt_custom_setup "$@"
 
 function _reset-prompt-and-accept-line {
   prompt_custom_header_rewrite_date
   zle .accept-line
 }
-zle -N accept-line _reset-prompt-and-accept-line
+#zle -N accept-line _reset-prompt-and-accept-line
 
 function _reset-prompt-and-accept-isearch {
   prompt_custom_header_rewrite_date
   zle .zle-isearch-exit
 }
-
-zle -N zle-isearch-exit _reset-prompt-and-accept-isearch
+#zle -N zle-isearch-exit _reset-prompt-and-accept-isearch
 
 zmodload zsh/datetime
 autoload -U promptinit
@@ -185,3 +184,4 @@ bindkey '^[[B' history-substring-search-down
 
 
 command -v direnv > /dev/null 2>&1 && eval "$(direnv hook zsh)"
+command -v starship > /dev/null 2>&1 && eval "$(starship init zsh)"

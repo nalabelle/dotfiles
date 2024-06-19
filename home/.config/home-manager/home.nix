@@ -9,10 +9,14 @@
     # General shell
     curl
     fzf
+    htop
     jq
     tmux
     vim
     wget
+
+    # Fancy Prompt
+    starship
 
     # Environment
     direnv
@@ -26,10 +30,17 @@
     podman
     pre-commit
 
+    devbox
+    devenv
+    convco
+
     # Kubernetes
     k9s
     krew
     kubectl
+
+    # tools
+    sqlite
   ];
 
   programs.home-manager.enable = true;

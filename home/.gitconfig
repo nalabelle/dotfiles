@@ -1,6 +1,7 @@
 [user]
   name = nalabelle
   email = git@nalabelle.com
+	signingkey = /home/nalabelle/.ssh/id_ed25519.pub
 [core]
   editor = vim --clean
   excludesfile = ~/.gitignore_global
@@ -41,3 +42,7 @@
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
 	required = true
+[commit]
+	gpgsign = true
+[gpg]
+	format = ssh
