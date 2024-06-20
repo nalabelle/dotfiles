@@ -2,7 +2,6 @@
 
 {
   home.username = "nalabelle";
-  home.homeDirectory = "/home/nalabelle";
   home.stateVersion = "23.11";
 
   home.packages = with pkgs; [
