@@ -27,11 +27,9 @@
     pre-commit
 
     # Kubernetes
-    fluxcd
     k9s
     krew
     kubectl
-    kyverno
   ];
 
   programs.home-manager.enable = true;
