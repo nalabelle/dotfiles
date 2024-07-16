@@ -30,8 +30,7 @@ set noexrc          " don't use local config files
 set cpoptions=Ben
 
 " color options
-colo xoria256
-set background=dark " could be light too...
+set background=dark
 
 " syntax highlighting
 syntax on
@@ -128,9 +127,6 @@ if ! has('gui_running')
   augroup END
 endif
 
-" Visual Indent from vim-indent-guides
-let indent_guides_enable_on_vim_startup = 1
-
 " Always show the signcolumn for diagnostics
 set signcolumn=yes
 
@@ -159,8 +155,11 @@ function! ToggleFormatting()
 endf
 
 map <Leader>o :silent !open -jg "%"<CR>
-map <Leader>af :ALEFix<CR>
 map <Leader>m :messages<CR>
+
+" Remap recorder
+nnoremap <Leader>q q
+nnoremap q <NOP>
 
 " https://raw.github.com/sdball/dotfiles/master/vim/vimrc
 " blocks arrow keys for forced learning
@@ -168,18 +167,6 @@ map <Left> :echo "NOPE! Use h"<cr>
 map <Right> :echo "NOPE! Use l"<cr>
 map <Up> :echo "NOPE! Use k"<cr>
 map <Down> :echo "NOPE! Use j"<cr>
-
-" easier split moving
-nnoremap <C-J> <C-W><C-J>
-nnoremap <C-K> <C-W><C-K>
-nnoremap <C-L> <C-W><C-L>
-nnoremap <C-H> <C-W><C-H>
-
-" Move the splits arround!
-"nnoremap <silent> <C-S-k> <C-W>k
-"nnoremap <silent> <C-s-j> <C-W>j
-"nnoremap <silent> <C-S-h> <C-W>h
-"nnoremap <silent> <C-S-l> <C-W>l
 
 " hide and show numbers/non-printing chars
 map <Leader>n :call ToggleFormatting()<CR>
@@ -220,24 +207,8 @@ if has('gui_running')
   map <S-Insert> <MiddleMouse>
   map! <S-Insert> <MiddleMouse>
 
-  " Only do this for Vim version 5.0 and later.
-  if version >= 500
-
-    " Switch on syntax highlighting if it wasn't on yet.
-    if !exists("syntax_on")
-      syntax on
-    endif
-
-    " For Win32 version, have "K" lookup the keyword in a help file
-    "if has("win32")
-    "  let winhelpfile='windows.hlp'
-    "  map K :execute "!start winhlp32 -k <cword> " . winhelpfile <CR>
-    "endif
-
-    "set enc=utf-8
-    set guifont=Fira_Code_Retina:h11:cDEFAULT:qCLEARTYPE
-
-  endif
+  "set enc=utf-8
+  set guifont=Fira_Code_Retina:h11:cDEFAULT:qCLEARTYPE
 endif
 
 " Folds
@@ -249,43 +220,12 @@ let g:fastfold_minlines = 0
 let g:fastfold_savehook = 1
 set foldcolumn=7
 
-" ALE fixers
-function! Retab(buffer) abort
-  retab
-endfunction
-
-function! AutoIndent(buffer) abort
-  " Mark cursor, then go to the middle, format, then unwind the cursor stack
-  exe 'normal! mc;M;mm;gg=G;`m;`c'
-endfunction
-
-
-call ale#fix#registry#Add('retab', 'Retab', [], 'Retabs as per vim settings')
-call ale#fix#registry#Add('auto_indent', 'AutoIndent', [], 'vim auto-indent, gg=G')
-let g:ale_fixers = {'*': ['retab', 'remove_trailing_lines', 'trim_whitespace']}
-let g:ale_fix_on_save = 0
-let g:ale_set_balloons = 1
-
-"set completeopt+=longest
-"set completeopt+=menuone
-"set completeopt+=noinsert
-"set completeopt+=noselect
-
-"let g:mucomplete#enable_auto_at_startup = 1
-"let g:mucomplete#tab_when_no_results = 1
+set completeopt+=menuone
+set completeopt+=noinsert
+set shortmess+=c " Shut off completion messages
 
 "selecting an autocomplete option should not insert a newline
 inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-" typeahead
-inoremap <expr> <C-n> pumvisible() ? '<C-n>' :
-  \ '<C-n><C-r>=pumvisible() ? "\<lt>Down>" : ""<CR>'
-inoremap <expr> <M-,> pumvisible() ? '<C-n>' :
-  \ '<C-x><C-o><C-n><C-p><C-r>=pumvisible() ? "\<lt>Down>" : ""<CR>'
-
-"if exists("+omnifunc")
-"  set omnifunc=syntaxcomplete#Complete
-"  let g:omni_sql_default_compl_type = 'syntax'
-"endif
 
 if has("autocmd")
   " drop into the last buffer to avoid E173 "more files to edit" on :q
@@ -307,107 +247,13 @@ nnoremap <leader>e :FzfFiles<cr>
 nnoremap <leader>E :FzfGFiles<cr>
 nnoremap <leader>/ :FzfBLines<cr>
 
-" vim-bufferline
-" :help bufferline
-let g:bufferline_echo = 0
-" bufferline aligns to the right in airline, so you want to pin your current
-" buffer to the right for it to be usable with many open buffers
-let g:bufferline_fixed_index = -2
-let g:bufferline_rotate = 1
-
-" Airline
-let g:airline_theme='bubblegum'
-let g:airline_skip_empty_sections = 1
-let g:airline_highlighting_cache = 1
-let g:airline_mode_map = {
-    \ 'c'      : 'C',
-    \ 'i'      : 'I',
-    \ 'n'      : 'N',
-    \ 'v'      : 'V',
-    \ }
-
-if !exists('g:airline_symbols')
-  let g:airline_symbols = {}
-endif
-let g:airline_symbols.linenr = '☰ '
-let g:airline_symbols.colnr = '||'
-let g:airline_symbols.maxlinenr = ''
-let g:airline_symbols.branch = ''
-let g:airline_symbols.readonly = 'RO'
-
 let g:mkdp_filetypes = ['markdown', 'page']
 
-" vim-maximizer
-nnoremap <C-W>z :MaximizerToggle<CR>
-
 " bufkill
-nnoremap <Leader>d :KillBuffer<CR>
+nnoremap <Leader>D :KillBuffer<CR>
 
 " Toggle fold
 nnoremap <space> za
 
-" COC Settings
-" Use `[g` and `]g` to navigate diagnostics
-" Use `:CocDiagnostics` to get all diagnostics of current buffer in location list
-"nmap <silent> [g <Plug>(coc-diagnostic-prev)
-"nmap <silent> ]g <Plug>(coc-diagnostic-next)
-
-" GoTo code navigation
-"nmap <silent> gd <Plug>(coc-definition)
-"nmap <silent> gy <Plug>(coc-type-definition)
-"nmap <silent> gi <Plug>(coc-implementation)
-"nmap <silent> gr <Plug>(coc-references)
-
-" Use K to show documentation in preview window
-nnoremap <silent> K :call ShowDocumentation()<CR>
-
-"function! ShowDocumentation()
-"  if CocAction('hasProvider', 'hover')
-"    call CocActionAsync('doHover')
-"  else
-"    call feedkeys('K', 'in')
-"  endif
-"endfunction
-
-" Highlight the symbol and its references when holding the cursor
-"autocmd CursorHold * silent call CocActionAsync('highlight')
-
-" Symbol renaming
-"nmap <leader>rn <Plug>(coc-rename)
-"
-"" Formatting selected code
-"xmap <leader>f  <Plug>(coc-format-selected)
-"nmap <leader>f  <Plug>(coc-format-selected)
-"
-"" Applying code actions to the selected code block
-"" Example: `<leader>aap` for current paragraph
-"xmap <leader>a  <Plug>(coc-codeaction-selected)
-"nmap <leader>a  <Plug>(coc-codeaction-selected)
-"
-"" Remap keys for applying code actions at the cursor position
-"nmap <leader>ac  <Plug>(coc-codeaction-cursor)
-"" Remap keys for apply code actions affect whole buffer
-"nmap <leader>as  <Plug>(coc-codeaction-source)
-"" Apply the most preferred quickfix action to fix diagnostic on the current line
-"nmap <leader>qf  <Plug>(coc-fix-current)
-"
-"" Remap keys for applying refactor code actions
-"nmap <silent> <leader>re <Plug>(coc-codeaction-refactor)
-"xmap <silent> <leader>r  <Plug>(coc-codeaction-refactor-selected)
-"nmap <silent> <leader>r  <Plug>(coc-codeaction-refactor-selected)
-"
-"" Run the Code Lens action on the current line
-"nmap <leader>cl  <Plug>(coc-codelens-action)
-
-" Add `:Format` command to format current buffer
-"command! -nargs=0 Format :call CocActionAsync('format')
-
-" Add `:Fold` command to fold current buffer
-"command! -nargs=? Fold :call     CocAction('fold', <f-args>)
-
-" Add `:OR` command for organize imports of the current buffer
-"command! -nargs=0 OR   :call     CocActionAsync('runCommand', 'editor.action.organizeImport')
-
-"let g:coc_start_at_startup = 1
 let g:local_vimrc = ['vimrc.local']
 call lh#local_vimrc#munge('whitelist', $HOME.'/git')
