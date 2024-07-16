@@ -107,6 +107,9 @@ Plug 'MarcWeber/vim-addon-goto-thing-at-cursor'
 Plug 'MarcWeber/vim-addon-errorformats'
 Plug 'MarcWeber/vim-addon-nix'
 
+Plug 'LucHermitte/lh-vim-lib'
+Plug 'LucHermitte/local_vimrc'
+
 "if executable('node') && executable('yarn')
 "  Plug 'neoclide/coc.nvim', {'branch': 'release'}
 "  if executable('javac') && executable('scala')

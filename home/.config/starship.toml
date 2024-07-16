@@ -1,0 +1,50 @@
+"$schema" = 'https://starship.rs/config-schema.json'
+
+add_newline = true
+format = '''$time$fill$username$hostname
+$all
+${env_var.PROMPT_ENV}$character'''
+palette = 'xoria'
+
+command_timeout = 1000
+
+[palettes.xoria]
+dark_grey = '248'
+
+[character]
+vimcmd_symbol = '[N](bold green)'
+vimcmd_visual_symbol = '[V](bold yellow)'
+
+[line_break]
+disabled = true
+
+[time]
+disabled = false
+style = 'dimmed dark_grey'
+format = '[$time]($style)'
+time_format = '%F %T%Z'
+utc_time_offset = '0'
+
+[username]
+style_user = 'dimmed dark_grey'
+format = '[$user]($style)'
+
+[hostname]
+ssh_symbol = ''
+style = 'dimmed dark_grey'
+format = '[$ssh_symbol@$hostname]($style)'
+
+[fill]
+symbol = ' '
+
+[nix_shell]
+format = '[$symbol$state( \($name\))]($style) '
+symbol = '❆ '
+impure_msg = ''
+
+[rust]
+format = '[$symbol($version )]($style)'
+
+[env_var.PROMPT_ENV]
+style = 'grey dimmed'
+format = '[\($env_value\)]($style) '
