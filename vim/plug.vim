@@ -98,6 +98,15 @@ Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': 
 Plug 'hashivim/vim-terraform'
 Plug 'earthly/earthly.vim', { 'branch': 'main' }
 
+" Deps for vim-addon-nix + that
+Plug 'tomtom/tlib_vim'
+Plug 'MarcWeber/vim-addon-mw-utils'
+Plug 'MarcWeber/vim-addon-actions'
+Plug 'MarcWeber/vim-addon-completion'
+Plug 'MarcWeber/vim-addon-goto-thing-at-cursor'
+Plug 'MarcWeber/vim-addon-errorformats'
+Plug 'MarcWeber/vim-addon-nix'
+
 "if executable('node') && executable('yarn')
 "  Plug 'neoclide/coc.nvim', {'branch': 'release'}
 "  if executable('javac') && executable('scala')
