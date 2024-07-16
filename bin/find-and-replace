@@ -1,0 +1,16 @@
+#!/bin/bash
+# find_and_replace.sh
+# https://superuser.com/a/428494
+
+echo "Find and replace in current directory!"
+echo "File pattern to look for? (eg '*.txt')"
+read -r filepattern
+echo "Existing string?"
+read -r existing
+echo "Replacement string?"
+read -r replacement
+echo "Replacing all occurences of $existing with $replacement in files matching $filepattern"
+set -x
+
+#git grep -lz "$filepattern" | xargs -0 sed -i '' -e "s/$existing/$replacement/g"
+find . -type f -name "$filepattern" -print0 | xargs -0 sed -i'' -e "s|$existing|$replacement|g"
