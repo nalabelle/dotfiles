@@ -1,9 +1,6 @@
 # shellcheck shell=bash
 # shellcheck external-sources=false disable=SC1091
 
-+path.source \
-  "$PERLBREW_ROOT/etc/bashrc" \
-
 export DOTFILES_PATH
 
 BASHRCD=(
