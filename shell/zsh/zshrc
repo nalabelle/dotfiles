@@ -1,3 +1,4 @@
+# shellcheck shell=sh external-sources=false disable=SC1091
 # vim:filetype=zsh
 
 ZDOTDIR="$HOME/.config/zsh"
@@ -97,8 +98,8 @@ zstyle ':vcs_info:git*+set-message:*' hooks git-untracked
 # %F/%f start stop foreground color
 # %K/%k start stop background color
 prompt_custom_header_env() {
-  if [ -n "$CONDA_PROMPT_MODIFIER" ]; then
-    print - " %F{94}conda:$CONDA_PROMPT_MODIFIER%f"
+  if [ -n "$PROMPT_ENV" ]; then
+    print - " %F{94}$PROMPT_ENV%f"
   fi
 }
 
