@@ -11,8 +11,9 @@
     htop
     jq
     tmux
-    vim
+    vim-full
     wget
+    glow
 
     # Fancy Prompt
     starship
@@ -23,11 +24,12 @@
     nix-direnv
 
     # Dev Tools
-    ctags
+    universal-ctags
     git
     gnumake
     podman
     pre-commit
+    cargo
 
     devbox
     devenv
@@ -40,6 +42,10 @@
 
     # tools
     sqlite
+
+    # General Linters/Fixers
+    vale
+    markdownlint-cli
   ];
 
   programs.home-manager.enable = true;
