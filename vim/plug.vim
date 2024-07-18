@@ -1,6 +1,7 @@
 " ale
 if !empty(glob('~/.vim/bundle/ale'))
   let g:ale_completion_enabled = 1
+  let g:ale_completion_tsserver_remove_warnings = 1
 
   " ALE fixers
   function! Retab(buffer) abort
@@ -18,18 +19,7 @@ if !empty(glob('~/.vim/bundle/ale'))
   let g:ale_set_balloons = 1
 
   map <Leader>af :ALEFix<CR>
-
-  set omnifunc=ale#completion#OmniFunc
-endif
-
-if !empty(glob('~/.vim/bundle/vim-mucomplete'))
-  let g:mucomplete#enable_auto_at_startup = 1
-  let g:mucomplete#buffer_relative_paths = 1
-  let g:mucomplete#no_mappings = 1
-  let g:MUcompleteNotify = 3
-
-  imap <unique> <c-j> <plug>(MUcompleteCycFwd)
-  imap <expr> <right> mucomplete#extend_fwd("\<right>")
+  "set omnifunc=ale#completion#OmniFunc
 endif
 
 " vim-polyglot
@@ -41,6 +31,17 @@ endif
 if !empty(glob('~/.vim/bundle/markdown-preview.nvim'))
   nmap <Leader>v <Plug>MarkdownPreviewToggle
 endif
+
+" Fzf
+if !empty(glob('~/.vim/bundle/fzf.vim'))
+  let g:fzf_buffers_jump = 1
+  let g:fzf_command_prefix = 'Fzf'
+  nnoremap f :FzfBLines<cr>
+  nnoremap <C-b> :FzfBuffers<cr>
+  nnoremap <S-f> :FzfFiles<cr>
+  nnoremap <C-f> :FzfGFiles<cr>
+endif
+
 
 if !empty(glob('~/.vim/bundle/vim-markdown'))
   " Source: https://codeinthehole.com/tips/writing-markdown-in-vim/
@@ -130,7 +131,9 @@ endif
 
 if !empty(glob('~/.vim/bundle/vim-gutentags'))
   set statusline+=%{gutentags#statusline()}
-  let g:gutentags_cache_dir='.tags'
+  let g:gutentags_ctags_tagfile = '.tags'
+  let g:gutentags_generate_on_new = 0
+  let g:gutentags_ctags_exclude = [ '.devbox', 'node_modules', 'dist' ]
 endif
 
 if !empty(glob('~/.vim/bundle/vista.vim'))
@@ -138,6 +141,11 @@ if !empty(glob('~/.vim/bundle/vista.vim'))
   nnoremap <Leader>v :Vista!!<CR>
 endif
 
+" NERDTree
+if !empty(glob('~/.vim/bundle/nerdtree'))
+  nnoremap <C-t> :NERDTreeToggleVCS<cr>
+  autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | call feedkeys(":quit\<CR>:\<BS>") | endif
+endif
 
 
 " Plugin loading
@@ -222,23 +230,18 @@ Plug 'preservim/nerdtree'
 Plug 'sheerun/vim-polyglot'
 Plug 'godlygeek/tabular'
 Plug 'preservim/vim-markdown'
-Plug 'cespare/vim-toml', { 'branch': 'main' }
-Plug 'derekwyatt/vim-scala'
-Plug 'fatih/vim-go'
-Plug 'wlangstroth/vim-racket'
-Plug 'wfxr/protobuf.vim'
-Plug 'Glench/Vim-Jinja2-Syntax'
-
-" Automates Autocomplete
-Plug 'lifepillar/vim-mucomplete'
+"Plug 'cespare/vim-toml', { 'branch': 'main' }
+"Plug 'fatih/vim-go'
+"Plug 'wfxr/protobuf.vim'
+"Plug 'Glench/Vim-Jinja2-Syntax'
 
 " Markdown Previews
 Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
 
 " HCL
 "Plug 'jvirtanen/vim-hcl'
-Plug 'hashivim/vim-terraform'
-Plug 'earthly/earthly.vim', { 'branch': 'main' }
+"Plug 'hashivim/vim-terraform'
+"Plug 'earthly/earthly.vim', { 'branch': 'main' }
 
 " Deps for vim-addon-nix + that
 Plug 'tomtom/tlib_vim'
@@ -280,26 +283,6 @@ if !empty(glob('~/.vim/bundle/ale'))
 endif
 
 
-if !empty(glob('~/.vim/bundle/vim-mucomplete')) && !empty(glob('~/.vim/bundle/vim-airline'))
-  function MUcompleteMethod()
-    if !pumvisible()
-      return ''
-    endif
-    let mucomplete_method = get(g:mucomplete#msg#short_methods,
-      \        get(g:, 'mucomplete_current_method', ''), '')
-    if mucomplete_method != ''
-      return printf('[%s]', mucomplete_method)
-    else
-      return ''
-    endif
-  endfunction
-  function! MUcompleteStatus(...)
-    call airline#extensions#prepend_to_section('x', '%{MUcompleteMethod()} ')
-  endfunction
-
-  call airline#add_statusline_func('MUcompleteStatus')
-endif
-
 if !empty(glob('~/.vim/bundle/xoria256.vim'))
   colo xoria256
   set background=dark " could be light too...
@@ -308,5 +291,3 @@ endif
 " if !empty(glob('~/.vim/bundle/bubblegum'))
 "   colo bubblegum-256-dark
 " endif
-
-

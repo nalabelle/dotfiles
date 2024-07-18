@@ -220,8 +220,7 @@ let g:fastfold_minlines = 0
 let g:fastfold_savehook = 1
 set foldcolumn=7
 
-set completeopt+=menuone
-set completeopt+=noinsert
+set completeopt=menuone,noinsert,preview
 set shortmess+=c " Shut off completion messages
 
 "selecting an autocomplete option should not insert a newline
@@ -232,20 +231,6 @@ if has("autocmd")
   autocmd QuitPre * blast
 endif
 
-" vim-go
-let g:go_code_completion_enabled = 0
-
-" NERDTree
-nnoremap <C-t> :NERDTreeToggle<cr>
-nnoremap <C-f> :NERDTreeFind<cr>
-
-" Fzf
-let g:fzf_buffers_jump = 1
-let g:fzf_command_prefix = 'Fzf'
-nnoremap <tab> :FzfBuffer<cr>
-nnoremap <leader>e :FzfFiles<cr>
-nnoremap <leader>E :FzfGFiles<cr>
-nnoremap <leader>/ :FzfBLines<cr>
 
 let g:mkdp_filetypes = ['markdown', 'page']
 
