@@ -1,4 +1,6 @@
+# vim:ft=gitignore
 *~
 .DS_Store
 .metals
 vimrc.local
+.tags
