@@ -2,65 +2,69 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>AllowClipboardAccess</key>
-	<true/>
-	<key>AlternateMouseScroll</key>
-	<true/>
-	<key>Command</key>
-	<string></string>
-	<key>Control</key>
-	<integer>7</integer>
+	<key>CmdClickWhenInactiveInvokesSemanticHistory</key>
+	<false/>
 	<key>CopySelection</key>
 	<false/>
 	<key>Default Bookmark Guid</key>
 	<string>EA06C4B6-932A-4C8D-9C16-377F00E52D45</string>
 	<key>DimBackgroundWindows</key>
 	<false/>
+	<key>DimOnlyText</key>
+	<true/>
 	<key>DisableFullscreenTransparency</key>
 	<false/>
 	<key>DoubleClickPerformsSmartSelection</key>
-	<false/>
+	<true/>
 	<key>EnableDivisionView</key>
 	<false/>
 	<key>EnableProxyIcon</key>
 	<false/>
+	<key>EnterCopyModeAutomatically</key>
+	<true/>
+	<key>FunctionKey</key>
+	<integer>10</integer>
 	<key>GlobalKeyMap</key>
 	<dict>
+		<key>0x19-0x60000</key>
+		<dict>
+			<key>Action</key>
+			<integer>39</integer>
+			<key>Text</key>
+			<string></string>
+		</dict>
 		<key>0x43-0x60000-0x8</key>
 		<dict>
 			<key>Action</key>
-			<integer>25</integer>
-			<key>Label</key>
-			<string></string>
+			<integer>69</integer>
+			<key>Apply Mode</key>
+			<integer>0</integer>
+			<key>Escaping</key>
+			<integer>2</integer>
 			<key>Text</key>
-			<string>Copy
-Copy</string>
+			<string></string>
 			<key>Version</key>
-			<integer>1</integer>
+			<integer>2</integer>
 		</dict>
 		<key>0x56-0x60000-0x9</key>
 		<dict>
 			<key>Action</key>
-			<integer>25</integer>
-			<key>Label</key>
-			<string></string>
+			<integer>70</integer>
+			<key>Apply Mode</key>
+			<integer>0</integer>
+			<key>Escaping</key>
+			<integer>2</integer>
 			<key>Text</key>
-			<string>Paste
-Paste</string>
+			<string></string>
 			<key>Version</key>
-			<integer>1</integer>
+			<integer>2</integer>
 		</dict>
-		<key>0x76-0x140000-0x9</key>
+		<key>0x9-0x40000</key>
 		<dict>
 			<key>Action</key>
-			<integer>25</integer>
-			<key>Label</key>
-			<string></string>
+			<integer>32</integer>
 			<key>Text</key>
-			<string>Paste
-Paste</string>
-			<key>Version</key>
-			<integer>1</integer>
+			<string></string>
 		</dict>
 		<key>0xf700-0x300000</key>
 		<dict>
@@ -73,6 +77,34 @@ Paste</string>
 		<dict>
 			<key>Action</key>
 			<integer>6</integer>
+			<key>Text</key>
+			<string></string>
+		</dict>
+		<key>0xf702-0x300000</key>
+		<dict>
+			<key>Action</key>
+			<integer>2</integer>
+			<key>Text</key>
+			<string></string>
+		</dict>
+		<key>0xf702-0x320000</key>
+		<dict>
+			<key>Action</key>
+			<integer>33</integer>
+			<key>Text</key>
+			<string></string>
+		</dict>
+		<key>0xf703-0x300000</key>
+		<dict>
+			<key>Action</key>
+			<integer>0</integer>
+			<key>Text</key>
+			<string></string>
+		</dict>
+		<key>0xf703-0x320000</key>
+		<dict>
+			<key>Action</key>
+			<integer>34</integer>
 			<key>Text</key>
 			<string></string>
 		</dict>
@@ -121,10 +153,6 @@ Paste</string>
 	</dict>
 	<key>HapticFeedbackForEsc</key>
 	<false/>
-	<key>HideActivityIndicator</key>
-	<false/>
-	<key>HideMenuBarInFullscreen</key>
-	<false/>
 	<key>HideScrollbar</key>
 	<false/>
 	<key>HideTab</key>
@@ -134,13 +162,17 @@ Paste</string>
 	<key>HotkeyMigratedFromSingleToMulti</key>
 	<true/>
 	<key>LeftCommand</key>
-	<integer>1</integer>
+	<integer>11</integer>
+	<key>LeftControl</key>
+	<integer>7</integer>
 	<key>LeftOption</key>
 	<integer>2</integer>
 	<key>New Bookmarks</key>
 	<array>
 		<dict>
 			<key>ASCII Anti Aliased</key>
+			<true/>
+			<key>ASCII Ligatures</key>
 			<true/>
 			<key>Ambiguous Double Width</key>
 			<false/>
@@ -160,14 +192,14 @@ Paste</string>
 				<key>Green Component</key>
 				<real>0.4235294</real>
 				<key>Red Component</key>
-				<real>1</real>
+				<integer>1</integer>
 			</dict>
 			<key>Ansi 10 Color</key>
 			<dict>
 				<key>Blue Component</key>
 				<real>0.67277030000000004</real>
 				<key>Green Component</key>
-				<real>1</real>
+				<integer>1</integer>
 				<key>Red Component</key>
 				<real>0.80941479999999999</real>
 			</dict>
@@ -176,9 +208,9 @@ Paste</string>
 				<key>Blue Component</key>
 				<real>0.7996491</real>
 				<key>Green Component</key>
-				<real>1</real>
+				<integer>1</integer>
 				<key>Red Component</key>
-				<real>1</real>
+				<integer>1</integer>
 			</dict>
 			<key>Ansi 12 Color</key>
 			<dict>
@@ -196,7 +228,7 @@ Paste</string>
 				<key>Green Component</key>
 				<real>0.61330589999999996</real>
 				<key>Red Component</key>
-				<real>1</real>
+				<integer>1</integer>
 			</dict>
 			<key>Ansi 14 Color</key>
 			<dict>
@@ -210,18 +242,18 @@ Paste</string>
 			<key>Ansi 15 Color</key>
 			<dict>
 				<key>Blue Component</key>
-				<real>1</real>
+				<integer>1</integer>
 				<key>Green Component</key>
-				<real>1</real>
+				<integer>1</integer>
 				<key>Red Component</key>
-				<real>1</real>
+				<integer>1</integer>
 			</dict>
 			<key>Ansi 2 Color</key>
 			<dict>
 				<key>Blue Component</key>
 				<real>0.37647059999999999</real>
 				<key>Green Component</key>
-				<real>1</real>
+				<integer>1</integer>
 				<key>Red Component</key>
 				<real>0.65882350000000001</real>
 			</dict>
@@ -230,9 +262,9 @@ Paste</string>
 				<key>Blue Component</key>
 				<real>0.71372550000000001</real>
 				<key>Green Component</key>
-				<real>1</real>
+				<integer>1</integer>
 				<key>Red Component</key>
-				<real>1</real>
+				<integer>1</integer>
 			</dict>
 			<key>Ansi 4 Color</key>
 			<dict>
@@ -250,7 +282,7 @@ Paste</string>
 				<key>Green Component</key>
 				<real>0.4509804</real>
 				<key>Red Component</key>
-				<real>1</real>
+				<integer>1</integer>
 			</dict>
 			<key>Ansi 6 Color</key>
 			<dict>
@@ -286,18 +318,18 @@ Paste</string>
 				<key>Green Component</key>
 				<real>0.71372550000000001</real>
 				<key>Red Component</key>
-				<real>1</real>
+				<integer>1</integer>
 			</dict>
 			<key>BM Growl</key>
 			<true/>
 			<key>Background Color</key>
 			<dict>
 				<key>Blue Component</key>
-				<real>0.0</real>
+				<integer>0</integer>
 				<key>Green Component</key>
-				<real>0.0</real>
+				<integer>0</integer>
 				<key>Red Component</key>
-				<real>0.0</real>
+				<integer>0</integer>
 			</dict>
 			<key>Background Image Location</key>
 			<string></string>
@@ -306,14 +338,16 @@ Paste</string>
 				<key>Alpha Component</key>
 				<real>0.5</real>
 				<key>Blue Component</key>
-				<real>0.0</real>
+				<integer>0</integer>
 				<key>Color Space</key>
 				<string>sRGB</string>
 				<key>Green Component</key>
 				<real>0.14910027384757996</real>
 				<key>Red Component</key>
-				<real>1</real>
+				<integer>1</integer>
 			</dict>
+			<key>Blink Allowed</key>
+			<true/>
 			<key>Blinking Cursor</key>
 			<false/>
 			<key>Blur</key>
@@ -321,18 +355,18 @@ Paste</string>
 			<key>Bold Color</key>
 			<dict>
 				<key>Blue Component</key>
-				<real>1</real>
+				<integer>1</integer>
 				<key>Green Component</key>
-				<real>1</real>
+				<integer>1</integer>
 				<key>Red Component</key>
-				<real>1</real>
+				<integer>1</integer>
 			</dict>
 			<key>Character Encoding</key>
 			<integer>4</integer>
 			<key>Close Sessions On End</key>
 			<true/>
 			<key>Columns</key>
-			<integer>80</integer>
+			<integer>100</integer>
 			<key>Command</key>
 			<string></string>
 			<key>Cursor Color</key>
@@ -342,14 +376,14 @@ Paste</string>
 				<key>Green Component</key>
 				<real>0.64705880000000005</real>
 				<key>Red Component</key>
-				<real>1</real>
+				<integer>1</integer>
 			</dict>
 			<key>Cursor Guide Color</key>
 			<dict>
 				<key>Alpha Component</key>
 				<real>0.25</real>
 				<key>Blue Component</key>
-				<real>1</real>
+				<integer>1</integer>
 				<key>Color Space</key>
 				<string>sRGB</string>
 				<key>Green Component</key>
@@ -360,11 +394,11 @@ Paste</string>
 			<key>Cursor Text Color</key>
 			<dict>
 				<key>Blue Component</key>
-				<real>1</real>
+				<integer>1</integer>
 				<key>Green Component</key>
-				<real>1</real>
+				<integer>1</integer>
 				<key>Red Component</key>
-				<real>1</real>
+				<integer>1</integer>
 			</dict>
 			<key>Custom Command</key>
 			<string>No</string>
@@ -377,7 +411,7 @@ Paste</string>
 			<key>Disable Window Resizing</key>
 			<true/>
 			<key>Draw Powerline Glyphs</key>
-			<false/>
+			<true/>
 			<key>Enable Triggers in Interactive Apps</key>
 			<false/>
 			<key>Flashing Bell</key>
@@ -395,6 +429,8 @@ Paste</string>
 			<string>EA06C4B6-932A-4C8D-9C16-377F00E52D45</string>
 			<key>Horizontal Spacing</key>
 			<real>1</real>
+			<key>Icon</key>
+			<integer>0</integer>
 			<key>Idle Code</key>
 			<integer>0</integer>
 			<key>Initial Use Transparency</key>
@@ -692,7 +728,7 @@ Paste</string>
 			<key>Link Color</key>
 			<dict>
 				<key>Alpha Component</key>
-				<real>1</real>
+				<integer>1</integer>
 				<key>Blue Component</key>
 				<real>0.73422712087631226</real>
 				<key>Color Space</key>
@@ -700,18 +736,18 @@ Paste</string>
 				<key>Green Component</key>
 				<real>0.35915297269821167</real>
 				<key>Red Component</key>
-				<real>0.0</real>
+				<integer>0</integer>
 			</dict>
 			<key>Mouse Reporting</key>
-			<true/>
+			<false/>
 			<key>Name</key>
-			<string>Default</string>
+			<string>Custom</string>
 			<key>Non Ascii Font</key>
 			<string>Monaco 12</string>
 			<key>Non-ASCII Anti Aliased</key>
 			<true/>
 			<key>Normal Font</key>
-			<string>Monaco 12</string>
+			<string>CaskaydiaCoveNF-Regular 12</string>
 			<key>Open Password Manager Automatically</key>
 			<false/>
 			<key>Option Key Sends</key>
@@ -752,8 +788,14 @@ Paste</string>
 			<string></string>
 			<key>Show Status Bar</key>
 			<false/>
+			<key>Show Timestamps</key>
+			<integer>0</integer>
 			<key>Silence Bell</key>
 			<true/>
+			<key>Smart Cursor Color</key>
+			<false/>
+			<key>Smart Selection Actions Use Interpolated Strings</key>
+			<false/>
 			<key>Smart Selection Rules</key>
 			<array>
 				<dict>
@@ -828,7 +870,7 @@ Paste</string>
 					<key>precision</key>
 					<string>very_high</string>
 					<key>regex</key>
-					<string>((?&lt;!\()https?://([a-z0-9A-Z]+(:[a-zA-Z0-9]+)?@)?([a-z0-9A-Z][-a-z0-9A-Z]*\.)+[A-Za-z][-A-Za-z]*((:[0-9]+)?)(/[a-zA-Z0-9;/.\-_+%?&amp;@=#~()]*)?)|(https?://([a-z0-9A-Z]+(:[a-zA-Z0-9]+)?@)?([a-z0-9A-Z][-a-z0-9A-Z]*\.)+[A-Za-z][-A-Za-z]*((:[0-9]+)?)(/[a-zA-Z0-9;/.\-_+%?&amp;@=#~(]*)?)</string>
+					<string>((?&lt;!\()https?://([a-z0-9A-Z]+(:[a-zA-Z0-9]+)?@)?([a-z0-9A-Z][-a-z0-9A-Z]*\.)*[A-Za-z][-A-Za-z]*((:[0-9]+)?)(/[a-zA-Z0-9;/.\-_+%?&amp;@=#~()]*)?)|(https?://([a-z0-9A-Z]+(:[a-zA-Z0-9]+)?@)?([a-z0-9A-Z][-a-z0-9A-Z]*\.)*[A-Za-z][-A-Za-z]*((:[0-9]+)?)(/[a-zA-Z0-9;/.\-_+%?&amp;@=#~(]*)?)</string>
 				</dict>
 				<dict>
 					<key>notes</key>
@@ -856,7 +898,7 @@ Paste</string>
 					<key>auto-rainbow style</key>
 					<integer>0</integer>
 					<key>font</key>
-					<string>.AppleSystemUIFont 12</string>
+					<string>.SFNS-Regular 12</string>
 					<key>remove empty components</key>
 					<false/>
 				</dict>
@@ -870,17 +912,21 @@ Paste</string>
 			<key>Terminal Type</key>
 			<string>xterm-256color</string>
 			<key>Thin Strokes</key>
-			<integer>4</integer>
+			<integer>1</integer>
 			<key>Title Components</key>
-			<integer>390</integer>
+			<integer>262</integer>
 			<key>Transparency</key>
-			<real>0.0</real>
+			<integer>0</integer>
+			<key>Unicode Version</key>
+			<integer>9</integer>
 			<key>Unlimited Scrollback</key>
 			<true/>
 			<key>Use Bold Font</key>
 			<true/>
 			<key>Use Bright Bold</key>
 			<true/>
+			<key>Use Cursor Guide</key>
+			<false/>
 			<key>Use Italic Font</key>
 			<true/>
 			<key>Use Non-ASCII Font</key>
@@ -897,10 +943,6 @@ Paste</string>
 			<string>/Users/nalabelle</string>
 		</dict>
 	</array>
-	<key>PMPrintingExpandedStateForPrint2</key>
-	<false/>
-	<key>PasteTabToStringTabStopSize</key>
-	<integer>2</integer>
 	<key>PointerActions</key>
 	<dict>
 		<key>Button,1,1,,</key>
@@ -936,47 +978,33 @@ Paste</string>
 	</dict>
 	<key>PreserveWindowSizeWhenTabBarVisibilityChanges</key>
 	<false/>
-	<key>Print In Black And White</key>
-	<true/>
-	<key>QuitWhenAllWindowsClosed</key>
-	<true/>
 	<key>RightCommand</key>
 	<integer>8</integer>
-	<key>SeparateStatusBarsPerPane</key>
-	<false/>
-	<key>SeparateWindowTitlePerTab</key>
-	<true/>
-	<key>ShowFullScreenTabBar</key>
-	<true/>
+	<key>RightControl</key>
+	<integer>12</integer>
+	<key>RightOption</key>
+	<integer>3</integer>
 	<key>ShowPaneTitles</key>
 	<true/>
 	<key>SoundForEsc</key>
 	<false/>
 	<key>StatusBarPosition</key>
 	<integer>1</integer>
-	<key>StretchTabsToFillBar</key>
-	<true/>
-	<key>SwitchTabModifier</key>
-	<integer>9</integer>
-	<key>SwitchWindowModifier</key>
-	<integer>9</integer>
 	<key>TabStyleWithAutomaticOption</key>
-	<integer>6</integer>
+	<integer>4</integer>
 	<key>TabViewType</key>
-	<integer>0</integer>
+	<integer>2</integer>
 	<key>TabsHaveCloseButton</key>
 	<true/>
 	<key>TrailingPunctuationMarks</key>
 	<string>!?…)]."';:,¶</string>
-	<key>URLHandlersByGuid</key>
-	<dict/>
+	<key>URLCharacterSetExclusions</key>
+	<string>¬</string>
 	<key>UseBorder</key>
 	<false/>
-	<key>UseTmuxStatusBar</key>
-	<true/>
 	<key>VisualIndicatorForEsc</key>
 	<false/>
-	<key>WindowNumber</key>
-	<false/>
+	<key>findMode_iTerm</key>
+	<integer>0</integer>
 </dict>
 </plist>
