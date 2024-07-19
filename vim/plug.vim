@@ -19,6 +19,7 @@ if !empty(glob('~/.vim/bundle/ale'))
   let g:ale_set_balloons = 1
 
   map <Leader>af :ALEFix<CR>
+  map <Leader>e :ALENextWrap<CR>
   "set omnifunc=ale#completion#OmniFunc
 endif
 
@@ -192,6 +193,9 @@ Plug 'bit101/bufkill'
 
 " vim-fugtive - git things for vim!
 Plug 'tpope/vim-fugitive'
+
+" surround words with characters
+Plug 'tpope/vim-surround'
 
 " indent guides for visually showing indent
 Plug 'preservim/vim-indent-guides'
