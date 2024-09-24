@@ -239,6 +239,3 @@ nnoremap <Leader>D :KillBuffer<CR>
 
 " Toggle fold
 nnoremap <space> za
-
-let g:local_vimrc = ['vimrc.local']
-call lh#local_vimrc#munge('whitelist', $HOME.'/git')

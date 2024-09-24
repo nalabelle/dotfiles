@@ -20,7 +20,7 @@ if !empty(glob('~/.vim/bundle/ale'))
 
   map <Leader>af :ALEFix<CR>
   map <Leader>e :ALENextWrap<CR>
-  "set omnifunc=ale#completion#OmniFunc
+  set omnifunc=ale#completion#OmniFunc
 endif
 
 " vim-polyglot
@@ -79,14 +79,6 @@ if !empty(glob('~/.vim/bundle/vim-markdown'))
   let g:vim_markdown_folding_level = 2
 endif
 
-
-
-if !empty(glob('~/.vim/bundle/vimspector'))
-  " https://github.com/puremourning/vimspector/blob/master/README.md#visual-studio--vscode
-  " :help vimspector-visual-studio-vscode
-  let g:vimspector_enable_mappings = 'VISUAL_STUDIO'
-endif
-
 " vim-maximizer
 if !empty(glob('~/.vim/bundle/vim-maximizer'))
   nnoremap <C-W>z :MaximizerToggle<CR>
@@ -129,13 +121,6 @@ if !empty(glob('~/.vim/bundle/vim-airline'))
   let g:airline_symbols.readonly = 'RO'
 endif
 
-
-if !empty(glob('~/.vim/bundle/vim-gutentags'))
-  set statusline+=%{gutentags#statusline()}
-  let g:gutentags_ctags_tagfile = '.tags'
-  let g:gutentags_generate_on_new = 0
-  let g:gutentags_ctags_exclude = [ '.devbox', 'node_modules', 'dist' ]
-endif
 
 if !empty(glob('~/.vim/bundle/vista.vim'))
   let g:vista#renderer#enable_icon = 1
@@ -203,9 +188,6 @@ Plug 'preservim/vim-indent-guides'
 " calculate folds on save, not while typing
 Plug 'Konfekt/FastFold'
 
-" generate tags
-Plug 'ludovicchabant/vim-gutentags'
-
 " Displays details from LSP
 Plug 'liuchengxu/vista.vim'
 
@@ -258,17 +240,6 @@ Plug 'MarcWeber/vim-addon-nix'
 
 Plug 'LucHermitte/lh-vim-lib'
 Plug 'LucHermitte/local_vimrc'
-
-"if executable('node') && executable('yarn')
-"  Plug 'neoclide/coc.nvim', {'branch': 'release'}
-"  if executable('javac') && executable('scala')
-"    Plug 'scalameta/coc-metals', {'do': 'yarn install --frozen-lockfile'}
-"  endif
-"  Plug 'fannheyward/coc-pyright'
-"  let g:coc_start_at_startup = v:false
-"endif
-"
-Plug 'puremourning/vimspector'
 
 " Svelte
 Plug 'othree/html5.vim'
