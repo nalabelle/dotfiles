@@ -8,7 +8,9 @@
     # General shell
     curl
     fzf
+    ripgrep
     htop
+    bat
     jq
     tmux
     vim-full
@@ -30,9 +32,9 @@
     podman
     pre-commit
     cargo
+    gh
 
     devbox
-    devenv
     convco
 
     # Kubernetes
