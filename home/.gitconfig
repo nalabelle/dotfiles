@@ -11,6 +11,7 @@
   rebase = true
 [push]
   default = upstream
+  autoSetupRemote = true
 [diff]
   tool = vimdiff
 [include]
@@ -18,8 +19,9 @@
 [fetch]
   prune = true
 [alias]
-  gone = !git remote prune origin && git branch -vv | grep ': gone]' | awk '{print $1}'
-  gone-prune = !git gone | xargs git branch -d
+  amend = "!f() { if [ $# -eq 0 ]; then git commit --amend --no-edit; else git commit --amend \"$@\"; fi; }; f"
+  gone = !git remote prune origin >/dev/null && git branch -vv | grep ': gone]' | awk '{print $1}'
+  gone-rm = !git gone | xargs git branch -D
   tld = rev-parse --show-toplevel
   fpush = push --force-with-lease
   log-compare = log --oneline --boundary --left-right --cherry-mark --decorate
@@ -27,6 +29,12 @@
   #origin/$(git branch --show-current)..${2:-${1:-HEAD}}"
   logf = log-compare --abbrev-commit --format='tformat:%C(auto,blue)%m%C(auto) %h %s%d %C(auto,dim)%cr'
   logr = logf --reverse
+  logn = log -p -- . ":(exclude)package-lock.json"
+  ri = "!f() { if [ $# -eq 0 ]; then set -- origin/main; fi; git rebase --interactive --keep-base \"$@\"; }; f"
+  rb = "!f() { if [ $# -eq 0 ]; then set -- origin/main; git fetch origin main; fi && git rebase \"$@\"; }; f"
+  stack = "!git log --decorate=short --pretty='format:%D' origin/main.. | sed 's/, /\\n/g; s/HEAD -> //' | grep -Ev '^origin|^$'"
+  fpstack = "!git stack | xargs git push --force-with-lease origin"
+  wip = commit --no-verify -m "WIP"
 [init]
   defaultBranch = main
   templateDir = ~/.config/git/template
@@ -34,6 +42,7 @@
   version = 2
 [rebase]
   autoStash = true
+  updateRefs = true
 [diff "sopsdiffer"]
   textconv = "sops -d"
 [filter "lfs"]
