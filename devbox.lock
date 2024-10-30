@@ -152,6 +152,54 @@
           "store_path": "/nix/store/960yyy4wf0yvhzs0kdas4bfdjv04hgyj-shfmt-3.8.0"
         }
       }
+    },
+    "vendir@latest": {
+      "last_modified": "2024-10-13T23:44:06Z",
+      "resolved": "github:NixOS/nixpkgs/d4f247e89f6e10120f911e2e2d2254a050d0f732#vendir",
+      "source": "devbox-search",
+      "version": "0.42.0",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/5cmbccff3fwbsch08dh43ygccx4slywb-vendir-0.42.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/5cmbccff3fwbsch08dh43ygccx4slywb-vendir-0.42.0"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/99ib4mj41jb0slif847ms6x688j0k57a-vendir-0.42.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/99ib4mj41jb0slif847ms6x688j0k57a-vendir-0.42.0"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/vqxb0gl1sa63j8qj2wni8n17zsvksazg-vendir-0.42.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/vqxb0gl1sa63j8qj2wni8n17zsvksazg-vendir-0.42.0"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/nmjf8z1rgyakpsa7ykn2gxm2pmfjc7zb-vendir-0.42.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/nmjf8z1rgyakpsa7ykn2gxm2pmfjc7zb-vendir-0.42.0"
+        }
+      }
     }
   }
 }

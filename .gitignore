@@ -9,3 +9,6 @@ vim/undo
 vim/swap
 
 /.direnv
+
+# Vendir
+home/.config/zsh/plugins

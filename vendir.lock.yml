@@ -1,0 +1,26 @@
+apiVersion: vendir.k14s.io/v1alpha1
+directories:
+- contents:
+  - directory: {}
+    path: devbox
+  - git:
+      commitTitle: 'Merge pull request #687 from japanese-goblinn/master...'
+      sha: c3d4e576c9c86eac62884bd47c01f6faed043fc5
+    path: zsh-autosuggestions
+  - git:
+      commitTitle: Add compinit loading so compdef works in testing, ignore .zcompdump
+        directory
+      sha: e16f3833f804e4e55597513b7353e129a6410008
+    path: zsh-bd
+  - git:
+      commitTitle: 'Merge pull request #159 from dxrcy/master...'
+      sha: 87ce96b1862928d84b1afe7c173316614b30e301
+    path: zsh-history-substring-search
+  - git:
+      commitTitle: Tag version 0.8.0.
+      sha: db085e4661f6aafd24e5acb5b2e17e4dd5dddf3e
+      tags:
+      - 0.8.0
+    path: zsh-syntax-highlighting
+  path: home/.config/zsh/plugins
+kind: LockConfig
