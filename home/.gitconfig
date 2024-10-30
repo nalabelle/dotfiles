@@ -19,6 +19,9 @@
 [fetch]
   prune = true
 [alias]
+  rbc = rebase --continue
+  rba = rebase --abort
+  br = "branch -vv"
   amend = "!f() { if [ $# -eq 0 ]; then git commit --amend --no-edit; else git commit --amend \"$@\"; fi; }; f"
   gone = !git remote prune origin >/dev/null && git branch -vv | grep ': gone]' | awk '{print $1}'
   gone-rm = !git gone | xargs git branch -D
@@ -35,6 +38,7 @@
   stack = "!git log --decorate=short --pretty='format:%D' origin/main.. | sed 's/, /\\n/g; s/HEAD -> //' | grep -Ev '^origin|^$'"
   fpstack = "!git stack | xargs git push --force-with-lease origin"
   wip = commit --no-verify -m "WIP"
+  fix = commit --no-verify -m 'WIP: FIXUP'
 [init]
   defaultBranch = main
   templateDir = ~/.config/git/template
