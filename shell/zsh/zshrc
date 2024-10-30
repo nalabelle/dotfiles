@@ -9,6 +9,7 @@ bindkey -v
 # allow backspacing over characters to left
 bindkey -v '^?' backward-delete-char
 
+autoload -U compinit; compinit
 
 # https://github.com/zsh-users/zsh-autosuggestions
 . $ZDOTDIR/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
@@ -176,7 +177,6 @@ function _reset-prompt-and-accept-isearch {
 
 zmodload zsh/datetime
 autoload -U promptinit
-autoload -U compinit; compinit
 #autoload -U history-search-end
 
 #zle -N history-beginning-search-backward-end history-search-end
