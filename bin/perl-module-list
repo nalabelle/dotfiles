@@ -1,3 +1,0 @@
-#!/bin/bash
-
-perldoc -u perllocal 2>/dev/null | grep -F 'C<Module> L<' | sed 's/^.*L<\(.*\)|.*>$/\1/' | sort | uniq
