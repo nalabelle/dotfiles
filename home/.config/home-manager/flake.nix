@@ -24,6 +24,7 @@
         aarch64-darwin = home-manager.lib.homeManagerConfiguration {
           pkgs = import nixpkgs { system = "aarch64-darwin"; };
           modules = [
+            ./osx.nix
             ./home.nix
             {
               home.homeDirectory = "/Users/nalabelle";

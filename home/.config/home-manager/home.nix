@@ -1,8 +1,7 @@
 { pkgs, ... }:
-
 {
   home.username = "nalabelle";
-  home.stateVersion = "23.11";
+  home.stateVersion = "24.11";
 
   home.packages = with pkgs; [
     # General shell
@@ -15,7 +14,6 @@
     tmux
     vim-full
     wget
-    glow
 
     # Fancy Prompt
     starship
@@ -25,29 +23,22 @@
     nix
     nix-direnv
 
-    # Dev Tools
-    universal-ctags
+    # Dev
     git
-    gnumake
-    podman
-    pre-commit
     cargo
     gh
-
     devbox
     convco
 
-    # Kubernetes
-    k9s
-    krew
-    kubectl
+    # Kubernetes/Containers
+    podman
+    docker-compose
 
-    # tools
+    # Tools
     sqlite
 
-    # General Linters/Fixers
-    vale
-    markdownlint-cli
+    # Viewers
+    glow
   ];
 
   programs.home-manager.enable = true;
