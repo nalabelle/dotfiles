@@ -19,6 +19,10 @@
 [fetch]
   prune = true
 [alias]
+  get-main-remote = "!git branch -rl '*/HEAD' | cut -f2 -d'>' | cut -c 2-"
+  get-main-branch = "!git branch | cut -c 3- | grep -E '^master$|^main$'"
+  try-rebase-all = "!f() { CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD); TARGET=$(git get-main-remote); for branch in $(git for-each-ref --format='%(refname:lstrip=2)' refs/heads/); do git rebase "$TARGET" "$branch" >/dev/null 2>&1 || git rebase --abort; done; git switch "$CURRENT_BRANCH"; }; f"
+  rm-merged = "!git branch --format='%(refname:lstrip=2)' --merged | grep -vE '^master$|^main$' | xargs git branch -d"
   rbc = rebase --continue
   rba = rebase --abort
   br = "branch -vv"
