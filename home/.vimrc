@@ -239,3 +239,7 @@ nnoremap <Leader>D :KillBuffer<CR>
 
 " Toggle fold
 nnoremap <space> za
+
+" Don't use mouse
+set mouse=
+set ttymouse=
