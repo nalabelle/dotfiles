@@ -1,5 +1,6 @@
 { pkgs, ... }:
 {
+  # https://home-manager-options.extranix.com/?query=&release=release-24.11
   home.username = "nalabelle";
   home.stateVersion = "24.11";
 
