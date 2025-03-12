@@ -11,9 +11,7 @@ export XDG_CONFIG_HOME="$HOME/.config"
 
 +path.prepend "PATH" \
   "$DOTFILES_PATH/bin" \
-  "$HOME/.local/bin"
-
-+path.append "PATH" \
+  "$HOME/.local/bin" \
   "$HOME/.nix-profile/bin" \
   "$CARGO_HOME/bin"
 
