@@ -1,94 +1,96 @@
 set nocompatible    " vim not vi, it's good to be explicit
 if has("multi_byte")
+  set encoding=utf-8
+
   if &termencoding == ""
-    let &termencoding = &encoding
+    let &termencoding = &encoding  " Use internal encoding for terminal if not specified
   endif
 
   if exists("+printencoding") && (&printencoding == "")
-    let &printencoding = &encoding
+    let &printencoding = &encoding  " Use internal encoding for printing if not specified
   endif
 
   set fileencodings-=ucs-bom
   set fileencodings-=utf-8
   if(&fileencodings == "") && (&encoding != "utf-8")
-    let &fileencodings = &encoding
+    let &fileencodings = &encoding  " Use internal encoding as default file encoding if not set
   endif
-  set fileencodings^=ucs-bom,utf-8
+  set fileencodings^=ucs-bom,utf-8  " Prioritize UTF-8 with BOM when detecting file encoding
 
-  set encoding=utf-8
-  setglobal fileencoding=utf-8
 else
-  echoerr "no unicode!"
+  echoerr "no unicode!"  " Error if multi-byte support is not available
 endif
-set title
+set title           " Show filename in the window title bar
 
 
 source ~/.vim/plug.vim
 
-set noexrc          " don't use local config files
+set noexrc          " Don't use local .exrc, .vimrc, or .gvimrc files (security feature)
 " http://vimdoc.sourceforge.net/htmldoc/options.html#'cpoptions'
-set cpoptions=Ben
+set cpoptions=Ben    " Set compatibility options: B=backslashes in mappings, e=<CR> in mappings, n=column used for 'number'
 
-" color options
-set background=dark
+" Color scheme settings
+set background=dark  " Use dark background for color schemes
 
-" syntax highlighting
-syntax on
+" Enable syntax highlighting
+syntax on           " Turns on color syntax highlighting
 
-" trigger filetype detection things
-filetype plugin indent on
+" Enable filetype detection and related features
+filetype plugin indent on  " Load filetype-specific plugins and indent files
 
-" allow modelines
-set modeline
-set modelines=5
+" Modeline settings (special comments in files that set vim options)
+set modeline        " Enable modelines (vim settings embedded in files)
+set modelines=5     " Check first and last 5 lines of files for modelines
 
-" allow backspacing over autoindent, linebreaks, and start of insert
-set backspace=indent,eol,start
+" Backspace behavior configuration
+set backspace=indent,eol,start  " Allow backspacing over autoindent, line breaks, and start of insert
 
 
-" make sure error bells stay off
-set noerrorbells
-set novisualbell
+" Disable annoying error notifications
+set noerrorbells    " Turn off audible error bells
+set novisualbell    " Turn off visual error bells (screen flashing)
 
-" stop littering swap everywhere
+" Centralize swap files instead of creating them in the current directory
 if isdirectory($HOME . '/.vim/swap') == 0
-  :silent !mkdir -p ~/.vim/swap >/dev/null 2>&1
+  :silent !mkdir -p ~/.vim/swap >/dev/null 2>&1  " Create swap directory if it doesn't exist
 endif
-set directory=~/.vim/swap,$TEMP
+set directory=~/.vim/swap,$TEMP  " Store swap files in ~/.vim/swap, fallback to $TEMP
 
-" stop littering backup everywhere
+" Centralize backup files
 if isdirectory($HOME . '/.vim/backup') == 0
-  :silent !mkdir -p ~/.vim/backup >/dev/null 2>&1
+  :silent !mkdir -p ~/.vim/backup >/dev/null 2>&1  " Create backup directory if it doesn't exist
 endif
-set backupdir=~/.vim/backup,$TEMP
-set backup          " make a backup file before overwriting, leave it after it's written
+set backupdir=~/.vim/backup,$TEMP  " Store backup files in ~/.vim/backup, fallback to $TEMP
+set backup          " Create backup files before overwriting, keep them after writing
 
-" stop littering undo everywhere
+" Persistent undo history (available in Vim 7.3+)
 if exists("+undofile") " 7.3+
   if isdirectory($HOME . '/.vim/undo') == 0
-    :silent !mkdir -p ~/.vim/undo > /dev/null 2>&1
+    :silent !mkdir -p ~/.vim/undo > /dev/null 2>&1  " Create undo directory if it doesn't exist
   endif
-  set undodir=~/.vim/undo,$TEMP
-  set undofile
+  set undodir=~/.vim/undo,$TEMP  " Store undo files in ~/.vim/undo, fallback to $TEMP
+  set undofile        " Save undo history to a file when exiting a buffer
 endif
 
-set ruler           " current row and column at bottom right
-set report=0        " report lines changed always
-set scrolloff=5     " keep 5 lines min above and below the cursor
-set showcmd         " show command in the last line of the screen
-set showmatch       " when inserting a bracket, jump to the matching one (for a moment)
+" Interface and display settings
+set ruler           " Show cursor position (line,column) in the status line
+set report=0        " Always report the number of lines changed by a command
+set scrolloff=5     " Keep at least 5 lines visible above/below cursor when scrolling
+set showcmd         " Show partial command in the last line of the screen
+set showmatch       " Briefly jump to matching bracket when inserting one
 
-set incsearch       " turn on incremental search (search as you type)
-set ignorecase      " ignore case in search patterns
-set smartcase       " override ignorecase if the search contains uppercase
-set hlsearch        " highlights searched text
+" Search behavior settings
+set incsearch       " Incremental search - show matches while typing
+set ignorecase      " Case-insensitive searching
+set smartcase       " Override ignorecase when search pattern has uppercase
+set hlsearch        " Highlight all matches of the search pattern
 
-" Tab Formatting
-set expandtab       " use spaces instead of a hard tab
-set shiftround      " round indent to multiple of shiftwidth
-set shiftwidth=2    " number of spaces to use for each step of indent
-set softtabstop=2   " number of spaces that tab counts for when editing
-set tabstop=2       " number of spaces that tab counts for in a file
+" Tab and indentation settings
+set expandtab       " Use spaces instead of tab characters
+set shiftround      " Round indentation to multiple of shiftwidth when using > and <
+set shiftwidth=2    " Number of spaces for each indentation level (used by >>, <<)
+set softtabstop=2   " Number of spaces a Tab counts for when editing (inserting/deleting)
+set tabstop=2       " Number of spaces a Tab character displays as in the file
 
 " https://raw.github.com/sdball/dotfiles/master/vim/vimrc
 " highlight trailing whitespace
@@ -111,24 +113,24 @@ set linebreak
 let &showbreak = '↪️  '
 set listchars=tab:→…,trail:•,nbsp:␣,extends:⟩,precedes:⟨,eol:¶
 
-" Always display status line
-set laststatus=2
-" Don't show mode in the command bar
+" Status line configuration
+set laststatus=2    " Always show status line (0=never, 1=if multiple windows, 2=always)
+" Don't show mode in the command bar (often redundant with status line plugins)
 set noshowmode
 
 
-" Leave insert mode immediately
+" Quick escape from insert mode (reduces delay when pressing Esc)
 if ! has('gui_running')
-  set ttimeoutlen=10
+  set ttimeoutlen=10   " Time in ms to wait for a key code sequence to complete
   augroup FastEscape
     autocmd!
-    au InsertEnter * set timeoutlen=0
-    au InsertLeave * set timeoutlen=1000
+    au InsertEnter * set timeoutlen=0    " No timeout for mappings in insert mode
+    au InsertLeave * set timeoutlen=1000 " Normal timeout in normal mode
   augroup END
 endif
 
-" Always show the signcolumn for diagnostics
-set signcolumn=yes
+" Sign column for displaying diagnostics/errors
+set signcolumn=yes   " Always show the sign column (for git/linting indicators)
 
 " Warn me when I'm over 80 cols
 function! SetColorColumns()
@@ -180,12 +182,12 @@ command! TrimWhitespace call TrimWhitespace()
 
 map <Leader>b :call GitBlameCurrentLine()<CR>
 
-" open splits to right and bottom
-set splitbelow
-set splitright
+" Split window behavior
+set splitbelow      " New horizontal splits appear below current window
+set splitright      " New vertical splits appear to the right of current window
 
 
-"Cursor settings:
+" Cursor shape settings for different modes (works in compatible terminals)
 
 "  1 -> blinking block
 "  2 -> solid block
@@ -193,23 +195,14 @@ set splitright
 "  4 -> solid underscore
 "  5 -> blinking vertical bar
 "  6 -> solid vertical bar
-"
-""Mode Settings
 
-let &t_SI ="\e[6 q" "SI = INSERT mode
-let &t_SR ="\e[4 q" "SR = REPLACE mode
-let &t_EI ="\e[2 q" "EI = NORMAL mode (ELSE)
+" Mode-specific cursor shapes
+let &t_SI ="\e[6 q" " SI = INSERT mode - vertical bar
+let &t_SR ="\e[4 q" " SR = REPLACE mode - underscore
+let &t_EI ="\e[2 q" " EI = NORMAL mode - solid block
 "set t_RB= t_RF= t_RV= t_u7=
+
 au VimEnter * silent !echo -e "\e[2 q"
-
-if has('gui_running')
-  " Make shift-insert work like in Xterm
-  map <S-Insert> <MiddleMouse>
-  map! <S-Insert> <MiddleMouse>
-
-  "set enc=utf-8
-  set guifont=Fira_Code_Retina:h11:cDEFAULT:qCLEARTYPE
-endif
 
 " Folds
 " note: set foldcolumn=X to see the folds

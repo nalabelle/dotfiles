@@ -58,11 +58,9 @@
   smudge = git-lfs smudge -- %f
   process = git-lfs filter-process
   required = true
-
-# vim:ft=gitconfig
-#[user]
-# signingkey = /home/nalabelle/.ssh/id_ed25519.pub
-#[commit]
-# gpgsign = true
-#[gpg]
-# format = ssh
+[user]
+  signingkey = ~/.ssh/id_ed25519.pub
+[commit]
+  gpgsign = true
+[gpg]
+  format = ssh
