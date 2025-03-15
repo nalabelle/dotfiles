@@ -21,18 +21,17 @@
 
     # Environment
     direnv
-    nix
     nix-direnv
 
     # Dev
     git
     cargo
+    cargo-binstall
     gh
     devbox
     convco
 
     # Kubernetes/Containers
-    podman
     docker-compose
 
     # Tools
