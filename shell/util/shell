@@ -20,11 +20,11 @@
 }
 
 +cmd.exists() {
-  command -v $@ > /dev/null 2>&1 || false
+  command -v "$@" > /dev/null 2>&1 || false
 }
 
 +brew.path() {
-  brew --prefix $@ 2>/dev/null
+  brew --prefix "$@" 2>/dev/null
 }
 
 +any.exists() {
@@ -64,5 +64,5 @@
   [ -n "$PS1" ] || return
   +shell.zsh || return
   [ -r "$path" ] || return
-  fpath=($fpath "$path")
+  fpath=("$fpath" "$path")
 }

@@ -1,27 +1,24 @@
 # shellcheck shell=sh external-sources=false disable=SC1091
 # vim:filetype=zsh
 
-ZDOTDIR="$HOME/.config/zsh"
+source $HOME/.profile
+[ -d "$XDG_STATE_HOME"/zsh ] || mkdir -p "$XDG_STATE_HOME"/zsh
+[ -d "$XDG_CACHE_HOME"/zsh ] || mkdir -p "$XDG_CACHE_HOME"/zsh
 
-# https://github.com/jeffreytse/zsh-vi-mode
-#. $ZDOTDIR/plugins/zsh-vi-mode/zsh-vi-mode.plugin.zsh
+HISTFILE="$XDG_STATE_HOME"/zsh/history
+
 bindkey -v
 # allow backspacing over characters to left
 bindkey -v '^?' backward-delete-char
 
-autoload -U compinit; compinit
-
 # https://github.com/zsh-users/zsh-autosuggestions
-. $ZDOTDIR/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
-
-# https://github.com/Tarrasch/zsh-bd
-. $ZDOTDIR/plugins/zsh-bd/bd.zsh
+source $HOME/.config/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 # https://github.com/zsh-users/zsh-syntax-highlighting
-. $ZDOTDIR/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source $HOME/.config/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 # https://github.com/zsh-users/zsh-history-substring-search
-. $ZDOTDIR/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh
+source $HOME/.config/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh
 
 
 # https://linux.die.net/man/1/zshoptions
@@ -36,8 +33,6 @@ setopt globdots
 # Sends unmatched globs to the command
 setopt no_nomatch
 
-# History
-HISTFILE="$ZDOTDIR/zsh_history"
 # How many commands in the history file
 SAVEHIST=5000
 # How many commands in session history
@@ -181,13 +176,29 @@ autoload -U promptinit
 #bindkey "^[[B" history-beginning-search-forward-end
 bindkey '^[[A' history-substring-search-up
 bindkey '^[[B' history-substring-search-down
+bindkey -M vicmd 'k' history-substring-search-up
+bindkey -M vicmd 'j' history-substring-search-down
 
 
 # Paths
 [[ -f /opt/homebrew/bin/brew ]] && eval "$(/opt/homebrew/bin/brew shellenv)"
 
 # Completion
+#command -v gt > /dev/null 2>&1 && eval "$(gt completion)"
+#command -v devbox > /dev/null 2>&1 && eval "$(devbox completion zsh)"
+
+local HOMESHICK="$HOME/.homesick/repos/homeshick"
+if [ -d "$HOMESHICK" ]; then
+  echo "Loading homeshick"
+  source "$HOMESHICK/homeshick.sh"
+  homeshick --quiet refresh
+  fpath=($HOMESHICK/completions $fpath)
+fi
+
+zstyle ':completion:*' cache-path "$XDG_CACHE_HOME"/zsh/zcompcache
+autoload -Uz compinit
+compinit -d "$XDG_CACHE_HOME"/zsh/zcompdump-$ZSH_VERSION
+
+# Tools
 command -v direnv > /dev/null 2>&1 && eval "$(direnv hook zsh)"
 command -v starship > /dev/null 2>&1 && eval "$(starship init zsh)"
-command -v gt > /dev/null 2>&1 && eval "$(gt completion)"
-command -v devbox > /dev/null 2>&1 && eval "$(devbox completion zsh)"

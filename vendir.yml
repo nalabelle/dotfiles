@@ -1,28 +1,20 @@
 apiVersion: vendir.k14s.io/v1alpha1
 kind: Config
 directories:
-  - path: home/.config/zsh/plugins
+  - path: zsh/plugins
     contents:
-      - path: devbox
-        directory:
-          path: shell/zsh/plugins/devbox
       - path: zsh-autosuggestions
         git:
           url: https://github.com/zsh-users/zsh-autosuggestions
-          ref: c3d4e576c9c86eac62884bd47c01f6faed043fc5
-          depth: 1
-      - path: zsh-bd
-        git:
-          url: https://github.com/Tarrasch/zsh-bd
-          ref: e16f3833f804e4e55597513b7353e129a6410008
+          ref: master
           depth: 1
       - path: zsh-history-substring-search
         git:
           url: https://github.com/zsh-users/zsh-history-substring-search
-          ref: 87ce96b1862928d84b1afe7c173316614b30e301
+          ref: master
           depth: 1
       - path: zsh-syntax-highlighting
         git:
           url: https://github.com/zsh-users/zsh-syntax-highlighting
-          ref: 0.8.0
+          ref: master
           depth: 1

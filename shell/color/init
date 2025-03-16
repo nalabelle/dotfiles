@@ -21,7 +21,7 @@ fi
 # This prevents polluting env with a giant LS_COLORS string...
 ls_colors=""
 if [ -n "$x_dircolors" ]; then
-  dircolors_conf="$DOTFILES_PATH/shell/color/dircolors"
+  dircolors_conf="$DOTFILES/shell/color/dircolors"
   ls_colors="$(${x_dircolors} -b $dircolors_conf | head -n1)"
   ls_colors=${ls_colors:0:-1}
   unset dircolors_conf
