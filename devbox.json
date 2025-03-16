@@ -3,16 +3,7 @@
   "packages": [
     "shellcheck@latest",
     "shfmt@latest",
-    "vendir@latest"
-  ],
-  "shell": {
-    "init_hook": [
-      "echo 'Welcome to devbox!' > /dev/null"
-    ],
-    "scripts": {
-      "setup": [
-        "vendir sync"
-      ]
-    }
-  }
+    "nil@latest",
+    "nixfmt@latest"
+  ]
 }

@@ -1,0 +1,12 @@
+# shellcheck shell=bash external-sources=false disable=SC1091
+# vim:filetype=zsh
+
+# Paths
+[[ -f /opt/homebrew/bin/brew ]] && eval "$(/opt/homebrew/bin/brew shellenv)"
+
+HOMESHICK="$HOME/.homesick/repos/homeshick"
+if [ -d "$HOMESHICK" ]; then
+  source "$HOMESHICK/homeshick.sh"
+  homeshick --quiet refresh
+  fpath+=("$HOMESHICK/completions")
+fi
