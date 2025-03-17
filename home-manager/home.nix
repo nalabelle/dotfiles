@@ -33,6 +33,7 @@
     cargo-binstall
     gh
     devbox
+    devenv
     convco
 
     # Kubernetes/Containers
