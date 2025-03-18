@@ -22,8 +22,9 @@ in
     # Testing to see if this changes anything
     currentHostDefaults = {
       "com.apple.dock" = {
-        tilesize = 96;
-        orientation = "left";
+        tilesize = 32;
+        orientation = "bottom";
+        autohide = true;
       };
     };
 
