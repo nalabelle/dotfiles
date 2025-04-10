@@ -28,9 +28,10 @@
     nix-direnv
 
     # Dev
+    act
     git
-    cargo
-    cargo-binstall
+    #cargo
+    #cargo-binstall
     gh
     devbox
     devenv
@@ -80,6 +81,7 @@
       findNoDups = true;
       ignoreAllDups = true;
       ignoreDups = true;
+      share = false;
     };
 
     historySubstringSearch = { enable = true; };
