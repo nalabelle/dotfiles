@@ -43,7 +43,6 @@
   fix = commit --no-verify -m 'WIP: FIXUP'
 [init]
   defaultBranch = main
-  templateDir = ~/.config/git/template
 [protocol]
   version = 2
 [rebase]
@@ -65,3 +64,5 @@
 # Keep at bottom
 [include]
   path = .gitconfig_local
+[credential]
+  helper = store
