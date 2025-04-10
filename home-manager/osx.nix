@@ -10,6 +10,9 @@ in
     bash
 
     extraNodePackages."@anthropic-ai/claude-code"
+
+    awscli
+    duckdb
   ];
 
   programs.zsh.initExtra = ''
