@@ -52,21 +52,24 @@ set novisualbell    " Turn off visual error bells (screen flashing)
 
 " Centralize swap files instead of creating them in the current directory
 if isdirectory($HOME . '/.vim/swap') == 0
-  :silent !mkdir -p ~/.vim/swap >/dev/null 2>&1  " Create swap directory if it doesn't exist
+  " Create swap directory if it doesn't exist
+  :silent !mkdir -p ~/.vim/swap >/dev/null 2>&1
 endif
 set directory=~/.vim/swap,$TEMP  " Store swap files in ~/.vim/swap, fallback to $TEMP
 
 " Centralize backup files
 if isdirectory($HOME . '/.vim/backup') == 0
-  :silent !mkdir -p ~/.vim/backup >/dev/null 2>&1  " Create backup directory if it doesn't exist
+  " Create backup directory if it doesn't exist
+  :silent !mkdir -p ~/.vim/backup >/dev/null 2>&1
 endif
-set backupdir=~/.vim/backup,$TEMP  " Store backup files in ~/.vim/backup, fallback to $TEMP
-set backup          " Create backup files before overwriting, keep them after writing
+  set backupdir=~/.vim/backup,$TEMP  " Store backup files in ~/.vim/backup, fallback to $TEMP
+  set backup          " Create backup files before overwriting, keep them after writing
 
 " Persistent undo history (available in Vim 7.3+)
 if exists("+undofile") " 7.3+
   if isdirectory($HOME . '/.vim/undo') == 0
-    :silent !mkdir -p ~/.vim/undo > /dev/null 2>&1  " Create undo directory if it doesn't exist
+    " Create undo directory if it doesn't exist
+    :silent !mkdir -p ~/.vim/undo > /dev/null 2>&1
   endif
   set undodir=~/.vim/undo,$TEMP  " Store undo files in ~/.vim/undo, fallback to $TEMP
   set undofile        " Save undo history to a file when exiting a buffer
