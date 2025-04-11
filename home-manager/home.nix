@@ -1,4 +1,11 @@
-{ pkgs, config, ... }: {
+{ pkgs, config, system, ... }:
+let
+  extraNodePackages = import ./node {
+    inherit pkgs system;
+    nodejs = pkgs.nodejs_22;
+  };
+in
+{
   # https://home-manager-options.extranix.com/?query=&release=release-24.11
   home.username = "nalabelle";
   home.stateVersion = "24.11";
@@ -14,6 +21,7 @@
     tmux
     vim-full
     wget
+    less
 
     # ZSH
     zsh-syntax-highlighting
@@ -36,6 +44,7 @@
     devbox
     devenv
     convco
+    extraNodePackages."@anthropic-ai/claude-code"
 
     # Kubernetes/Containers
     docker-compose
@@ -107,6 +116,74 @@
     initExtra = ''
       source ${config.home.homeDirectory}/.homesick/repos/dotfiles/zsh/completions;
     '';
+  };
+
+  programs.tmux = {
+    enable = true;
+    aggressiveResize = true;
+    baseIndex = 1;
+    shortcut = "a";
+    keyMode = "vi";
+    customPaneNavigationAndResize = true;
+    sensibleOnTop = true;
+
+    plugins = with pkgs; [
+      tmuxPlugins.cpu
+      tmuxPlugins.pain-control
+      tmuxPlugins.prefix-highlight
+      tmuxPlugins.sensible
+      tmuxPlugins.yank
+    ];
+
+    #terminal = "screen-256color";
+    #check infocmp screen-256color-bce-s
+    #check infocmp screen-256color-bce
+
+    extraConfig = ''
+      # https://github.com/tmux/tmux/blob/master/CHANGES
+      run-shell 'tmux setenv -g TMUX_VERSION $(tmux -V | \
+        sed -En "s/^tmux[^0-9]*([.0-9]+).*/\1/p")'
+
+      # Don't move around panes with arrow keys
+      unbind Left
+      unbind Down
+      unbind Up
+      unbind Right
+
+      # yank and visual selection in the tmux buffer
+      #bind -t vi-copy v begin-selection
+      #bind -t vi-copy y copy-selection
+
+      # prefix, S to send a pane to a window
+      bind-key S choose-window "join-pane -t "%%""
+
+      # prefix, C to clear a pane and its history
+      unbind C
+      bind-key C send-keys -R "Escape" C-l \; clear-history
+      if-shell -b '[ "$(echo "$TMUX_VERSION > 3.1" | bc)" = 1 ]' " \
+        bind-key O customize-mode -Z"
+
+      # styles
+      set -g status-style bg=black,fg=white
+      set -g pane-border-style fg=blue,bg=default
+      set -g pane-active-border-style fg=green,bg=default
+
+      # status-left
+      set -g status-left '#{?pane_in_mode,#{s/copy.+/#[fg=black,bg=red]/:pane_mode} #S ,#[fg=black,bg=green] #S }#{prefix_highlight}'
+      set -g @prefix_highlight_fg 'black,bold'
+      set -g @prefix_highlight_bg 'yellow'
+
+      # status-window
+      set -g window-status-format ' #I>#W#F '
+      set -g window-status-current-format ' #I>#W#F '
+      set -ag window-status-current-style fg=black,bg=blue
+
+      # status-right
+      set -ag status-right-style dim
+      set -g status-right-length 80
+      set -g status-right '#{ram_fg_color}#{ram_percentage}#[fg=default] #{cpu_fg_color}#{cpu_percentage}#[fg=default] #(status-getload.sh)/#(status-getcpu.sh) #[bg=colour236,fg=default] %H:%M #[bg=default,fg=default] #h '
+      set -g status-interval 10
+      '';
   };
 
   programs.fzf = {
