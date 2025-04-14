@@ -45,6 +45,7 @@ in
     devenv
     convco
     extraNodePackages."@anthropic-ai/claude-code"
+    aider-chat
 
     # Kubernetes/Containers
     docker-compose
@@ -126,24 +127,24 @@ in
     keyMode = "vi";
     customPaneNavigationAndResize = true;
     sensibleOnTop = true;
+    # This causes some problems...
+    # https://github.com/tmux/tmux/pull/4411
+    # https://github.com/tmux/tmux/commit/817b621d2078137b4ddea78835f609a9d7bac339
+    # https://github.com/tmux-plugins/tmux-sensible/issues/61
+    escapeTime = 500;
 
     plugins = with pkgs; [
       tmuxPlugins.cpu
       tmuxPlugins.pain-control
       tmuxPlugins.prefix-highlight
-      tmuxPlugins.sensible
       tmuxPlugins.yank
     ];
 
-    #terminal = "screen-256color";
+    terminal = "screen-256color-bce-s";
     #check infocmp screen-256color-bce-s
     #check infocmp screen-256color-bce
 
     extraConfig = ''
-      # https://github.com/tmux/tmux/blob/master/CHANGES
-      run-shell 'tmux setenv -g TMUX_VERSION $(tmux -V | \
-        sed -En "s/^tmux[^0-9]*([.0-9]+).*/\1/p")'
-
       # Don't move around panes with arrow keys
       unbind Left
       unbind Down
@@ -160,8 +161,7 @@ in
       # prefix, C to clear a pane and its history
       unbind C
       bind-key C send-keys -R "Escape" C-l \; clear-history
-      if-shell -b '[ "$(echo "$TMUX_VERSION > 3.1" | bc)" = 1 ]' " \
-        bind-key O customize-mode -Z"
+      bind-key O customize-mode -Z
 
       # styles
       set -g status-style bg=black,fg=white
@@ -189,6 +189,7 @@ in
   programs.fzf = {
     enable = true;
     enableZshIntegration = true;
+    tmux.enableShellIntegration = true;
   };
 
   programs.starship = {
