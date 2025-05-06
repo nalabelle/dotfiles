@@ -7,33 +7,37 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    mkAlias = {
+      url = "github:cdmistman/mkAlias";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    darwin = {
+      url = "github:nix-darwin/nix-darwin";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, home-manager, nixpkgs }:
+  outputs = inputs@{ self, home-manager, nixpkgs, darwin, mkAlias, ... }:
     let
-      config = {
-        x86_64-linux = home-manager.lib.homeManagerConfiguration {
-          pkgs = import nixpkgs { system = "x86_64-linux"; };
-          modules = [
-            ./home.nix
-            {
-              home.homeDirectory = "/home/nalabelle";
-            }
-          ];
-        };
-        aarch64-darwin = home-manager.lib.homeManagerConfiguration {
-          pkgs = import nixpkgs { system = "aarch64-darwin"; };
-          modules = [
-            ./osx.nix
-            ./home.nix
-            {
-              home.homeDirectory = "/Users/nalabelle";
-            }
-          ];
-        };
-      };
+      # Variables used in flake
+      vars = { username = "nalabelle"; };
     in {
-      packages.aarch64-darwin.homeConfigurations.nalabelle = config.aarch64-darwin;
-      packages.x86_64-linux.homeConfigurations.nalabelle = config.x86_64-linux;
+      # Linux configurations
+      nixosConfigurations = (import ./hosts {
+        inherit (nixpkgs) lib;
+        inherit inputs nixpkgs home-manager darwin vars;
+      });
+
+      # macOS configurations
+      darwinConfigurations = (import ./darwin {
+        inherit (nixpkgs) lib;
+        inherit inputs nixpkgs home-manager darwin mkAlias vars;
+      });
+
+      # Home Manager configurations
+      homeConfigurations = (import ./nix {
+        inherit (nixpkgs) lib;
+        inherit inputs nixpkgs home-manager vars;
+      });
     };
 }
