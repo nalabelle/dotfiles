@@ -28,6 +28,8 @@ flake.nix
 ```sh
 # Install xcode
 xcode-select --install
+softwareupdate --install-rosetta --agree-to-license
+
 # Install Nix (if not already installed)
 sh <(curl -L https://nixos.org/nix/install) --no-daemon
 # or

@@ -1,6 +1,4 @@
 { pkgs, system, ... }: {
-  # Enable Homebrew
-  homebrew.enable = true;
   security.pam.services.sudo_local = {
     enable = true;
     touchIdAuth = true;
@@ -15,6 +13,12 @@
 
       # Set 24-hour clock on login. The "global system" setting below only applies to user clock I guess?
       sudo defaults write /Library/Preferences/.GlobalPreferences.plist AppleICUForce24HourTime -bool true
+
+      # Attempt to disable Homebrew analytics
+      if [ -x "/opt/homebrew/bin/brew" ]; then
+        echo "Attempting to disable Homebrew analytics..."
+        /opt/homebrew/bin/brew analytics off
+      fi
     '';
 
     defaults = {
