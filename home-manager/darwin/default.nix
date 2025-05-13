@@ -11,6 +11,7 @@
     modules = [
       ./darwin-configuration.nix
       ./host-users.nix
+      ./tennyson-configuration.nix
       {
         nixpkgs.overlays = [
           (final: prev: {

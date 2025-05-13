@@ -1,4 +1,10 @@
 { pkgs, system, ... }: {
+  # Enable Homebrew
+  homebrew.enable = true;
+  security.pam.services.sudo_local = {
+    enable = true;
+    touchIdAuth = true;
+  };
   system = {
     stateVersion = 6;
     # activationScripts are executed every time you boot the system or run `nixos-rebuild` / `darwin-rebuild`.
@@ -39,6 +45,7 @@
         ShowStatusBar = true;
         _FXSortFoldersFirst = true;
         FXDefaultSearchScope = "SCcf";
+        NewWindowTarget = "Home";
       };
       # Added from modules/macos/default.nix
       controlcenter = { BatteryShowPercentage = true; };
