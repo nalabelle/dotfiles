@@ -27,7 +27,10 @@
 
       fetch.prune = true;
 
-      init.defaultBranch = "main";
+      init = {
+        defaultBranch = "main";
+        #templateDir = "${config.xdg.configHome}/git/template";
+      };
 
       protocol.version = 2;
 
@@ -90,5 +93,10 @@
       "wip" = ''commit --no-verify -m "WIP"'';
       "fix" = "commit --no-verify -m 'WIP: FIXUP'";
     };
+  };
+
+  home.file."${config.xdg.configHome}/git/template" = {
+    source = ../../../git/template; # Relative path from this nix file
+    recursive = true; # Ensure the whole directory is copied
   };
 }

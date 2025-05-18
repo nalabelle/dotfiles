@@ -1,8 +1,6 @@
 { config, lib, pkgs, ... }:
 
 {
-  nixpkgs.config.allowUnfree = true;
-
   home.packages = with pkgs; [ bash awscli duckdb vscode ];
 
   programs.zsh.initExtra = ''

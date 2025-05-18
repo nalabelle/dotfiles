@@ -15,7 +15,7 @@ in {
     devenv
     convco
     extraNodePackages."@anthropic-ai/claude-code"
-    aider-chat
+    _1password-cli
 
     # Environment
     direnv
@@ -45,5 +45,13 @@ in {
   programs.direnv = {
     enable = true;
     enableZshIntegration = true;
+    config = {
+      global = {
+        strict_env = true;
+        load_dotenv = false;
+        warn_timeout = "60s";
+        hide_env_diff = true;
+      };
+    };
   };
 }

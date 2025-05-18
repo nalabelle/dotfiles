@@ -4,7 +4,8 @@
   # Darwin configurations
   "tennyson" = darwin.lib.darwinSystem {
     system = "aarch64-darwin";
-    specialArgs = inputs // {
+    specialArgs = {
+      flakeInputs = inputs;
       username = vars.username;
       hostname = "tennyson";
     };
@@ -22,9 +23,14 @@
       }
       home-manager.darwinModules.home-manager
       {
+        # Pass special arguments to the Home Manager modules
+        home-manager.extraSpecialArgs = { inherit inputs vars; };
+
         home-manager.users.${vars.username} = {
-          imports = [ ../modules ];
+          imports = [ ../modules ../modules/systems/darwin ];
           home.homeDirectory = "/Users/${vars.username}";
+          nixpkgs.config.allowUnfree =
+            true; # Configure allowUnfree for Home Manager's pkgs
         };
       }
     ];

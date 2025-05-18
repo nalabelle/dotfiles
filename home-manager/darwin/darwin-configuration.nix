@@ -1,8 +1,13 @@
-{ pkgs, system, ... }: {
+{ pkgs, system, flakeInputs, ... }: {
+  nixpkgs.config.allowUnfree =
+    true; # Allow unfree packages globally for this system
+
   security.pam.services.sudo_local = {
     enable = true;
     touchIdAuth = true;
   };
+  environment.systemPackages =
+    [ flakeInputs.home-manager.packages.${pkgs.system}.default ];
   system = {
     stateVersion = 6;
     # activationScripts are executed every time you boot the system or run `nixos-rebuild` / `darwin-rebuild`.

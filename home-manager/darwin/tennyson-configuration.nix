@@ -12,9 +12,14 @@
     };
 
     casks = [
-      "docker" # This installs Docker Desktop for macOS
+      "android-ndk"
+      "android-platform-tools"
+      "android-studio"
+      "docker" # docker-desktop
       "kopiaui"
       "syncthing"
     ];
+
+    masApps = { Tailscale = 1475387142; };
   };
 }

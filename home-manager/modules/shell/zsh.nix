@@ -53,6 +53,24 @@
 
     initExtra = ''
       source ${config.home.homeDirectory}/.homesick/repos/dotfiles/zsh/completions;
+
+      nix-refresh() {
+        local flake_path="${config.home.homeDirectory}/.homesick/repos/dotfiles/home-manager"
+        local current_system current_hostname
+        current_hostname=$(hostname)
+        current_system=$(uname)
+
+        case "$current_system" in
+          "Darwin")
+            echo "Refreshing nix-darwin configuration for $current_hostname..."
+            darwin-rebuild switch --flake "$flake_path#$current_hostname" "$@"
+            ;;
+          *)
+            echo "Refreshing Home Manager configuration for $current_hostname..."
+            home-manager switch --flake "$flake_path#$current_hostname" "$@"
+            ;;
+        esac
+      }
     '';
   };
 }
