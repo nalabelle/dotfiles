@@ -3,7 +3,7 @@ set -eu
 set -o pipefail
 
 # This will be replaced with the actual path during installation
-flake_path="@flakePath@"
+flake_path="@flakePath@/home-manager"
 current_hostname=$(hostname)
 current_system=$(uname)
 
@@ -18,6 +18,6 @@ case "$current_system" in
     ;;
   *)
     echo "Refreshing Home Manager configuration for $current_hostname..."
-    home-manager switch --flake "$flake_path#$current_hostname" "$@"
+    home-manager switch --flake "$flake_path" "$@"
     ;;
 esac

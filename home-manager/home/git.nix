@@ -57,7 +57,7 @@
 
       include.path = ".gitconfig_local";
 
-      credential.helper = "store";
+      #credential.helper = "store";
     };
 
     aliases = {

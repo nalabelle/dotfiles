@@ -1,8 +1,9 @@
 .PHONY: test
 test:
 	# Does a test build of a system and home config
-	nix build .#darwinConfigurations.tennyson.system 
-	nix build .#homeConfigurations."nalabelle".activationPackage
+	nix flake check
+	nix build .#darwinConfigurations.tennyson.system
+	nix build .#homeConfigurations."nalabelle@tennyson".activationPackage
 
 .PHONY: clean
 clean:
@@ -11,5 +12,4 @@ clean:
 
 .PHONY: switch
 switch:
-	sudo darwin-rebuild switch --flake .
-	home-manager switch --flake .
+	./bin/nix-refresh
