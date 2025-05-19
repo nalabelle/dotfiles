@@ -1,6 +1,7 @@
 { config, lib, pkgs, ... }:
 
 {
+  home.packages = [ pkgs.git ];
   programs.git = {
     enable = true;
 
@@ -96,7 +97,7 @@
   };
 
   home.file."${config.xdg.configHome}/git/template" = {
-    source = ../../../git/template; # Relative path from this nix file
+    source = ../../git/template; # Relative path from this nix file
     recursive = true; # Ensure the whole directory is copied
   };
 }

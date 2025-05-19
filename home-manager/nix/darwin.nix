@@ -1,24 +1,38 @@
-{ pkgs, system, flakeInputs, ... }: {
-  nixpkgs.config.allowUnfree =
-    true; # Allow unfree packages globally for this system
+{ pkgs, system, flakeInputs, config, lib, vars, hostname, username, ... }: {
+
+  nixpkgs.hostPlatform = "aarch64-darwin";
+
+  networking.computerName = hostname;
+  networking.hostName = hostname;
+  system.defaults.smb.NetBIOSName = hostname;
+  nix.settings.trusted-users = [ username ];
+  system.primaryUser = username;
+  users.users."${username}".home = "/Users/${username}";
+
+  # Upgrade ancient osx bash
+  environment.systemPackages = [ pkgs.bash ];
 
   security.pam.services.sudo_local = {
     enable = true;
     touchIdAuth = true;
   };
-  environment.systemPackages =
-    [ flakeInputs.home-manager.packages.${pkgs.system}.default ];
+
   system = {
     stateVersion = 6;
+
     # activationScripts are executed every time you boot the system or run `nixos-rebuild` / `darwin-rebuild`.
-    activationScripts.postUserActivation.text = ''
+    activationScripts."activate-settings".text = ''
       # activateSettings -u will reload the settings from the database and apply them to the current session,
       # so we do not need to logout and login again to make the changes take effect.
       /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
+    '';
 
+    activationScripts."24-hour-login-clock".text = ''
       # Set 24-hour clock on login. The "global system" setting below only applies to user clock I guess?
-      sudo defaults write /Library/Preferences/.GlobalPreferences.plist AppleICUForce24HourTime -bool true
+      defaults write /Library/Preferences/.GlobalPreferences.plist AppleICUForce24HourTime -bool true
+    '';
 
+    activationScripts."disable-homebrew-analytics".text = ''
       # Attempt to disable Homebrew analytics
       if [ -x "/opt/homebrew/bin/brew" ]; then
         echo "Attempting to disable Homebrew analytics..."
@@ -56,7 +70,7 @@
         FXDefaultSearchScope = "SCcf";
         NewWindowTarget = "Home";
       };
-      # Added from modules/macos/default.nix
+
       controlcenter = { BatteryShowPercentage = true; };
       CustomUserPreferences = {
         ".GlobalPreferences" = {
@@ -68,7 +82,7 @@
             "4" = "EEEE, dd MMMM y"; # Extra long date format
           };
         };
-        # Added from modules/macos/default.nix
+
         "com.apple.desktopservices" = {
           # Avoid creating .DS_Store files on network or USB volumes
           DSDontWriteNetworkStores = true;
@@ -79,6 +93,17 @@
     keyboard = {
       enableKeyMapping = true;
       remapCapsLockToEscape = true;
+    };
+  };
+
+  # Enable Homebrew and configure it based on the current machine
+  homebrew = {
+    enable = true;
+    onActivation = {
+      autoUpdate = true;
+      cleanup = "zap";
+      upgrade = true;
+      extraFlags = [ "--verbose" ];
     };
   };
 }

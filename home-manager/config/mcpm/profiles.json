@@ -1,0 +1,10 @@
+{
+  "default": [
+    {
+      "name": "docs",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "$HOME/docs"],
+      "env": {}
+    }
+  ]
+}

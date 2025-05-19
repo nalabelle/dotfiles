@@ -1,11 +1,11 @@
 { config, lib, pkgs, ... }:
 
 {
-  home.username = "nalabelle";
+  imports = [ ./git.nix ./tmux.nix ./tools.nix ./zsh.nix ./darwin.nix ];
+  # ../configs/mcpm-module.nix
   home.stateVersion = "24.11";
 
   home.packages = with pkgs; [
-    # General shell
     curl
     fzf
     ripgrep
@@ -17,6 +17,16 @@
     wget
     less
   ];
+
+  programs.home-manager.enable = true;
+  services.home-manager = lib.mkIf pkgs.stdenv.isLinux {
+    autoExpire = {
+      enable = true;
+      frequency = "weekly";
+      timestamp = "-30 days";
+    };
+    autoUpgrade.enable = true;
+  };
 
   nix.gc = {
     automatic = true;

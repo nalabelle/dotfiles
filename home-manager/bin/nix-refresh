@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+set -eu
+set -o pipefail
+
+# This will be replaced with the actual path during installation
+flake_path="@flakePath@"
+current_hostname=$(hostname)
+current_system=$(uname)
+
+# For local testing
+[[  "$flake_path" == *"flakePath"* ]] && flake_path="."
+
+case "$current_system" in
+  "Darwin")
+    echo "Refreshing nix-darwin configuration for $current_hostname..."
+    sudo darwin-rebuild switch --flake "$flake_path#$current_hostname" "$@"
+    home-manager switch --flake "$flake_path" "$@"
+    ;;
+  *)
+    echo "Refreshing Home Manager configuration for $current_hostname..."
+    home-manager switch --flake "$flake_path#$current_hostname" "$@"
+    ;;
+esac

@@ -1,20 +1,10 @@
-{ config, lib, pkgs, system ? builtins.currentSystem, ... }:
-
-let
-  extraNodePackages = import ../../node {
-    inherit pkgs system;
-    nodejs = pkgs.nodejs_22;
-  };
-in {
+{ config, lib, pkgs, system ? builtins.currentSystem, ... }: {
   home.packages = with pkgs; [
     # Dev tools
     act
-    git
     gh
     devbox
-    devenv
     convco
-    extraNodePackages."@anthropic-ai/claude-code"
     _1password-cli
 
     # Environment
@@ -29,6 +19,14 @@ in {
 
     # Viewers
     glow
+
+    # Custom scripts
+    (writeShellApplication {
+      name = "nix-refresh";
+      runtimeInputs = [ home-manager ];
+      text = builtins.replaceStrings [ "@flakePath@" ] [ "${toString ../..}" ]
+        (builtins.readFile ../bin/nix-refresh);
+    })
   ];
 
   programs.fzf = {
