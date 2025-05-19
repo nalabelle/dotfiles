@@ -2,22 +2,29 @@
 set -eu
 set -o pipefail
 
-# This will be replaced with the actual path during installation
-flake_path="@flakePath@/home-manager"
+# Determine the flake path
+# Use "." if we're in the repo, otherwise use the direct GitHub URL
+if [ -d ".git" ] || git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+  # We're in the repo, use "."
+  flake_path="."
+else
+  # We're not in the repo, use the direct GitHub URL with the correct subdirectory
+  flake_path="github:nalabelle/dotfiles?dir=home-manager"
+fi
+
 current_hostname=$(hostname)
 current_system=$(uname)
-
-# For local testing
-[[  "$flake_path" == *"flakePath"* ]] && flake_path="."
 
 case "$current_system" in
   "Darwin")
     echo "Refreshing nix-darwin configuration for $current_hostname..."
-    sudo darwin-rebuild switch --flake "$flake_path#$current_hostname" "$@"
+    set -x
+    sudo -E HOME="$HOME" darwin-rebuild switch --flake "$flake_path#$current_hostname" "$@"
     home-manager switch --flake "$flake_path" "$@"
     ;;
   *)
     echo "Refreshing Home Manager configuration for $current_hostname..."
+    set -x
     home-manager switch --flake "$flake_path" "$@"
     ;;
 esac

@@ -9,18 +9,9 @@
   #}
 
   homebrew = {
-    taps = [ "stacklok/tap" ];
+    brews = [ "mcpm" ];
 
-    brews = [ "thv" "mcpm" ];
-
-    casks = [
-      "android-ndk"
-      "android-platform-tools"
-      "android-studio"
-      "docker" # docker-desktop
-      "kopiaui"
-      "syncthing"
-      "tailscale"
-    ];
+    casks =
+      [ "android-ndk" "android-platform-tools" "android-studio" "kopiaui" ];
   };
 }

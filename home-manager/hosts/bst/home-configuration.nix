@@ -1,7 +1,7 @@
 { pkgs, inputs, ... }:
 let
   extraNodePackages = import ../../node {
-    inherit pkgs system;
+    inherit pkgs;
     nodejs = pkgs.nodejs_22;
   };
 in {

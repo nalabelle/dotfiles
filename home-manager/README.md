@@ -17,30 +17,19 @@ curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix 
 # Follow instructions
 ```
 
-## Usage
+## Bootstrapping Without Local Checkout
 
-### For macOS systems
-
-```sh
-# Switch to the darwin configuration
-darwin-rebuild switch --flake .#tennyson
-```
-
-### For Linux systems
-
-```sh
-# Switch to the NixOS configuration
-nixos-rebuild switch --flake .#hostname
-```
-
-### For standalone Home Manager
+You can bootstrap your system directly from GitHub without a local checkout:
 
 ```sh
 # For macOS
-nix run . -- switch --flake .#aarch64-darwin
+sudo -E HOME=$HOME nix --extra-experimental-features "nix-command flakes" run nix-darwin -- switch --flake 'github:nalabelle/dotfiles?dir=home-manager#'$(hostname)
 
 # For Linux
-nix run . -- switch --flake .#x86_64-linux
+sudo nix --extra-experimental-features "nix-command flakes" run nixpkgs#nixos-rebuild -- switch --flake 'github:nalabelle/dotfiles?dir=home-manager#'$(hostname)
+
+# For standalone Home Manager
+nix --extra-experimental-features "nix-command flakes" run home-manager/master -- switch --flake 'github:nalabelle/dotfiles?dir=home-manager#'$(whoami)@$(hostname)
 ```
 
 ## Updating

@@ -23,9 +23,8 @@
     # Custom scripts
     (writeShellApplication {
       name = "nix-refresh";
-      runtimeInputs = [ home-manager ];
-      text = builtins.replaceStrings [ "@flakePath@" ] [ "${toString ../..}" ]
-        (builtins.readFile ../bin/nix-refresh);
+      runtimeInputs = [ home-manager git ];
+      text = builtins.readFile ../bin/nix-refresh;
     })
   ];
 

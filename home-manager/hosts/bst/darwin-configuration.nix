@@ -1,13 +1,10 @@
 { pkgs, inputs, hostname, ... }: {
+  ids.gids.nixbld = 30000;
   homebrew = {
-    taps = [ "stacklok/tap" ];
+    taps = [ "withgraphite/tap" ];
 
-    brews = [ "thv" "mcpm" ];
+    brews = [ "mcpm" "graphite" ];
 
-    casks = [
-      "docker" # docker-desktop
-      "syncthing"
-      "tailscale"
-    ];
+    casks = [ "dbeaver-community" "linear-linear" ];
   };
 }

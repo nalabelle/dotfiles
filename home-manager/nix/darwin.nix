@@ -4,9 +4,7 @@
 
   networking.computerName = hostname;
   networking.hostName = hostname;
-  system.defaults.smb.NetBIOSName = hostname;
   nix.settings.trusted-users = [ username ];
-  system.primaryUser = username;
   users.users."${username}".home = "/Users/${username}";
 
   # Upgrade ancient osx bash
@@ -19,6 +17,7 @@
 
   system = {
     stateVersion = 6;
+    primaryUser = username;
 
     # activationScripts are executed every time you boot the system or run `nixos-rebuild` / `darwin-rebuild`.
     activationScripts."activate-settings".text = ''
@@ -41,6 +40,7 @@
     '';
 
     defaults = {
+      smb.NetBIOSName = hostname;
       menuExtraClock.Show24Hour = true;
       menuExtraClock.ShowAMPM = false;
       dock = {
@@ -105,5 +105,18 @@
       upgrade = true;
       extraFlags = [ "--verbose" ];
     };
+
+    casks = [
+      "1password"
+      "brave-browser"
+      "caldigit-docking-utility"
+      "coconutbattery"
+      "docker" # docker-desktop
+      "iterm2"
+      "plexamp"
+      "raycast"
+      "syncthing"
+      "tailscale"
+    ];
   };
 }
