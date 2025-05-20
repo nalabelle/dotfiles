@@ -20,7 +20,6 @@ case "$current_system" in
     echo "Refreshing nix-darwin configuration for $current_hostname..."
     set -x
     sudo -E HOME="$HOME" darwin-rebuild switch --flake "$flake_path#$current_hostname" "$@"
-    home-manager switch --flake "$flake_path" "$@"
     ;;
   *)
     echo "Refreshing Home Manager configuration for $current_hostname..."

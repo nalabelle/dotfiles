@@ -117,6 +117,7 @@
       "raycast"
       "syncthing"
       "tailscale"
+      "unnaturalscrollwheels"
     ];
   };
 }
