@@ -34,11 +34,6 @@
     tmux.enableShellIntegration = true;
   };
 
-  programs.starship = {
-    enable = true;
-    enableZshIntegration = true;
-  };
-
   programs.direnv = {
     enable = true;
     enableZshIntegration = true;
@@ -50,5 +45,10 @@
         hide_env_diff = true;
       };
     };
+  };
+
+  xdg.configFile = {
+    "mcpm/config.json".source = ../config/mcpm/config.json;
+    "mcpm/profiles.json".source = ../config/mcpm/profiles.json;
   };
 }
