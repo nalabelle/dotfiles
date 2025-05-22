@@ -25,7 +25,10 @@
       frequency = "weekly";
       timestamp = "-30 days";
     };
-    autoUpgrade.enable = true;
+    autoUpgrade = {
+      enable = true;
+      frequency = "weekly";
+    };
   };
 
   nix.gc = {

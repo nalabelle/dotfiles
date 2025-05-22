@@ -3,7 +3,7 @@ test:
 	# Does a test build of a system and home config
 	nix flake check
 	nix build .#darwinConfigurations.tennyson.system
-	nix build .#homeConfigurations."nalabelle@tennyson".activationPackage
+	nix build .#homeConfigurations.nalabelle.activationPackage
 
 .PHONY: clean
 clean:

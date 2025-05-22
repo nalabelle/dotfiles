@@ -1,42 +1,20 @@
 { inputs, ... }:
 let
+  systems = [ "aarch64-darwin" "x86_64-linux" ];
   lib = inputs.nixpkgs.lib;
-  username = "nalabelle"; # Hardcoded since it's always the same
-  nixpkgsConfig = { allowUnfree = true; }; # Default config
+  username = "nalabelle";
+  nixpkgsConfig = { allowUnfree = true; };
 
   # Create a darwin configuration for a host
-  mkDarwinSystem = { hostname, system ? "aarch64-darwin" }:
+  mkDarwinSystem = { hostname }:
     inputs.nix-darwin.lib.darwinSystem {
-      inherit system;
+      system = "aarch64-darwin";
       modules = [
-        inputs.home-manager.darwinModules.home-manager
-        {
-          nixpkgs.config = nixpkgsConfig;
-          home-manager = {
-            useGlobalPkgs = true;
-            useUserPackages = true;
-            users.${username} = {
-              imports = [
-                (if builtins.pathExists
-                ../hosts/${hostname}/home-configuration.nix then
-                  ../hosts/${hostname}/home-configuration.nix
-                else
-                  { })
-                ../home
-              ];
-            };
-            extraSpecialArgs = { inherit inputs; };
-          };
-        }
         ../nix/nixos.nix
         ../nix/darwin.nix
         ../hosts/${hostname}/darwin-configuration.nix
       ];
-      specialArgs = {
-        inherit inputs;
-        hostname = hostname;
-        username = username;
-      };
+      specialArgs = { inherit inputs username hostname; };
     };
 
   # Create a standalone home configuration
@@ -84,29 +62,32 @@ in {
           null) hosts));
 
       # Create home configurations for all hosts with home-configuration.nix
-      homeConfigs = lib.listToAttrs (lib.filter (x: x != null) (map (hostname:
-        if builtins.pathExists
-        ../hosts/${hostname}/home-configuration.nix then {
-          name = "${username}@${hostname}";
-          value = mkHomeConfig {
-            inherit hostname;
-            system = if builtins.pathExists
-            ../hosts/${hostname}/darwin-configuration.nix then
-              "aarch64-darwin"
-            else
-              "x86_64-linux";
-          };
-        } else {
-          name = "${username}";
-          value = mkHomeConfig {
-            inherit hostname;
-            system = if builtins.pathExists
-            ../hosts/${hostname}/darwin-configuration.nix then
-              "aarch64-darwin"
-            else
-              "x86_64-linux";
-          };
-        }) hosts));
+      hostHomeConfigs = lib.listToAttrs (lib.filter (x: x != null) (map
+        (hostname:
+          if builtins.pathExists
+          ../hosts/${hostname}/home-configuration.nix then {
+            name = "${username}@${hostname}";
+            value = mkHomeConfig {
+              inherit hostname;
+              system = if builtins.pathExists
+              ../hosts/${hostname}/darwin-configuration.nix then
+                "aarch64-darwin"
+              else
+                "x86_64-linux";
+            };
+          } else
+            null) hosts));
+
+      genericConfigs = lib.listToAttrs (map (system: {
+        name = "${username}";
+        value = mkHomeConfig {
+          # hostname is unused in the home configs, a string that shouldn't match any hosts files/dirs
+          hostname = "default";
+          inherit system;
+        };
+      }) systems);
+
+      homeConfigs = hostHomeConfigs // genericConfigs;
 
     in {
       darwinConfigurations = darwinConfigs;

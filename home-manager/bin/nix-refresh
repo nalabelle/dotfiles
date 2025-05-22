@@ -19,11 +19,14 @@ case "$current_system" in
   "Darwin")
     echo "Refreshing nix-darwin configuration for $current_hostname..."
     set -x
-    sudo -E HOME="$HOME" darwin-rebuild switch --flake "$flake_path#$current_hostname" "$@"
-    ;;
+    sudo -E HOME="$HOME" darwin-rebuild switch --flake "$flake_path"
+    { set +x; } 2>/dev/null
+    ;& # Fall through to next case. Trying to include home-manager inside the nix-darwin 
+    # setup just made a lot of pain
   *)
-    echo "Refreshing Home Manager configuration for $current_hostname..."
+    echo "Refreshing Home Manager configuration..."
     set -x
-    home-manager switch --flake "$flake_path" "$@"
+    home-manager switch --flake "$flake_path"
+    { set +x; } 2>/dev/null
     ;;
 esac
