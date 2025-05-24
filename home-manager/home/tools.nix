@@ -5,6 +5,7 @@
     gh
     devbox
     convco
+    mkcert
     _1password-cli
 
     # Environment
