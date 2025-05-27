@@ -7,10 +7,11 @@
     userName = "nalabelle";
     userEmail = "git@nalabelle.com";
 
+    ignores = [ "*~" ".DS_Store" ".metals" "vimrc.local" ".tags" ];
+
     extraConfig = {
       core = {
         editor = "vim --clean";
-        excludesfile = "~/.gitignore_global";
         untrackedCache = true;
       };
 
@@ -48,11 +49,11 @@
         required = true;
       };
 
-      user.signingkey = "~/.ssh/id_ed25519.pub";
+      #user.signingkey = "~/.ssh/id_ed25519.pub";
 
-      commit.gpgsign = true;
+      #commit.gpgsign = true;
 
-      gpg.format = "ssh";
+      #gpg.format = "ssh";
 
       include.path = ".gitconfig_local";
 

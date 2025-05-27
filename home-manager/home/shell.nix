@@ -25,7 +25,7 @@
   };
 
   # Configure zsh ulimit (this will be merged with existing zsh config)
-  programs.zsh.initExtra = lib.mkBefore ''
+  programs.zsh.initContent = lib.mkBefore ''
     # Set file descriptor limit (from .profile)
     ulimit -n 10240
   '';
