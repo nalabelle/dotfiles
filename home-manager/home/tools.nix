@@ -52,6 +52,41 @@
     })
   ];
 
+  # Containers configuration
+  xdg.configFile."containers/policy.json".text = ''
+    {
+        "default": [
+            {
+                "type": "insecureAcceptAnything"
+            }
+        ],
+        "transports": {
+            "docker-daemon": {
+                "": [{"type":"insecureAcceptAnything"}]
+            }
+        }
+    }
+  '';
+
+  # Curl configuration
+  home.file.".curlrc".text = ''
+    progress-bar
+  '';
+
+  # MySQL configuration
+  home.file.".my.cnf".text = ''
+    [mysql]
+    prompt=T\\R:\\m:\\s\\S\\_\\"\\h\\" [\\d]>\\_
+    show-warnings
+    auto-rehash
+  '';
+
+  programs.poetry = {
+    enable = true;
+    package = null;
+    settings = { virtualenvs = { in-project = true; }; };
+  };
+
   programs.fzf = {
     enable = true;
     enableZshIntegration = true;

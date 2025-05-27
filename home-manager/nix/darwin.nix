@@ -1,10 +1,14 @@
 { pkgs, system, flakeInputs, config, lib, vars, hostname, username, ... }: {
-
   nixpkgs.hostPlatform = "aarch64-darwin";
 
   networking.computerName = hostname;
   networking.hostName = hostname;
-  nix.settings.trusted-users = [ username ];
+  nix = {
+    settings.trusted-users = [ username ];
+    extraOptions = ''
+      experimental-features = nix-command flakes
+    '';
+  };
   users.users."${username}".home = "/Users/${username}";
 
   # Upgrade ancient osx bash
