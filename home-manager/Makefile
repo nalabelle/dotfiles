@@ -13,3 +13,11 @@ clean:
 .PHONY: switch
 switch:
 	./bin/nix-refresh
+
+.PHONY: update
+update:
+	nix flake update
+
+.PHONY: gc
+gc:
+	nix-collect-garbage --delete-old

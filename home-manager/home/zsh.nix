@@ -42,10 +42,6 @@
     '';
 
     initContent = lib.mkMerge [
-      (lib.mkBefore ''
-        source ${config.home.homeDirectory}/.homesick/repos/dotfiles/home/.profile;
-      '')
-
       (lib.mkOrder 550 ''
         source ${config.home.homeDirectory}/.homesick/repos/dotfiles/zsh/options;
         source ${config.home.homeDirectory}/.homesick/repos/dotfiles/zsh/prompt;

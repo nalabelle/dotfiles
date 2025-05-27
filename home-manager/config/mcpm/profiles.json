@@ -3,7 +3,13 @@
     {
       "name": "docs",
       "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-filesystem", "$HOME/docs"],
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "$HOME/.mcp/docs"],
+      "env": {}
+    },
+    {
+      "name": "context",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "$HOME/.mcp/context"],
       "env": {}
     }
   ]

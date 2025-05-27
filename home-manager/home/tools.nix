@@ -30,6 +30,26 @@
       runtimeInputs = [ home-manager git ];
       text = builtins.readFile ../bin/nix-refresh;
     })
+    (writeShellApplication {
+      name = "dff";
+      runtimeInputs = [ coreutils ];
+      text = builtins.readFile ../bin/dff;
+    })
+    (writeShellApplication {
+      name = "find-and-replace";
+      runtimeInputs = [ findutils gnused ];
+      text = builtins.readFile ../bin/find-and-replace;
+    })
+    (writeShellApplication {
+      name = "status-getcpu";
+      runtimeInputs = [ procps ];
+      text = builtins.readFile ../bin/status-getcpu.sh;
+    })
+    (writeShellApplication {
+      name = "status-getload";
+      runtimeInputs = [ procps ];
+      text = builtins.readFile ../bin/status-getload.sh;
+    })
   ];
 
   programs.fzf = {

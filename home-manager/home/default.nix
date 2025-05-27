@@ -1,7 +1,8 @@
 { config, lib, pkgs, ... }:
 
 {
-  imports = [ ./git.nix ./tmux.nix ./tools.nix ./zsh.nix ./darwin.nix ];
+  imports =
+    [ ./git.nix ./tmux.nix ./tools.nix ./zsh.nix ./darwin.nix ./shell.nix ];
   # ../configs/mcpm-module.nix
   home.stateVersion = "24.11";
 
