@@ -113,6 +113,7 @@
       "coconutbattery"
       "docker" # docker-desktop
       "iterm2"
+      "ollama"
       "plexamp"
       "raycast"
       "syncthing"
