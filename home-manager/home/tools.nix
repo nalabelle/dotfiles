@@ -21,6 +21,9 @@
     # Viewers
     glow
 
+    qdrant
+    ollama
+
     # Custom scripts
     (writeShellApplication {
       name = "nix-refresh";
