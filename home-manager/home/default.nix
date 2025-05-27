@@ -5,6 +5,7 @@
     ./git.nix
     ./tmux.nix
     ./tools.nix
+    ./vim.nix
     ./zsh.nix
     ./darwin.nix
     ./shell.nix
@@ -13,18 +14,7 @@
 
   home.stateVersion = "24.11";
 
-  home.packages = with pkgs; [
-    curl
-    fzf
-    ripgrep
-    htop
-    bat
-    jq
-    tmux
-    vim-full
-    wget
-    less
-  ];
+  home.packages = with pkgs; [ curl fzf ripgrep htop bat jq tmux wget less ];
 
   programs.home-manager.enable = true;
   services.home-manager = lib.mkIf pkgs.stdenv.isLinux {
@@ -42,9 +32,7 @@
   nix = {
     enable = true;
     package = pkgs.nix;
-    settings = {
-      experimental-features = [ "nix-command" "flakes" ];
-    };
+    settings = { experimental-features = [ "nix-command" "flakes" ]; };
     gc = {
       automatic = true;
       frequency = "weekly";
