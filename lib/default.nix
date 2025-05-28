@@ -44,8 +44,6 @@ let
 in {
   __functor = _: _args:
     let
-      # We'll use the default nixpkgsConfig defined at the top level
-      # and the inputs from the outer scope
       # Get all hosts from the hosts directory
       hostsDir = ../hosts;
       entries = builtins.readDir hostsDir;
@@ -78,19 +76,18 @@ in {
           } else
             null) hosts));
 
-      genericConfigs = lib.listToAttrs (map (system: {
-        name = "${username}";
-        value = mkHomeConfig {
-          # hostname is unused in the home configs, a string that shouldn't match any hosts files/dirs
-          hostname = "default";
-          inherit system;
-        };
-      }) systems);
-
-      homeConfigs = hostHomeConfigs // genericConfigs;
+      # Create system-specific packages
+      mkSystemPackages = system:
+        let
+          homeConfig = mkHomeConfig {
+            hostname = "default";
+            inherit system;
+          };
+        in { homeConfigurations."${username}" = homeConfig; };
 
     in {
       darwinConfigurations = darwinConfigs;
-      homeConfigurations = homeConfigs;
+      homeConfigurations = hostHomeConfigs;
+      packages = lib.genAttrs systems mkSystemPackages;
     };
 }
