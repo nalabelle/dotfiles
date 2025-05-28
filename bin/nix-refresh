@@ -2,32 +2,95 @@
 set -eu
 set -o pipefail
 
+# Configuration
+username=$USER
+
 # Determine the flake path
-# Use "." if we're in the repo, otherwise use the direct GitHub URL
-if [ -d ".git" ] || git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
-  # We're in the repo, use "."
-  flake_path="."
-else
-  # We're not in the repo, use the direct GitHub URL with the correct subdirectory
-  flake_path="github:nalabelle/dotfiles"
-fi
+get_flake_path() {
+  if [ -d ".git" ] || git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+    echo "."
+  else
+    echo "github:nalabelle/dotfiles"
+  fi
+}
 
-current_hostname=$(hostname)
-current_system=$(uname)
+# Check if a flake output exists by trying to evaluate it
+check_flake_output() {
+  local flake_path="$1"
+  local output_path="$2"
+  nix eval "${flake_path}#${output_path}" --apply 'x: true' 2>/dev/null >/dev/null
+}
 
-case "$current_system" in
-  "Darwin")
-    echo "Refreshing nix-darwin configuration for $current_hostname..."
+# List available configurations for debugging
+list_available_configs() {
+  local flake_path="$1"
+  local config_type="$2"
+  echo "Available $config_type configurations:"
+  nix flake show "$flake_path" --json 2>/dev/null | jq -r ".$config_type | keys[]" 2>/dev/null || echo "  (none found)"
+}
+
+# Refresh darwin configuration
+refresh_darwin() {
+  local flake_path="$1"
+  local hostname="$2"
+  
+  local config="${hostname}"
+  if check_flake_output "$flake_path" "darwinConfigurations.${config}"; then
+    echo "Refreshing nix-darwin configuration for $hostname..."
     set -x
-    # May need -E HOME="$HOME"
-    sudo darwin-rebuild switch --refresh --flake "$flake_path"
+    sudo darwin-rebuild switch --refresh --flake "$flake_path#${config}"
     { set +x; } 2>/dev/null
-    ;& # Fall through to next case. Trying to include home-manager inside the nix-darwin 
-    # setup just made a lot of pain
-  *)
-    echo "Refreshing Home Manager configuration..."
+  else
+    echo "No darwin configuration found for hostname '$hostname'"
+    list_available_configs "$flake_path" "darwinConfigurations"
+    exit 1
+  fi
+}
+
+# Refresh home-manager configuration with fallback
+refresh_home_manager() {
+  local flake_path="$1"
+  local hostname="$2"
+  
+  local config_with_host="${username}@${hostname}"
+  local config_fallback="${username}"
+  
+  if check_flake_output "$flake_path" "homeConfigurations.${config_with_host}"; then
+    echo "Refreshing Home Manager configuration for ${username}@${hostname}..."
     set -x
-    home-manager switch --refresh --flake "$flake_path"
+    home-manager switch --refresh --flake "$flake_path#${config_with_host}"
     { set +x; } 2>/dev/null
-    ;;
-esac
+  elif check_flake_output "$flake_path" "homeConfigurations.${config_fallback}"; then
+    echo "No host-specific home-manager configuration found for '$hostname'"
+    echo "Using fallback configuration for user '$username'..."
+    set -x
+    home-manager switch --refresh --flake "$flake_path#${config_fallback}"
+    { set +x; } 2>/dev/null
+  else
+    echo "No home-manager configuration found for hostname '$hostname' or user '$username'"
+    list_available_configs "$flake_path" "homeConfigurations"
+    exit 1
+  fi
+}
+
+# Main execution
+main() {
+  local flake_path
+  local hostname
+  local system
+  
+  flake_path=$(get_flake_path)
+  hostname=$(hostname)
+  system=$(uname)
+  
+  case "$system" in
+    "Darwin")
+      refresh_darwin "$flake_path" "$hostname"
+      ;& # Fall through to home-manager
+    *)
+      refresh_home_manager "$flake_path" "$hostname"
+      ;;
+  esac
+}
+
+main "$@"
