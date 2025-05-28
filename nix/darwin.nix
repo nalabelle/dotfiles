@@ -118,6 +118,7 @@
       "docker" # docker-desktop
       "iterm2"
       "plexamp"
+      "protonvpn"
       "raycast"
       "syncthing"
       "tailscale"
