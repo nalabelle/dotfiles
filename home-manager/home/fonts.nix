@@ -1,5 +1,7 @@
 { config, lib, pkgs, ... }: {
   fonts.fontconfig.enable = true;
+  #font-caskaydia-cove-nerd-font
+  #font-fantasque-sans-mono-nerd-font
   xdg.configFile."fontconfig/fonts.conf".text = ''
     <?xml version='1.0'?>
     <!DOCTYPE fontconfig SYSTEM 'fonts.dtd'>

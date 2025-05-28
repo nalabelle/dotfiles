@@ -7,6 +7,11 @@
     zsh-autosuggestions
   ];
 
+  home.file.".config/zsh/options".source = ./../../zsh/options;
+  home.file.".config/zsh/prompt".source = ./../../zsh/prompt;
+  home.file.".config/zsh/imports".source = ./../../zsh/imports;
+  home.file.".config/zsh/completions".source = ./../../zsh/completions;
+
   programs.zsh = {
     enable = true;
     defaultKeymap = "viins";
@@ -43,13 +48,16 @@
 
     initContent = lib.mkMerge [
       (lib.mkOrder 550 ''
-        source ${config.home.homeDirectory}/.homesick/repos/dotfiles/zsh/options;
-        source ${config.home.homeDirectory}/.homesick/repos/dotfiles/zsh/prompt;
-        source ${config.home.homeDirectory}/.homesick/repos/dotfiles/zsh/imports;
+        source ${config.xdg.configHome}/zsh/options;
+        source ${config.xdg.configHome}/zsh/prompt;
+        source ${config.xdg.configHome}/zsh/imports;
       '')
 
       ''
-        source ${config.home.homeDirectory}/.homesick/repos/dotfiles/zsh/completions;
+        # Source the completions file
+        if [ -f "${config.xdg.configHome}/zsh/completions" ]; then
+          source ${config.xdg.configHome}/zsh/completions;
+        fi
       ''
     ];
   };
