@@ -3,6 +3,7 @@
 {
   programs.tmux = {
     enable = true;
+    shell = "${pkgs.zsh}/bin/zsh";
     aggressiveResize = true;
     baseIndex = 1;
     shortcut = "a";

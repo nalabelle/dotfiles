@@ -7,10 +7,10 @@
     zsh-autosuggestions
   ];
 
-  home.file.".config/zsh/options".source = ./../../zsh/options;
-  home.file.".config/zsh/prompt".source = ./../../zsh/prompt;
-  home.file.".config/zsh/imports".source = ./../../zsh/imports;
-  home.file.".config/zsh/completions".source = ./../../zsh/completions;
+  home.file.".config/zsh/options".source = ../zsh/options;
+  home.file.".config/zsh/prompt".source = ../zsh/prompt;
+  home.file.".config/zsh/imports".source = ../zsh/imports;
+  home.file.".config/zsh/completions".source = ../zsh/completions;
 
   programs.zsh = {
     enable = true;
