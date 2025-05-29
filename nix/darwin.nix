@@ -147,6 +147,12 @@
       WorkingDirectory = "/tmp";
       StandardOutPath = "/Users/${username}/.local/var/log/qdrant.log";
       StandardErrorPath = "/Users/${username}/.local/var/log/qdrant.log";
+      SoftResourceLimits = {
+        NumberOfFiles = 10240;
+      };
+      HardResourceLimits = {
+        NumberOfFiles = 10240;
+      };
       EnvironmentVariables = {
         QDRANT__STORAGE__STORAGE_PATH = "/Users/${username}/.local/share/qdrant/storage";
         QDRANT__STORAGE__SNAPSHOTS_PATH = "/Users/${username}/.local/share/qdrant/snapshots";
@@ -162,6 +168,12 @@
       KeepAlive = true;
       StandardOutPath = "/Users/${username}/.local/var/log/ollama.log";
       StandardErrorPath = "/Users/${username}/.local/var/log/ollama.log";
+      SoftResourceLimits = {
+        NumberOfFiles = 10240;
+      };
+      HardResourceLimits = {
+        NumberOfFiles = 10240;
+      };
     };
   };
 }
