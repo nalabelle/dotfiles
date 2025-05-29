@@ -3,18 +3,14 @@
 {
   programs.tmux = {
     enable = true;
-    shell = "${pkgs.zsh}/bin/zsh";
     aggressiveResize = true;
     baseIndex = 1;
     shortcut = "a";
     keyMode = "vi";
     customPaneNavigationAndResize = true;
-    sensibleOnTop = true;
-    # This causes some problems...
-    # https://github.com/tmux/tmux/pull/4411
-    # https://github.com/tmux/tmux/commit/817b621d2078137b4ddea78835f609a9d7bac339
-    # https://github.com/tmux-plugins/tmux-sensible/issues/61
     escapeTime = 500;
+    mouse = true;
+    newSession = true;
 
     plugins = with pkgs; [
       tmuxPlugins.cpu
@@ -23,11 +19,19 @@
       tmuxPlugins.yank
     ];
 
-    terminal = "screen-256color-bce-s";
-    #check infocmp screen-256color-bce-s
-    #check infocmp screen-256color-bce
+    terminal = "tmux-256color";
 
-    extraConfig = ''
+    extraConfig = let tmux_config = "${config.xdg.configHome}/tmux/tmux.conf";
+    in ''
+      set -g history-limit 50000
+      set -g display-time 4000
+      set -g status-keys emacs
+      set -g focus-events on
+
+      bind-key R run-shell " \
+      tmux source-file ${tmux_config} > /dev/null; \
+      tmux display-message 'Sourced ${tmux_config}!'"
+
       # Don't move around panes with arrow keys
       unbind Left
       unbind Down
@@ -64,7 +68,7 @@
       # status-right
       set -ag status-right-style dim
       set -g status-right-length 80
-      set -g status-right '#{ram_fg_color}#{ram_percentage}#[fg=default] #{cpu_fg_color}#{cpu_percentage}#[fg=default] #(status-getload.sh)/#(status-getcpu.sh) #[bg=colour236,fg=default] %H:%M #[bg=default,fg=default] #h '
+      set -g status-right '#{ram_fg_color}#{ram_percentage}#[fg=default] #{cpu_fg_color}#{cpu_percentage}#[fg=default] #(status-getload)/#(status-getcpu) #[bg=colour236,fg=default] %H:%M #[bg=default,fg=default] #h '
       set -g status-interval 10
     '';
   };
