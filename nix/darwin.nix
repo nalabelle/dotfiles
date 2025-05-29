@@ -125,4 +125,43 @@
       "unnaturalscrollwheels"
     ];
   };
+
+  # User launchd agents for auto-starting services
+  #
+  # Management commands:
+  # - Start: launchctl load ~/Library/LaunchAgents/org.nixos.qdrant.plist
+  # - Stop:  launchctl unload ~/Library/LaunchAgents/org.nixos.qdrant.plist
+  # - Status: launchctl list | grep qdrant
+  # - Logs: tail -f ~/.local/var/log/qdrant.log
+  #
+  # Same commands apply to ollama (replace 'qdrant' with 'ollama')
+  # Services auto-start on login and restart if they crash (KeepAlive = true)
+  launchd.user.agents.qdrant = {
+    serviceConfig = {
+      ProgramArguments = [
+        "${pkgs.qdrant}/bin/qdrant"
+        "--disable-telemetry"
+      ];
+      RunAtLoad = true;
+      KeepAlive = true;
+      WorkingDirectory = "/tmp";
+      StandardOutPath = "/Users/${username}/.local/var/log/qdrant.log";
+      StandardErrorPath = "/Users/${username}/.local/var/log/qdrant.log";
+      EnvironmentVariables = {
+        QDRANT__STORAGE__STORAGE_PATH = "/Users/${username}/.local/share/qdrant/storage";
+        QDRANT__STORAGE__SNAPSHOTS_PATH = "/Users/${username}/.local/share/qdrant/snapshots";
+        QDRANT__STORAGE__TEMP_PATH = "/Users/${username}/.local/share/qdrant/temp";
+      };
+    };
+  };
+
+  launchd.user.agents.ollama = {
+    serviceConfig = {
+      ProgramArguments = [ "${pkgs.ollama}/bin/ollama" "start" ];
+      RunAtLoad = true;
+      KeepAlive = true;
+      StandardOutPath = "/Users/${username}/.local/var/log/ollama.log";
+      StandardErrorPath = "/Users/${username}/.local/var/log/ollama.log";
+    };
+  };
 }
