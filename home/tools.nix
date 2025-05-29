@@ -17,6 +17,8 @@
 
     # Tools
     sqlite
+    # I wish psql came separate
+    postgresql
     wakeonlan
 
     # Viewers
