@@ -17,6 +17,7 @@
 
     # Tools
     sqlite
+    wakeonlan
 
     # Viewers
     glow
