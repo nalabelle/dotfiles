@@ -7,7 +7,10 @@ username=$USER
 
 # Determine the flake path
 get_flake_path() {
-  if [ -d ".git" ] || git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+  # Check if we're in a git repo AND it's the dotfiles repo
+  if ([ -d ".git" ] || git rev-parse --is-inside-work-tree >/dev/null 2>&1) &&
+     [ -f "flake.nix" ] &&
+     git remote get-url origin 2>/dev/null | grep -q "nalabelle/dotfiles"; then
     echo "."
   else
     echo "github:nalabelle/dotfiles"
