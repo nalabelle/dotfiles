@@ -43,6 +43,13 @@
       fi
     '';
 
+    activationScripts."create-screenshots-directory".text = ''
+      # Create the Screenshots directory if it doesn't exist
+      mkdir -p "/Users/${username}/Screenshots"
+      # Set ownership to the user
+      chown "${username}:staff" "/Users/${username}/Screenshots"
+    '';
+
     defaults = {
       smb.NetBIOSName = hostname;
       menuExtraClock.Show24Hour = true;
@@ -73,6 +80,12 @@
         _FXSortFoldersFirst = true;
         FXDefaultSearchScope = "SCcf";
         NewWindowTarget = "Home";
+      };
+      screencapture = {
+        location = "/Users/${username}/Screenshots";
+        # Other options:
+        # type = "png"; # jpg, tiff, pdf, bmp
+        # disable-shadow = true;
       };
 
       controlcenter = { BatteryShowPercentage = true; };
@@ -138,25 +151,21 @@
   # Services auto-start on login and restart if they crash (KeepAlive = true)
   launchd.user.agents.qdrant = {
     serviceConfig = {
-      ProgramArguments = [
-        "${pkgs.qdrant}/bin/qdrant"
-        "--disable-telemetry"
-      ];
+      ProgramArguments = [ "${pkgs.qdrant}/bin/qdrant" "--disable-telemetry" ];
       RunAtLoad = true;
       KeepAlive = true;
       WorkingDirectory = "/tmp";
       StandardOutPath = "/Users/${username}/.local/var/log/qdrant.log";
       StandardErrorPath = "/Users/${username}/.local/var/log/qdrant.log";
-      SoftResourceLimits = {
-        NumberOfFiles = 10240;
-      };
-      HardResourceLimits = {
-        NumberOfFiles = 10240;
-      };
+      SoftResourceLimits = { NumberOfFiles = 10240; };
+      HardResourceLimits = { NumberOfFiles = 10240; };
       EnvironmentVariables = {
-        QDRANT__STORAGE__STORAGE_PATH = "/Users/${username}/.local/share/qdrant/storage";
-        QDRANT__STORAGE__SNAPSHOTS_PATH = "/Users/${username}/.local/share/qdrant/snapshots";
-        QDRANT__STORAGE__TEMP_PATH = "/Users/${username}/.local/share/qdrant/temp";
+        QDRANT__STORAGE__STORAGE_PATH =
+          "/Users/${username}/.local/share/qdrant/storage";
+        QDRANT__STORAGE__SNAPSHOTS_PATH =
+          "/Users/${username}/.local/share/qdrant/snapshots";
+        QDRANT__STORAGE__TEMP_PATH =
+          "/Users/${username}/.local/share/qdrant/temp";
       };
     };
   };
@@ -168,12 +177,8 @@
       KeepAlive = true;
       StandardOutPath = "/Users/${username}/.local/var/log/ollama.log";
       StandardErrorPath = "/Users/${username}/.local/var/log/ollama.log";
-      SoftResourceLimits = {
-        NumberOfFiles = 10240;
-      };
-      HardResourceLimits = {
-        NumberOfFiles = 10240;
-      };
+      SoftResourceLimits = { NumberOfFiles = 10240; };
+      HardResourceLimits = { NumberOfFiles = 10240; };
     };
   };
 }
