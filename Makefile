@@ -9,10 +9,13 @@ test:
 clean:
 	rm -rf result
 
+.PHONY: darwin-switch
+darwin-switch:
+	sudo darwin-rebuild switch --flake .#$(shell hostname)
 
-.PHONY: switch
-switch:
-	./bin/nix-refresh
+.PHONY: home-switch
+home-switch:
+	home-manager switch --flake .
 
 .PHONY: update
 update:

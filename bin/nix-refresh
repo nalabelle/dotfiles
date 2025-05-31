@@ -4,18 +4,11 @@ set -o pipefail
 
 # Configuration
 username=$USER
+flake_path="github:nalabelle/dotfiles"
 
-# Determine the flake path
-get_flake_path() {
-  # Check if we're in a git repo AND it's the dotfiles repo
-  if ([ -d ".git" ] || git rev-parse --is-inside-work-tree >/dev/null 2>&1) &&
-     [ -f "flake.nix" ] &&
-     git remote get-url origin 2>/dev/null | grep -q "nalabelle/dotfiles"; then
-    echo "."
-  else
-    echo "github:nalabelle/dotfiles"
-  fi
-}
+# System variables
+hostname=$(hostname)
+system=$(uname)
 
 # Check if a flake output exists by trying to evaluate it
 check_flake_output() {
@@ -78,14 +71,6 @@ refresh_home_manager() {
 
 # Main execution
 main() {
-  local flake_path
-  local hostname
-  local system
-  
-  flake_path=$(get_flake_path)
-  hostname=$(hostname)
-  system=$(uname)
-  
   case "$system" in
     "Darwin")
       refresh_darwin "$flake_path" "$hostname"
