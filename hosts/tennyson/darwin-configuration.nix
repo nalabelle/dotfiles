@@ -12,6 +12,6 @@
     brews = [ "mcpm" ];
 
     casks =
-      [ "android-ndk" "android-platform-tools" "android-studio" "kopiaui" "obsidian" ];
+      [ "android-ndk" "android-platform-tools" "android-studio" "kopiaui" "obsidian" "calibre" ];
   };
 }
