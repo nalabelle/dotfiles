@@ -24,6 +24,29 @@ set modelines=5
 set backspace=indent,eol,start
 set backup
 set undofile
+set swapfile
+
+" XDG Base Directory Specification compliance
+" Use XDG_CACHE_HOME for vim temporary files
+if empty($XDG_CACHE_HOME)
+  let $XDG_CACHE_HOME = $HOME . '/.cache'
+endif
+
+" Set directories for swap, backup, and undo files
+set directory=$XDG_CACHE_HOME/vim/swap//
+set backupdir=$XDG_CACHE_HOME/vim/backup//
+set undodir=$XDG_CACHE_HOME/vim/undo//
+
+" Create directories if they don't exist
+if !isdirectory($XDG_CACHE_HOME . '/vim/swap')
+  call mkdir($XDG_CACHE_HOME . '/vim/swap', 'p')
+endif
+if !isdirectory($XDG_CACHE_HOME . '/vim/backup')
+  call mkdir($XDG_CACHE_HOME . '/vim/backup', 'p')
+endif
+if !isdirectory($XDG_CACHE_HOME . '/vim/undo')
+  call mkdir($XDG_CACHE_HOME . '/vim/undo', 'p')
+endif
 
 " Interface
 set title

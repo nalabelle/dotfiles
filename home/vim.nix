@@ -127,11 +127,7 @@
   };
 
   # Directory structure for vim
-  home.file = {
-    ".vim/backup/.keep".text = "";
-    ".vim/swap/.keep".text = "";
-    ".vim/undo/.keep".text = "";
-  } // builtins.listToAttrs (
+  home.file = builtins.listToAttrs (
     # ftdetect files
     map (file: {
       name = ".vim/ftdetect/${file}";
