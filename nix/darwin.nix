@@ -130,9 +130,7 @@
       "coconutbattery"
       "docker" # docker-desktop
       "iterm2"
-      "mountain-duck"
       "plexamp"
-      "protonvpn"
       "raycast"
       "syncthing"
       "tailscale"

@@ -86,6 +86,7 @@
 
   programs.poetry = {
     enable = true;
+    # this is installed per project
     package = null;
     settings = { virtualenvs = { in-project = true; }; };
   };

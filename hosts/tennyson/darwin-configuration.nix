@@ -11,7 +11,17 @@
   homebrew = {
     brews = [ "mcpm" ];
 
-    casks =
-      [ "android-ndk" "android-platform-tools" "android-studio" "kopiaui" "obsidian" "calibre" ];
+    casks = [
+      "android-ndk"
+      "android-platform-tools"
+      "android-studio"
+      "kopiaui"
+      "obsidian"
+      "calibre"
+      "zed"
+
+      "mountain-duck"
+      "protonvpn"
+    ];
   };
 }
