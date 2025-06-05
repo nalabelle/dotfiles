@@ -6,6 +6,7 @@
     ./tmux.nix
     ./tools.nix
     ./vim.nix
+    ./vscode.nix
     ./zsh.nix
     ./darwin.nix
     ./shell.nix

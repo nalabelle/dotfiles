@@ -1,0 +1,39 @@
+{
+  "mcpServers": {
+    "memory": {
+      "command": "nix",
+      "args": [
+        "shell",
+        "nixpkgs#nodejs",
+        "--command",
+        "sh",
+        "-c",
+        "mkdir -p .mcp && MEMORY_FILE_PATH=\"$(pwd)/.mcp/memory.json\" npx @modelcontextprotocol/server-memory"
+      ],
+      "alwaysAllow": ["search_nodes"]
+    },
+    "context7": {
+      "command": "nix",
+      "args": ["shell", "nixpkgs#nodejs", "--command", "npx", "--", "@upstash/context7-mcp"]
+    },
+    "fetch": {
+      "command": "nix",
+      "args": ["shell", "nixpkgs#uv", "--command", "uvx", "--", "mcp-server-fetch"]
+    },
+    "sequentialthinking": {
+      "command": "nix",
+      "args": ["shell", "nixpkgs#nodejs", "--command", "npx", "--", "mcp-sequential-thinking"]
+    },
+    "github": {
+      "command": "docker",
+      "args": [
+        "run",
+        "-i",
+        "--rm",
+        "-e",
+        "GITHUB_PERSONAL_ACCESS_TOKEN=${env:GITHUB_TOKEN}",
+        "ghcr.io/github/github-mcp-server"
+      ]
+    }
+  }
+}

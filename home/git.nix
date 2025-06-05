@@ -7,7 +7,7 @@
     userName = "nalabelle";
     userEmail = "git@nalabelle.com";
 
-    ignores = [ "*~" ".DS_Store" ".metals" "vimrc.local" ".tags" ];
+    ignores = [ "*~" ".DS_Store" ".metals" "vimrc.local" ".tags" ".kilocode" ".vscode" ".mcp" ];
 
     extraConfig = {
       core = {
