@@ -10,7 +10,8 @@
     },
     "sequentialthinking": {
       "command": "nix",
-      "args": ["shell", "nixpkgs#nodejs", "--command", "npx", "--", "mcp-sequential-thinking"]
+      "args": ["shell", "nixpkgs#nodejs", "--command", "npx", "--", "mcp-sequential-thinking"],
+      "alwaysAllow": ["sequentialthinking"]
     },
     "github": {
       "command": "docker",
