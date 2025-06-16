@@ -27,25 +27,6 @@
         "GITHUB_PERSONAL_ACCESS_TOKEN": "${env:GITHUB_TOKEN}"
       },
       "alwaysAllow": ["get_me"]
-    },
-    "memory": {
-      "command": "nix",
-      "args": [
-        "shell",
-        "nixpkgs#nodejs",
-        "--command",
-        "sh",
-        "-c",
-        "mkdir -p \"${PWD}/.vscode/mcp\" && MEMORY_FILE_PATH=\"${PWD}/.vscode/mcp/memory.json\" npx -y @modelcontextprotocol/server-memory"
-      ],
-      "alwaysAllow": [
-        "read_graph",
-        "search_nodes",
-        "open_nodes",
-        "create_entities",
-        "create_relations",
-        "add_observations"
-      ]
     }
   }
 }
