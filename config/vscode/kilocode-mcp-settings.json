@@ -8,11 +8,6 @@
       "command": "nix",
       "args": ["shell", "nixpkgs#uv", "--command", "uvx", "--", "mcp-server-fetch"]
     },
-    "sequentialthinking": {
-      "command": "nix",
-      "args": ["shell", "nixpkgs#nodejs", "--command", "npx", "--", "mcp-sequentialthinking-tools"],
-      "alwaysAllow": ["sequentialthinking_tools"]
-    },
     "github": {
       "command": "docker",
       "args": [
