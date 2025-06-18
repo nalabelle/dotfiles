@@ -14,6 +14,7 @@
       "vimrc.local"
       ".tags"
       ".kilocode"
+      ".kilocodeignore"
       ".vscode"
       ".mcp"
       ".mcp.json"
