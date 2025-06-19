@@ -10,15 +10,15 @@
     ignores = [
       "*~"
       ".DS_Store"
-      ".metals"
-      "vimrc.local"
-      ".tags"
+      ".cache"
       ".kilocode"
       ".kilocodeignore"
-      ".vscode"
       ".mcp"
       ".mcp.json"
-      ".memory.json"
+      ".metals"
+      ".tags"
+      ".vscode"
+      "vimrc.local"
     ];
 
     extraConfig = {
