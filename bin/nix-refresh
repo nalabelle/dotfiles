@@ -29,7 +29,7 @@ list_available_configs() {
 refresh_darwin() {
   local flake_path="$1"
   local hostname="$2"
-  
+
   local config="${hostname}"
   if check_flake_output "$flake_path" "darwinConfigurations.${config}"; then
     echo "Refreshing nix-darwin configuration for $hostname..."
@@ -47,10 +47,10 @@ refresh_darwin() {
 refresh_home_manager() {
   local flake_path="$1"
   local hostname="$2"
-  
+
   local config_with_host="${username}@${hostname}"
   local config_fallback="${username}"
-  
+
   if check_flake_output "$flake_path" "homeConfigurations.${config_with_host}"; then
     echo "Refreshing Home Manager configuration for ${username}@${hostname}..."
     set -x

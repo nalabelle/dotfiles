@@ -4,6 +4,7 @@
     "shellcheck@0.10.0",
     "shfmt@3.11.0",
     "nil@latest",
-    "nixfmt@0.6.0"
+    "nixfmt@0.6.0",
+    "pre-commit@latest"
   ]
 }

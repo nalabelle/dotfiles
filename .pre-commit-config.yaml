@@ -1,6 +1,6 @@
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.3.0
+    rev: v5.0.0
     hooks:
       - id: check-byte-order-marker
       - id: check-case-conflict
@@ -12,6 +12,7 @@ repos:
       - id: check-toml
       - id: check-xml
       - id: check-yaml
+        additional_dependencies: ["ruamel.yaml>=0.18.0"]
         args:
           - --allow-multiple-documents
       - id: end-of-file-fixer
@@ -23,10 +24,6 @@ repos:
     hooks:
       - id: forbid-binary
       - id: script-must-have-extension
-        exclude: ^home\/\..+$
+        exclude: ^\.envrc$
       - id: script-must-not-have-extension
       - id: shellcheck
-#  - repo: https://github.com/kynan/nbstripout
-#    rev: 0.5.0
-#    hooks:
-#      - id: nbstripout

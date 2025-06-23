@@ -46,12 +46,12 @@
     (writeShellApplication {
       name = "status-getcpu";
       runtimeInputs = [ procps ];
-      text = builtins.readFile ../bin/status-getcpu.sh;
+      text = builtins.readFile ../bin/status-getcpu;
     })
     (writeShellApplication {
       name = "status-getload";
       runtimeInputs = [ procps ];
-      text = builtins.readFile ../bin/status-getload.sh;
+      text = builtins.readFile ../bin/status-getload;
     })
   ];
 

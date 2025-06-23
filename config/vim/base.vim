@@ -1,5 +1,5 @@
 set nocompatible
-      
+
 if has("multi_byte")
   set encoding=utf-8
   if &termencoding == ""
