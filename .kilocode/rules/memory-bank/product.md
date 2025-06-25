@@ -5,7 +5,7 @@
 This dotfiles repository solves the fundamental problem of environment inconsistency across development machines. Traditional dotfiles approaches suffer from:
 
 - **Manual synchronization**: Copying configuration files between machines leads to drift and inconsistencies
-- **Platform differences**: Different setup procedures for macOS vs Linux systems  
+- **Platform differences**: Different setup procedures for macOS vs Linux systems
 - **Dependency management**: Applications and tools become out of sync between environments
 - **Setup complexity**: New machine setup requires extensive manual configuration
 - **Version control gaps**: Many dotfile managers don't handle binary dependencies well
@@ -18,7 +18,7 @@ This dotfiles repository solves the fundamental problem of environment inconsist
 - Provides deterministic builds through Nix's functional package management
 - Enables atomic rollbacks to previous working configurations
 
-### 2. **Cross-Platform Consistency**  
+### 2. **Cross-Platform Consistency**
 
 - Unified configuration syntax for both macOS (via nix-darwin) and Linux (via home-manager)
 - Platform-specific adaptations handled declaratively
@@ -33,7 +33,7 @@ This dotfiles repository solves the fundamental problem of environment inconsist
 ### 4. **Developer Productivity**
 
 - Comprehensive Git aliases and workflow optimizations
-- Advanced Vim configuration with curated plugin ecosystem  
+- Advanced Vim configuration with curated plugin ecosystem
 - Zsh with intelligent completions, history management, and visual feedback
 - Tmux session management with productivity-focused key bindings
 
@@ -64,7 +64,6 @@ sudo -E nix run nix-darwin -- switch --flake 'github:nalabelle/dotfiles#'$(hostn
 
 - **AI/ML Services**: Qdrant vector database and Ollama LLM services auto-start on login
 - **Development Tools**: DevBox, direnv, and project-specific environments work seamlessly
-- **Cloud Integration**: MCPM (Multi-Cloud Package Manager) provides unified cloud resource access
 
 ## User Experience Goals
 

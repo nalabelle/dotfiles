@@ -39,7 +39,6 @@ This repository contains a comprehensive personal development environment config
 
 - **FZF Integration**: Fuzzy finder with shell and tmux integration
 - **Direnv**: Automatic environment loading for project directories
-- **MCPM**: Multi-Cloud Package Manager configuration
 - **Terminal Multiplexing**: Tmux configuration for session management
 - **Kilocode Integration**: VS Code extension with MCP servers and rule file management
 

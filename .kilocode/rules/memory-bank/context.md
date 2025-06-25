@@ -2,14 +2,15 @@
 
 ## Current Work Focus
 
-**ZSH Directory Cleanup and Migration**: ✅ **PROJECT COMPLETED** - All 4 steps successfully implemented:
+**MCPM Cleanup**: ✅ **PROJECT COMPLETED** - Complete removal of Multi-Cloud Package Manager (MCPM) from dotfiles configuration:
 
-- ✅ Step 1: Completions migrated to `programs.zsh.completions`
-- ✅ Step 2: Shell options migrated to `programs.zsh.initContent`
-- ✅ Step 3: Redundant imports removed
-- ✅ Step 4: Unused prompt functions cleaned up
+- ✅ Removed mcpm package from both host configurations (tennyson, bst)
+- ✅ Deleted config/mcpm/ directory and configuration files
+- ✅ Removed xdg.configFile references from home/tools.nix
+- ✅ Updated all memory bank documentation to remove MCPM references
+- ✅ Verified configuration builds successfully with `make test`
 
-**Latest Achievement**: Step 4 completed - zsh/prompt file completely removed since custom prompt functions were unused (all commented out) and Starship provides all prompt functionality. Fixed deprecation warning by migrating from `programs.zsh.initExtra` to `programs.zsh.initContent`.
+**Previous Achievement**: ZSH Directory Cleanup and Migration completed - All 4 steps successfully implemented with legacy shell scripts migrated to declarative Nix configuration.
 
 **Previous Achievement**: Kilocode extension integration stabilized with workaround for symlink handling bug implemented via activation scripts.
 
@@ -20,10 +21,8 @@
 - **tennyson**: Personal development machine with full macOS configuration
   - Additional tools: Android development (NDK, Studio), Obsidian, Calibre, Zed editor
   - Cloud tools: Mountain Duck, ProtonVPN, KopiaUI backup
-  - Package manager: MCPM configured
 - **bst**: Work machine with streamlined configuration
   - Development tools: DBeaver, Linear, Graphite CLI
-  - Package manager: MCPM configured
   - Custom Nix build group configuration (gid: 30000)
 
 ### Current System State

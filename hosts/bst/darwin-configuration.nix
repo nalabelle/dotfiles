@@ -3,7 +3,7 @@
   homebrew = {
     taps = [ "withgraphite/tap" ];
 
-    brews = [ "mcpm" "graphite" ];
+    brews = [ "graphite" ];
 
     casks = [ "dbeaver-community" "linear-linear" ];
   };

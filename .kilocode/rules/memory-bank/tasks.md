@@ -139,10 +139,10 @@ programs.zsh.initExtra = ''
   setopt extendedglob
   setopt globdots
   setopt no_nomatch
-  
+
   # Corrections
   setopt correct
-  
+
   # Vi mode history search
   bindkey -M vicmd 'k' history-substring-search-up
   bindkey -M vicmd 'j' history-substring-search-down

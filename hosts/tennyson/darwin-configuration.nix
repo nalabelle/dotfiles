@@ -9,8 +9,6 @@
   #}
 
   homebrew = {
-    brews = [ "mcpm" ];
-
     casks = [
       "android-ndk"
       "android-platform-tools"

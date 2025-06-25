@@ -42,15 +42,15 @@ RUN nix run github:nix-community/home-manager -- switch --flake . -b backup
 FROM build AS verify
 
 # Copy verification script into the container
-COPY --chown=nalabelle:nalabelle test/verify.sh /home/nalabelle/verify.sh
-RUN chmod +x /home/nalabelle/verify.sh
+COPY --chown=nalabelle:nalabelle test/verify /home/nalabelle/verify
+RUN chmod +x /home/nalabelle/verify
 
 # Run verification as part of the build - build will fail if verification fails
 RUN echo "Running deployment verification..." && \
-    bash -c ". ~/.nix-profile/etc/profile.d/nix.sh && /home/nalabelle/verify.sh"
+    bash -c ". ~/.nix-profile/etc/profile.d/nix.sh && /home/nalabelle/verify"
 
 # Success message for completed build
 RUN echo "✅ Multi-stage build completed successfully with verification passed!"
 
 # Default command for manual container inspection if needed
-CMD ["bash", "-c", ". ~/.nix-profile/etc/profile.d/nix.sh && echo 'Container ready for inspection. Run /home/nalabelle/verify.sh to re-run verification.' && bash"]
+CMD ["bash", "-c", ". ~/.nix-profile/etc/profile.d/nix.sh && echo 'Container ready for inspection. Run /home/nalabelle/verify to re-run verification.' && bash"]

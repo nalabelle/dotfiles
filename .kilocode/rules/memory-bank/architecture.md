@@ -33,7 +33,6 @@ dotfiles/
 │       └── home-configuration.nix
 ├── config/                      # Application configuration files
 │   ├── vim/                    # Vim configuration files
-│   ├── mcpm/                   # Multi-Cloud Package Manager config
 │   ├── vscode/                 # VS Code settings
 │   └── kilocode/               # Kilocode extension rule files
 ├── bin/                         # Custom scripts and utilities
@@ -96,7 +95,6 @@ The system uses **launchd user agents** for service management:
 
 - **Direnv**: Automatic environment loading for project directories
 - **FZF**: Fuzzy finding integration across shell and tmux
-- **MCPM**: Multi-cloud package manager with unified configuration
 
 ## Kilocode Extension Architecture
 

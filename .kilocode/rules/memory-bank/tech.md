@@ -136,7 +136,6 @@ Cross-platform compatibility functions in `shell/util/shell`:
 
 ### Multi-Cloud Management
 
-- **MCPM**: Multi-Cloud Package Manager with router configuration
 - **1Password CLI**: Secure credential management
 - **Tailscale**: VPN and mesh networking (via Homebrew)
 
