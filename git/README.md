@@ -1,63 +1,74 @@
-# Git Template Source
+# Git Template System
 
-This directory contains copier template sources for creating new projects with standardized configuration files.
+This directory contains a universal template foundation that can be used by this dotfiles repository and other projects via git subtree.
 
-## Template: `template/`
+## Template Structure
 
-A copier template for bootstrapping new projects with development best practices.
+- `git/template/` - Universal foundation files for any project
+- Root directory - Template foundation + dotfiles-specific overlays
 
-### Included Files
+## Applying Template to Dotfiles Root
 
-#### Development Quality Tools
-
-- **`.pre-commit-config.yaml`** - Pre-commit hooks for code quality
-  - File validation (JSON, YAML, TOML, XML)
-  - Code formatting and linting
-  - Shell script validation with shellcheck
-  - Binary file prevention and script standards
-
-- **`devbox.json`** - Development environment configuration
-  - Includes essential tools: shellcheck, pre-commit
-  - Provides consistent development environment across projects
-
-#### Project Management
-
-- **`renovate.json`** - Automated dependency updates
-  - Configured to use shared renovate configuration
-  - Ensures dependencies stay up-to-date automatically
-
-#### Kilocode Integration
-
-- **`.kilocode/rules/memory-bank-instructions.md`** - Memory bank setup
-  - Instructions for AI assistant memory management
-  - Enables consistent project context across sessions
-
-#### Git Configuration
-
-- **`hooks/pre-commit`** - Git pre-commit hook implementation
-  - Integrates with pre-commit framework
-  - Ensures code quality before commits
-
-### Usage with Copier
-
-Bootstrap new projects with this template:
+To apply the template foundation to this dotfiles repository root:
 
 ```bash
-copier copy path/to/dotfiles/git/template /path/to/new/project
+# Apply template foundation to root using git subtree
+git subtree pull --prefix=. --strategy=subtree main --squash --allow-unrelated-histories
+
+# Alternative: merge template directory to root
+git read-tree --prefix=/ -u main:git/template/
 ```
 
-### Template Benefits
+Git will naturally handle any conflicts between template and existing files.
 
-- **Code Quality**: Automated linting and formatting enforcement
-- **Consistency**: Standardized project structure and tooling
-- **Automation**: Dependency updates and quality checks
-- **AI Integration**: Memory bank system for enhanced development workflow
+## Using Template in Other Projects
 
-### Post-Template Customization
+Other projects can pull template files via git subtree:
 
-After copying, customize the template files for your specific project:
+### Initial Setup
 
-1. Update `devbox.json` with project-specific tools
-2. Modify `.pre-commit-config.yaml` for language-specific hooks
-3. Initialize memory bank files for project context
-4. Configure additional development tools as needed
+```bash
+# Add template as subtree in your project
+git subtree add --prefix=standards \
+    https://github.com/nalabelle/dotfiles.git main:git/template --squash
+```
+
+### Pull Updates
+
+```bash
+# Update template files from dotfiles repo
+git subtree pull --prefix=standards \
+    https://github.com/nalabelle/dotfiles.git main:git/template --squash
+```
+
+### Selective File Copy
+
+If you only want specific files:
+
+```bash
+# Show available template files
+git show main:git/template/
+
+# Copy specific files
+git show main:git/template/.pre-commit-config.yaml > .pre-commit-config.yaml
+git show main:git/template/devbox.json > devbox.json
+```
+
+## Template Files
+
+Current template provides:
+
+- `.editorconfig` - Universal editor configuration
+- `.envrc` - Devbox integration for direnv  
+- `.pre-commit-config.yaml` - Standard pre-commit hooks
+- `devbox.json` - Development environment setup
+- `renovate.json` - Dependency update automation
+
+## Workflow
+
+1. **Template Maintenance**: Keep `git/template/` clean and universal
+2. **Dotfiles Usage**: Root files = template + dotfiles-specific extensions
+3. **Other Projects**: Use git subtree to pull template selectively
+4. **Updates**: Template changes propagate via git subtree pull
+
+This approach leverages git's native merge capabilities instead of custom tooling.
