@@ -27,15 +27,17 @@ in {
     # MCP settings for Kilo Code extension
     # This only manages the settings file, not the VSCode installation
 
-    # macOS path
-    home.file = lib.mkIf pkgs.stdenv.isDarwin {
-      "Library/Application Support/Code/User/globalStorage/kilocode.kilo-code/settings/mcp_settings.json" =
-        {
-          source = settingsFile;
-        };
-    };
+    # macOS MCP settings
+    home.file."Library/Application Support/Code/User/globalStorage/kilocode.kilo-code/settings/mcp_settings.json" =
+      lib.mkIf pkgs.stdenv.isDarwin { source = settingsFile; };
 
-    # Linux path
+    # Kilo Code rule files (both platforms)
+    home.file.".kilocode/rules/global.md".source = ../config/kilocode/global.md;
+    home.file.".kilocode/rules/python.md".source = ../config/kilocode/python.md;
+    home.file.".kilocode/rules/typescript.md".source =
+      ../config/kilocode/typescript.md;
+
+    # Linux MCP settings
     xdg.configFile = lib.mkIf pkgs.stdenv.isLinux {
       "Code/User/globalStorage/kilocode.kilo-code/settings/mcp_settings.json" =
         {
