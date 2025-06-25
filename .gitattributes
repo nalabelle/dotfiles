@@ -1,0 +1,5 @@
+# Template merge configuration
+# Use "ours" strategy for files that should keep local versions during template merges
+
+README.md merge=ours
+.gitignore merge=ours
