@@ -13,4 +13,4 @@ vim/swap
 # Vendir
 /zsh/plugins
 
-/home-manager/result
+result

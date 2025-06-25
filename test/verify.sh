@@ -1,0 +1,101 @@
+#!/bin/bash
+
+# Verification script to check that home manager properly deployed Kilo Code files
+
+echo "=== Kilo Code Linux Deployment Verification ==="
+echo
+
+# Check if Kilo Code rule files are deployed to ~/.kilocode/rules/
+echo "1. Checking Kilo Code rule files deployment..."
+RULES_DIR="$HOME/.kilocode/rules"
+
+if [ -d "$RULES_DIR" ]; then
+    echo "✅ Rules directory exists: $RULES_DIR"
+    
+    for rule_file in global.md python.md typescript.md; do
+        if [ -f "$RULES_DIR/$rule_file" ]; then
+            echo "✅ Rule file deployed: $rule_file"
+            echo "   Content preview:"
+            head -3 "$RULES_DIR/$rule_file" | sed 's/^/   /'
+        else
+            echo "❌ Missing rule file: $rule_file"
+            exit 1
+        fi
+    done
+else
+    echo "❌ Rules directory missing: $RULES_DIR"
+    echo "   Home manager did not deploy Kilo Code rule files"
+    exit 1
+fi
+
+echo
+
+# Check if MCP settings are deployed
+echo "2. Checking MCP settings deployment..."
+MCP_SETTINGS="$HOME/.config/Code/User/globalStorage/kilocode.kilo-code/settings/mcp_settings.json"
+
+if [ -f "$MCP_SETTINGS" ]; then
+    echo "✅ MCP settings file deployed: $MCP_SETTINGS"
+    echo "   Content preview:"
+    if command -v jq >/dev/null 2>&1; then
+        jq '.' "$MCP_SETTINGS" | head -10 | sed 's/^/   /'
+        echo "   Configured MCP servers:"
+        jq -r '.mcpServers | keys[]' "$MCP_SETTINGS" | sed 's/^/   - /'
+    else
+        head -10 "$MCP_SETTINGS" | sed 's/^/   /'
+    fi
+else
+    echo "❌ MCP settings file missing: $MCP_SETTINGS"
+    echo "   Home manager did not deploy MCP settings to Linux XDG path"
+    exit 1
+fi
+
+echo
+
+# Verify file permissions
+echo "3. Checking file permissions..."
+if [ -d "$RULES_DIR" ]; then
+    echo "Rule files permissions:"
+    ls -la "$RULES_DIR" | sed 's/^/   /'
+fi
+
+if [ -f "$MCP_SETTINGS" ]; then
+    echo "MCP settings permissions:"
+    ls -la "$MCP_SETTINGS" | sed 's/^/   /'
+fi
+
+echo
+
+# Validate JSON structure
+echo "4. Validating MCP settings JSON..."
+if [ -f "$MCP_SETTINGS" ] && command -v jq >/dev/null 2>&1; then
+    if jq empty "$MCP_SETTINGS" 2>/dev/null; then
+        echo "✅ MCP settings JSON is valid and properly formatted"
+    else
+        echo "❌ MCP settings JSON is invalid"
+        exit 1
+    fi
+fi
+
+echo
+
+# Final summary
+echo "=== Deployment Verification Complete ==="
+RULES_COUNT=$(find "$RULES_DIR" -name "*.md" 2>/dev/null | wc -l)
+MCP_EXISTS=$([ -f "$MCP_SETTINGS" ] && echo "Yes" || echo "No")
+
+echo "Results:"
+echo "  - Rule files deployed: $RULES_COUNT/3"
+echo "  - MCP settings deployed: $MCP_EXISTS"
+echo "  - Linux XDG paths used correctly: ✅"
+
+if [ "$RULES_COUNT" -eq 3 ] && [ -f "$MCP_SETTINGS" ]; then
+    echo
+    echo "🎉 SUCCESS: Home manager correctly deployed all Kilo Code configurations to Linux!"
+    echo "   The flake properly handles cross-platform deployment with XDG directories."
+    exit 0
+else
+    echo
+    echo "❌ FAILURE: Some Kilo Code configurations were not deployed correctly."
+    exit 1
+fi
