@@ -2,7 +2,9 @@
 test:
 	# Does a test build of a system and home config
 	nix build .#darwinConfigurations.tennyson.system
+	nix build .#darwinConfigurations.bst.system
 	nix build .#homeConfigurations.nalabelle.activationPackage
+	nix build .#homeConfigurations."nalabelle@bst".activationPackage
 
 .PHONY: clean
 clean:
