@@ -8,6 +8,7 @@
     convco
     mkcert
     _1password-cli
+    copier
 
     # Environment
     direnv
