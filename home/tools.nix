@@ -112,6 +112,13 @@
     };
   };
 
+  # Devbox completion (co-located with devbox installation)
+  programs.zsh.initContent = lib.mkAfter ''
+    if command -v devbox > /dev/null 2>&1; then
+      eval "$(devbox completion zsh)"
+    fi
+  '';
+
   xdg.configFile = {
     "mcpm/config.json".source = ../config/mcpm/config.json;
     "mcpm/profiles.json".source = ../config/mcpm/profiles.json;

@@ -7,11 +7,6 @@
     zsh-autosuggestions
   ];
 
-  home.file.".config/zsh/options".source = ../zsh/options;
-  home.file.".config/zsh/prompt".source = ../zsh/prompt;
-  home.file.".config/zsh/imports".source = ../zsh/imports;
-  home.file.".config/zsh/completions".source = ../zsh/completions;
-
   programs.zsh = {
     enable = true;
     defaultKeymap = "viins";
@@ -46,20 +41,24 @@
       compinit -d ${config.xdg.cacheHome}/zsh/zcompdump-$ZSH_VERSION
     '';
 
-    initContent = lib.mkMerge [
-      (lib.mkOrder 550 ''
-        source ${config.xdg.configHome}/zsh/options;
-        source ${config.xdg.configHome}/zsh/prompt;
-        source ${config.xdg.configHome}/zsh/imports;
-      '')
+    initContent = ''
+      # Globbing options (no built-in Home Manager support)
+      setopt nocaseglob
+      setopt extendedglob
+      setopt globdots
+      setopt no_nomatch
 
-      ''
-        # Source the completions file
-        if [ -f "${config.xdg.configHome}/zsh/completions" ]; then
-          source ${config.xdg.configHome}/zsh/completions;
-        fi
-      ''
-    ];
+      # Corrections (no built-in Home Manager support)
+      setopt correct
+
+      # History verify (supplement existing history config)
+      setopt histverify
+
+      # Vi mode key bindings (supplement built-in vi mode)
+      bindkey -v '^?' backward-delete-char
+      bindkey -M vicmd 'k' history-substring-search-up
+      bindkey -M vicmd 'j' history-substring-search-down
+    '';
   };
 
   programs.starship = {

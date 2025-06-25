@@ -31,4 +31,11 @@ in {
       };
     };
   };
+
+  # Graphite completion (co-located with graphite installation via homebrew)
+  programs.zsh.initContent = lib.mkAfter ''
+    if command -v gt > /dev/null 2>&1; then
+      eval "$(gt completion)"
+    fi
+  '';
 }

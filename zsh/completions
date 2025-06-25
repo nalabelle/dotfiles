@@ -1,6 +1,0 @@
-# shellcheck shell=sh external-sources=false
-# vim:filetype=zsh
-
-# Tools
-command -v gt > /dev/null 2>&1 && eval "$(gt completion)"
-command -v devbox > /dev/null 2>&1 && eval "$(devbox completion zsh)"
