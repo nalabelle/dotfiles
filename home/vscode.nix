@@ -16,6 +16,12 @@ let
     }' | ${pkgs.jq}/bin/jq '.' > $out
   '';
 
+  # Create a source directory with all kilocode rule files
+  kilocodeRulesSource = pkgs.runCommand "kilocode-rules-source" { } ''
+    mkdir -p $out
+    cp -r ${../config/kilocode}/* $out/
+  '';
+
 in {
   options.vscode.hostMcpServers = lib.mkOption {
     type = lib.types.attrs;
@@ -45,42 +51,24 @@ in {
     # `|| file.isSymbolicLink()` to these checks.
     #
     # This workaround can be reverted to `source` once the extension is fixed.
+
     home.activation.kilocodeRules = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
       # Create .kilocode/rules directory
       mkdir -p "$HOME/.kilocode/rules"
 
-      # Function to sync file only if needed (handles symlinks and content changes)
-      sync_rule_file() {
-        local source_file="$1"
-        local target_file="$2"
-        
-        # Remove symlinks or sync if content differs
-        if [[ -L "$target_file" ]]; then
-          echo "Replacing symlink with file: $target_file"
-          rm -f "$target_file"
-          ${pkgs.rsync}/bin/rsync -a "$source_file" "$target_file"
-        else
-          # Use rsync's --update flag to only copy if source is newer or different
-          ${pkgs.rsync}/bin/rsync -au "$source_file" "$target_file"
-        fi
-        chmod 644 "$target_file"
-      }
+      # Check if target directory has symlinks that need to be replaced
+      if find "$HOME/.kilocode/rules" -type l -print -quit | grep -q .; then
+        echo "Replacing symlinks in .kilocode/rules directory"
+        find "$HOME/.kilocode/rules" -type l -delete
+      fi
 
-      # Sync rule files efficiently
-      sync_rule_file ${
-        builtins.toFile "global.md"
-        (builtins.readFile ../config/kilocode/global.md)
-      } "$HOME/.kilocode/rules/global.md"
-
-      sync_rule_file ${
-        builtins.toFile "python.md"
-        (builtins.readFile ../config/kilocode/python.md)
-      } "$HOME/.kilocode/rules/python.md"
-
-      sync_rule_file ${
-        builtins.toFile "typescript.md"
-        (builtins.readFile ../config/kilocode/typescript.md)
-      } "$HOME/.kilocode/rules/typescript.md"
+      # Sync entire directory with deletion of orphaned files
+      # --update: only copy if source is newer or content differs
+      # --delete: remove files in destination that don't exist in source
+      # --recursive: sync directory contents recursively
+      ${pkgs.rsync}/bin/rsync --update --delete --recursive \
+        "${kilocodeRulesSource}/" \
+        "$HOME/.kilocode/rules/"
     '';
 
     # Linux MCP settings
