@@ -32,10 +32,56 @@ in {
       lib.mkIf pkgs.stdenv.isDarwin { source = settingsFile; };
 
     # Kilo Code rule files (both platforms)
-    home.file.".kilocode/rules/global.md".source = ../config/kilocode/global.md;
-    home.file.".kilocode/rules/python.md".source = ../config/kilocode/python.md;
-    home.file.".kilocode/rules/typescript.md".source =
-      ../config/kilocode/typescript.md;
+    #
+    # WORKAROUND: Using activation scripts to copy files instead of symlinks.
+    # This works around a Kilocode extension bug where the rule loading logic
+    # excludes symlinks.
+    #
+    # Bug locations in https://github.com/Kilo-Org/kilocode:
+    # - src/core/webview/kilorules.ts:60 (primary rule filtering logic)
+    # - src/utils/fs.ts:84 (utility function with same issue)
+    #
+    # The issue is that `file.isFile()` excludes symlinks - the fix would be to add
+    # `|| file.isSymbolicLink()` to these checks.
+    #
+    # This workaround can be reverted to `source` once the extension is fixed.
+    home.activation.kilocodeRules = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+      # Create .kilocode/rules directory
+      mkdir -p "$HOME/.kilocode/rules"
+
+      # Function to sync file only if needed (handles symlinks and content changes)
+      sync_rule_file() {
+        local source_file="$1"
+        local target_file="$2"
+        
+        # Remove symlinks or sync if content differs
+        if [[ -L "$target_file" ]]; then
+          echo "Replacing symlink with file: $target_file"
+          rm -f "$target_file"
+          ${pkgs.rsync}/bin/rsync -a "$source_file" "$target_file"
+        else
+          # Use rsync's --update flag to only copy if source is newer or different
+          ${pkgs.rsync}/bin/rsync -au "$source_file" "$target_file"
+        fi
+        chmod 644 "$target_file"
+      }
+
+      # Sync rule files efficiently
+      sync_rule_file ${
+        builtins.toFile "global.md"
+        (builtins.readFile ../config/kilocode/global.md)
+      } "$HOME/.kilocode/rules/global.md"
+
+      sync_rule_file ${
+        builtins.toFile "python.md"
+        (builtins.readFile ../config/kilocode/python.md)
+      } "$HOME/.kilocode/rules/python.md"
+
+      sync_rule_file ${
+        builtins.toFile "typescript.md"
+        (builtins.readFile ../config/kilocode/typescript.md)
+      } "$HOME/.kilocode/rules/typescript.md"
+    '';
 
     # Linux MCP settings
     xdg.configFile = lib.mkIf pkgs.stdenv.isLinux {

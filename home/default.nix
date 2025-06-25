@@ -2,6 +2,7 @@
 
 {
   imports = [
+    ./colors.nix
     ./git.nix
     ./tmux.nix
     ./tools.nix
@@ -43,4 +44,7 @@
   };
 
   xdg = { enable = true; };
+
+  # Prefer XDG directories for consistency with the rest of the configuration
+  home.preferXdgDirectories = true;
 }

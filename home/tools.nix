@@ -3,6 +3,7 @@
     # Dev tools
     act
     gh
+    git-lfs
     devbox
     convco
     mkcert
@@ -20,6 +21,7 @@
     # I wish psql came separate
     postgresql
     wakeonlan
+    rsync
 
     # Viewers
     glow

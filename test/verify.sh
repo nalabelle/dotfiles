@@ -11,7 +11,7 @@ RULES_DIR="$HOME/.kilocode/rules"
 
 if [ -d "$RULES_DIR" ]; then
     echo "✅ Rules directory exists: $RULES_DIR"
-    
+
     for rule_file in global.md python.md typescript.md; do
         if [ -f "$RULES_DIR/$rule_file" ]; then
             echo "✅ Rule file deployed: $rule_file"
