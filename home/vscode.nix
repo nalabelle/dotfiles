@@ -16,8 +16,8 @@ let
     }' | ${pkgs.jq}/bin/jq '.' > $out
   '';
 
-  # Create a source directory with all kilocode rule files
-  kilocodeRulesSource = pkgs.runCommand "kilocode-rules-source" { } ''
+  # Create a source directory with all kilocode files (rules and workflows)
+  kilocodeSource = pkgs.runCommand "kilocode-source" { } ''
     mkdir -p $out
     cp -r ${../config/kilocode}/* $out/
   '';
@@ -52,23 +52,25 @@ in {
     #
     # This workaround can be reverted to `source` once the extension is fixed.
 
-    home.activation.kilocodeRules = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-      # Create .kilocode/rules directory
-      mkdir -p "$HOME/.kilocode/rules"
+    home.activation.kilocodeFiles = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+      # Create .kilocode directory structure
+      mkdir -p "$HOME/.kilocode"
 
-      # Check if target directory has symlinks that need to be replaced
-      if find "$HOME/.kilocode/rules" -type l -print -quit | grep -q .; then
-        echo "Replacing symlinks in .kilocode/rules directory"
-        find "$HOME/.kilocode/rules" -type l -delete
+      # Check if .kilocode directory has symlinks that need to be replaced
+      # This is necessary because rsync doesn't always overwrite symlinks correctly
+      # and the Kilocode extension specifically excludes symlinks
+      if find "$HOME/.kilocode" -type l -print -quit | grep -q .; then
+        echo "Replacing symlinks in .kilocode directory"
+        find "$HOME/.kilocode" -type l -delete
       fi
 
-      # Sync entire directory with deletion of orphaned files
+      # Sync entire kilocode directory structure (rules and workflows)
       # --update: only copy if source is newer or content differs
       # --delete: remove files in destination that don't exist in source
       # --recursive: sync directory contents recursively
       ${pkgs.rsync}/bin/rsync --update --delete --recursive \
-        "${kilocodeRulesSource}/" \
-        "$HOME/.kilocode/rules/"
+        "${kilocodeSource}/" \
+        "$HOME/.kilocode/"
     '';
 
     # Linux MCP settings
