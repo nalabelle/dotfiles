@@ -93,42 +93,50 @@ compare_template() {
 
     # Check if template directory exists in remote
     if [[ ! -d "$template_path" ]]; then
-        error "Template directory not found in remote repository: $template_path
-
-The git/template directory hasn't been pushed to the remote repository yet.
-Please push the template files first."
+        error "Template directory not found in remote repository: $template_path."
     fi
 
     log "Comparing current project with template..."
     echo
 
-    # Perform recursive diff, excluding the template comparison directory
-    echo -e "${BLUE}Differences between current project and template:${NC}"
+    echo -e "${BLUE}Comparing project with template baseline:${NC}"
     echo
 
-    # Use diff with options to:
-    # -r: recursive
-    # -u: unified diff format (more readable)
-    # -N: treat absent files as empty
-    if diff -ruN \
-        --exclude=".git" \
-        --exclude=".devbox" \
-        --exclude="node_modules" \
-        --exclude="*.pyc" \
-        --exclude="__pycache__" \
-        --exclude="*.egg-info" \
-        --exclude="dist" \
-        --exclude="build" \
-        "$template_path" . 2>/dev/null; then
-        success "No differences found - your project matches the template!"
+    local found_differences=false
+
+    # Only compare files that exist in the template (left join)
+    while IFS= read -r -d '' template_file; do
+        local relative_path="${template_file#$template_path/}"
+        local project_file="./$relative_path"
+
+        if [[ -f "$project_file" ]]; then
+            # File exists in both - show differences if any
+            if ! diff -u "$template_file" "$project_file" >/dev/null 2>&1; then
+                echo -e "${YELLOW}$relative_path (project enhancements shown with +):${NC}"
+                diff -u "$template_file" "$project_file" || true
+                echo
+                found_differences=true
+            fi
+        else
+            # File exists in template but not in project - could be added
+            echo -e "${GREEN}Missing from project: $relative_path${NC}"
+            echo "Template content:"
+            cat "$template_file"
+            echo
+            echo "---"
+            echo
+            found_differences=true
+        fi
+    done < <(find "$template_path" -type f -print0)
+
+    if [[ "$found_differences" == "false" ]]; then
+        success "Project matches template baseline perfectly!"
     else
         echo
-        warn "Differences found between template and current project"
-        echo -e "${YELLOW}Review the diff output above to understand what has changed.${NC}"
-        echo
-        echo -e "${BLUE}Next steps:${NC}"
-        echo "1. Review each difference carefully"
-        echo "2. Update files as appropriate for your project"
+        echo -e "${BLUE}Analysis:${NC}"
+        echo "• Lines with + show enhancements your project has added beyond the template"
+        echo "• Lines with - show template content not in your project"
+        echo "• Missing files or lines should be added if beneficial for your project"
     fi
 }
 
