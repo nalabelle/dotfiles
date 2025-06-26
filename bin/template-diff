@@ -1,0 +1,162 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+# Template Diff Script
+# Clones git template into project and compares with current state
+# Usage: template-diff [--clean]
+
+SCRIPT_NAME="$(basename "$0")"
+# Use XDG cache directory for template storage
+TEMPLATE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/git-template"
+DOTFILES_REPO="${TEMPLATE_REPO:-https://github.com/nalabelle/dotfiles.git}"
+
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
+
+usage() {
+    cat << EOF
+Usage: $SCRIPT_NAME [OPTIONS]
+
+Compare current project with git template from dotfiles repository.
+
+OPTIONS:
+    --help      Show this help message
+
+DESCRIPTION:
+    This script clones the git template into your XDG cache directory
+    and uses 'diff -r' to compare the template files with your current project.
+
+    The template is cached in \$XDG_CACHE_HOME/git-template-comparison for
+    efficient reuse across multiple comparisons.
+
+EXAMPLES:
+    $SCRIPT_NAME              # Compare current project with latest template
+
+EOF
+}
+
+log() {
+    echo -e "${BLUE}[$SCRIPT_NAME]${NC} $*" >&2
+}
+
+warn() {
+    echo -e "${YELLOW}[$SCRIPT_NAME WARNING]${NC} $*" >&2
+}
+
+error() {
+    echo -e "${RED}[$SCRIPT_NAME ERROR]${NC} $*" >&2
+    exit 1
+}
+
+success() {
+    echo -e "${GREEN}[$SCRIPT_NAME]${NC} $*" >&2
+}
+
+setup_template_dir() {
+    log "Setting up template comparison directory: $TEMPLATE_DIR"
+
+    # Create cache directory if it doesn't exist
+    mkdir -p "$(dirname "$TEMPLATE_DIR")"
+
+    # Update existing directory or clone fresh
+    if [[ -d "$TEMPLATE_DIR" ]]; then
+        log "Updating existing template directory"
+        pushd "$TEMPLATE_DIR" >/dev/null
+        git fetch origin
+        git reset --hard origin/main
+        popd >/dev/null
+    else
+        log "Cloning dotfiles repository (sparse checkout: git/template)"
+        git clone \
+            --depth 1 \
+            --filter=blob:none \
+            --sparse \
+            "$DOTFILES_REPO" \
+            "$TEMPLATE_DIR"
+
+        # Configure sparse checkout
+        pushd "$TEMPLATE_DIR" >/dev/null
+        git sparse-checkout set git/template
+        popd >/dev/null
+    fi
+
+    success "Template files available in: $TEMPLATE_DIR/git/template"
+}
+
+compare_template() {
+    local template_path="$TEMPLATE_DIR/git/template"
+
+    # Check if template directory exists in remote
+    if [[ ! -d "$template_path" ]]; then
+        error "Template directory not found in remote repository: $template_path
+
+The git/template directory hasn't been pushed to the remote repository yet.
+Please push the template files first."
+    fi
+
+    log "Comparing current project with template..."
+    echo
+
+    # Perform recursive diff, excluding the template comparison directory
+    echo -e "${BLUE}Differences between current project and template:${NC}"
+    echo
+
+    # Use diff with options to:
+    # -r: recursive
+    # -u: unified diff format (more readable)
+    # -N: treat absent files as empty
+    if diff -ruN \
+        --exclude=".git" \
+        --exclude=".devbox" \
+        --exclude="node_modules" \
+        --exclude="*.pyc" \
+        --exclude="__pycache__" \
+        --exclude="*.egg-info" \
+        --exclude="dist" \
+        --exclude="build" \
+        "$template_path" . 2>/dev/null; then
+        success "No differences found - your project matches the template!"
+    else
+        echo
+        warn "Differences found between template and current project"
+        echo -e "${YELLOW}Review the diff output above to understand what has changed.${NC}"
+        echo
+        echo -e "${BLUE}Next steps:${NC}"
+        echo "1. Review each difference carefully"
+        echo "2. Update files as appropriate for your project"
+    fi
+}
+
+main() {
+    # Check if we're in a git repository
+    if ! git rev-parse --git-dir >/dev/null 2>&1; then
+        error "Not in a git repository. This script must be run from within a git project."
+    fi
+
+    # Parse arguments
+    case "${1:-}" in
+        --help|-h)
+            usage
+            exit 0
+            ;;
+        "")
+            # No arguments, proceed with comparison
+            ;;
+        *)
+            error "Unknown option: $1\nUse --help for usage information"
+            ;;
+    esac
+
+    # Setup template directory
+    setup_template_dir
+
+    # Compare template with current project
+    compare_template
+}
+
+main "$@"

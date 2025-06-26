@@ -29,7 +29,6 @@
 
     qdrant
     ollama
-
     # Custom scripts
     (writeShellApplication {
       name = "nix-refresh";
@@ -57,9 +56,9 @@
       text = builtins.readFile ../bin/status-getload;
     })
     (writeShellApplication {
-      name = "template-update";
-      runtimeInputs = [ git ];
-      text = builtins.readFile ../bin/template-update;
+      name = "template-diff";
+      runtimeInputs = [ git diffutils coreutils ];
+      text = builtins.readFile ../bin/template-diff;
     })
   ];
 
