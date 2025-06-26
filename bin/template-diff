@@ -106,7 +106,7 @@ compare_template() {
 
     # Only compare files that exist in the template (left join)
     while IFS= read -r -d '' template_file; do
-        local relative_path="${template_file#$template_path/}"
+        local relative_path="${template_file#"$template_path"/}"
         local project_file="./$relative_path"
 
         if [[ -f "$project_file" ]]; then
