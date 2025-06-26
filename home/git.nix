@@ -109,8 +109,4 @@
     };
   };
 
-  home.file."${config.xdg.configHome}/git/template" = {
-    source = ../git/template; # Relative path from this nix file
-    recursive = true; # Ensure the whole directory is copied
-  };
 }

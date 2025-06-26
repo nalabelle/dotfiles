@@ -56,6 +56,11 @@
       runtimeInputs = [ procps ];
       text = builtins.readFile ../bin/status-getload;
     })
+    (writeShellApplication {
+      name = "template-update";
+      runtimeInputs = [ git ];
+      text = builtins.readFile ../bin/template-update;
+    })
   ];
 
   # Containers configuration

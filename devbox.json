@@ -2,9 +2,9 @@
   "$schema": "https://raw.githubusercontent.com/jetify-com/devbox/0.11.0/.schema/devbox.schema.json",
   "packages": [
     "shellcheck@0.10.0",
+    "pre-commit@4.2.0",
     "shfmt@3.11.0",
     "nil@latest",
-    "nixfmt@0.6.0",
-    "pre-commit@latest"
+    "nixfmt@0.6.0"
   ]
 }
