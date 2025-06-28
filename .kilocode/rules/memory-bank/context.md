@@ -66,7 +66,10 @@
 
 - **System Architecture**: Host-specific configurations override base settings through dedicated directories
 - **Update Pattern**: `nix-refresh` script handles both darwin and home-manager updates with intelligent fallbacks
-- **Quality Controls**: Pre-commit hooks ensure code quality before configuration changes are committed
+- **Quality Controls**: Pre-commit hooks ensure code quality before configuration changes are committed. Running `pre-commit run --all-files` is **required** after any configuration changes to validate:
+  - Nix configuration formatting and evaluation
+  - Shell script syntax and style
+  - Linux deployment compatibility via Docker
 - **Service Management**: AI/ML services (Qdrant, Ollama) auto-start and maintain persistent storage
 
 ## Configuration Patterns

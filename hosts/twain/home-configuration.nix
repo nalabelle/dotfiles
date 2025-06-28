@@ -58,6 +58,16 @@
   # Ensure proper file permissions for VS Code Server
   # home.file.".vscode-server".recursive = true; # Commenting out as we don't need this
 
+  # Override VSCode settings path for remote server
+  xdg.configFile."Code/User/globalStorage/kilocode.kilo-code/settings/mcp_settings.json".enable =
+    false;
+
+  home.file.".vscode-server/data/User/globalStorage/kilocode.kilo-code/settings/mcp_settings.json" =
+    {
+      source = config.lib.file.mkOutOfStoreSymlink
+        "/home/nalabelle/git/dotfiles/config/vscode/kilocode-mcp-settings.json";
+    };
+
   # Configure home-manager auto-upgrade for flakes
   systemd.user.services.home-manager-auto-upgrade = {
     Service = {
