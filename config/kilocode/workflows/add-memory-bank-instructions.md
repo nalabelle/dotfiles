@@ -7,7 +7,7 @@ You are helping add the memory-bank-instructions.md file to the current project 
 2. Download the latest memory-bank-instructions.md file directly using `execute_command` with:
 
    ```bash
-   curl -o .kilocode/rules/memory-bank-instructions.md https://github.com/nalabelle/dotfiles/raw/refs/heads/main/.kilocode/rules/memory-bank-instructions.md
+   curl -L -o .kilocode/rules/memory-bank-instructions.md https://github.com/nalabelle/dotfiles/raw/refs/heads/main/.kilocode/rules/memory-bank-instructions.md
    ```
 
    This will overwrite the file if it already exists, ensuring you get the most up-to-date version.
