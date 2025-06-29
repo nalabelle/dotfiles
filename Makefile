@@ -9,14 +9,17 @@ help:
 		printf "  %-13s %s\n", substr($$1, 1, length($$1)-1), substr($$0, index($$0, "##") + 3) \
 	}' $(MAKEFILE_LIST)
 
-# Test build system and home configurations
+# Test build system and home configurations via GitHub Actions
 .PHONY: test
-test: ## Runs test builds
-	# Does a test build of a system and home config
-	nix build .#darwinConfigurations.tennyson.system
-	nix build .#darwinConfigurations.bst.system
-	nix build .#homeConfigurations.nalabelle.activationPackage
-	nix build .#homeConfigurations."nalabelle@bst".activationPackage
+test: ## Runs GitHub Actions tests for Darwin and Home configurations
+	# Triggers workflows for Darwin and Home configs and waits for completion.
+	gh workflow run test-darwin.yml
+	gh workflow run test-home.yml
+	gh run watch --exit-status || (echo "Workflow(s) failed. Check GitHub Actions for details."; exit 1)
+	@echo "All workflows completed. Check GitHub Actions for results."
+
+test-local: ## Quick local home test
+   nix build .#homeConfigurations.nalabelle.activationPackage
 
 # Remove build artifacts
 .PHONY: clean
@@ -38,11 +41,6 @@ home-switch: ## Update home configuration
 update: ## Update dependencies
 	nix flake update
 
-.PHONY: test-linux
-test-linux:
-	# Test Linux deployment of Kilo Code configurations via Docker multi-stage build
-	# Verification runs automatically during build - build fails if verification fails
-	docker build -f test/Dockerfile -t dotfiles-test . --target verify
 
 # Run garbage collection
 .PHONY: gc

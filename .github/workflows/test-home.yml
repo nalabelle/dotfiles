@@ -1,0 +1,28 @@
+name: Test Home Configurations
+
+on:
+  workflow_dispatch:
+  pull_request:
+
+jobs:
+  build-home:
+    name: Build Home Configurations
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        config:
+          - twain
+          - nalabelle
+          - 'nalabelle@bst'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@main
+
+      - name: Build home configuration ${{ matrix.config }}
+        run: nix build .#homeConfigurations.${{ matrix.config }}.activationPackage
+
+      - name: Run native Kilo Code verification
+        run: bash test/verify
