@@ -1,51 +1,19 @@
 {
   "lockfile_version": "1",
   "packages": {
-    "gh@latest": {
-      "last_modified": "2025-06-24T02:18:21Z",
-      "resolved": "github:NixOS/nixpkgs/69dfebb3d175bde602f612915c5576a41b18486b#gh",
+    "gh@1.14.0": {
+      "last_modified": "2021-08-19T13:27:31Z",
+      "resolved": "github:NixOS/nixpkgs/14b0f20fa1f56438b74100513c9b1f7c072cf789#gh",
       "source": "devbox-search",
-      "version": "2.74.2",
+      "version": "1.14.0",
       "systems": {
-        "aarch64-darwin": {
-          "outputs": [
-            {
-              "name": "out",
-              "path": "/nix/store/skd2pypjg31qkkg8cw75lmdrrfj0wpmp-gh-2.74.2",
-              "default": true
-            }
-          ],
-          "store_path": "/nix/store/skd2pypjg31qkkg8cw75lmdrrfj0wpmp-gh-2.74.2"
-        },
-        "aarch64-linux": {
-          "outputs": [
-            {
-              "name": "out",
-              "path": "/nix/store/csq39dvk7i297fhq0p84db03x0s9n5x3-gh-2.74.2",
-              "default": true
-            }
-          ],
-          "store_path": "/nix/store/csq39dvk7i297fhq0p84db03x0s9n5x3-gh-2.74.2"
-        },
-        "x86_64-darwin": {
-          "outputs": [
-            {
-              "name": "out",
-              "path": "/nix/store/c3822fczwp3x2p6274hw2ajqh9lah7jp-gh-2.74.2",
-              "default": true
-            }
-          ],
-          "store_path": "/nix/store/c3822fczwp3x2p6274hw2ajqh9lah7jp-gh-2.74.2"
-        },
         "x86_64-linux": {
           "outputs": [
             {
-              "name": "out",
-              "path": "/nix/store/4gmr6h0aly4pngrlrvy12z98kyag1bpx-gh-2.74.2",
+              "path": "/tmp/containerbase/cache/nix/store/m82v4jikzgacaq92kw1nap0hbl2jxdx6-gh-1.14.0",
               "default": true
             }
-          ],
-          "store_path": "/nix/store/4gmr6h0aly4pngrlrvy12z98kyag1bpx-gh-2.74.2"
+          ]
         }
       }
     },
