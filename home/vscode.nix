@@ -68,7 +68,7 @@ in {
       # --update: only copy if source is newer or content differs
       # --delete: remove files in destination that don't exist in source
       # --recursive: sync directory contents recursively
-      ${pkgs.rsync}/bin/rsync --update --delete --recursive \
+      ${pkgs.rsync}/bin/rsync --delete --recursive \
         "${kilocodeSource}/" \
         "$HOME/.kilocode/"
     '';
