@@ -1,0 +1,13 @@
+[Unit]
+Description=Ollama LLM Service
+
+[Service]
+Type=simple
+ExecStart=%h/.nix-profile/bin/ollama start
+Restart=always
+LimitNOFILE=10240
+StandardOutput=append:%h/.local/var/log/ollama.log
+StandardError=append:%h/.local/var/log/ollama.log
+
+[Install]
+WantedBy=default.target

@@ -1,0 +1,19 @@
+# Qdrant systemd user service (matches launchd agent from nix/darwin.nix)
+[Unit]
+Description=Qdrant Vector Database (User Service)
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=%h/.nix-profile/bin/qdrant --disable-telemetry
+WorkingDirectory=/tmp
+Restart=always
+LimitNOFILE=10240
+Environment=QDRANT__STORAGE__STORAGE_PATH=%h/.local/share/qdrant/storage
+Environment=QDRANT__STORAGE__SNAPSHOTS_PATH=%h/.local/share/qdrant/snapshots
+Environment=QDRANT__STORAGE__TEMP_PATH=%h/.local/share/qdrant/temp
+StandardOutput=append:%h/.local/var/log/qdrant.log
+StandardError=append:%h/.local/var/log/qdrant.log
+
+[Install]
+WantedBy=default.target

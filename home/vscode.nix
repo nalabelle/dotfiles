@@ -80,5 +80,47 @@ in {
           source = settingsFile;
         };
     };
+    # Linux systemd user services for Qdrant and Ollama (VS Code context)
+    systemd.user.services = lib.mkIf pkgs.stdenv.isLinux {
+      qdrant = lib.mkIf (pkgs ? qdrant && pkgs ? vscode) {
+        Unit = {
+          Description = "Qdrant Vector Database (User Service)";
+          After = [ "network.target" ];
+        };
+        Service = {
+          Type = "simple";
+          ExecStart = "${pkgs.qdrant}/bin/qdrant --disable-telemetry";
+          WorkingDirectory = "/tmp";
+          Restart = "always";
+          LimitNOFILE = 10240;
+          Environment = [
+            "QDRANT__STORAGE__STORAGE_PATH=%h/.local/share/qdrant/storage"
+            "QDRANT__STORAGE__SNAPSHOTS_PATH=%h/.local/share/qdrant/snapshots"
+            "QDRANT__STORAGE__TEMP_PATH=%h/.local/share/qdrant/temp"
+          ];
+          StandardOutput = "append:%h/.local/var/log/qdrant.log";
+          StandardError = "append:%h/.local/var/log/qdrant.log";
+          ExecStartPre = ''
+            ${pkgs.coreutils}/bin/mkdir -p $HOME/.local/var/log $HOME/.local/share/qdrant
+          '';
+        };
+        Install = { WantedBy = [ "default.target" ]; };
+      };
+      ollama = lib.mkIf (pkgs ? ollama && pkgs ? vscode) {
+        Unit = { Description = "Ollama LLM Service"; };
+        Service = {
+          Type = "simple";
+          ExecStart = "${pkgs.ollama}/bin/ollama start";
+          Restart = "always";
+          LimitNOFILE = 10240;
+          StandardOutput = "append:%h/.local/var/log/ollama.log";
+          StandardError = "append:%h/.local/var/log/ollama.log";
+          ExecStartPre = ''
+            ${pkgs.coreutils}/bin/mkdir -p $HOME/.local/var/log
+          '';
+        };
+        Install = { WantedBy = [ "default.target" ]; };
+      };
+    };
   };
 }
