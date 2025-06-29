@@ -25,5 +25,8 @@ jobs:
       - name: Build home configuration ${{ matrix.config }}
         run: nix build .#homeConfigurations.${{ matrix.config }}.activationPackage
 
+      - name: Activate home configuration ${{ matrix.config }}
+        run: ./result/activate
+
       - name: Run native Kilo Code verification
         run: bash test/verify
