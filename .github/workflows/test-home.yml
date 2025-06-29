@@ -6,15 +6,18 @@ on:
 
 jobs:
   build-home:
-    name: Build Home Configurations
-    runs-on: ubuntu-latest
+    name: Build Home Configurations (${{ matrix.config }})
+    runs-on: ${{ matrix.runner }}
     strategy:
       fail-fast: false
       matrix:
-        config:
-          - twain
-          - nalabelle
-          - 'nalabelle@bst'
+        include:
+          - config: twain
+            runner: ubuntu-latest
+          - config: nalabelle
+            runner: ubuntu-latest
+          - config: 'nalabelle@bst'
+            runner: macos-15
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
