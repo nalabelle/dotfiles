@@ -12,7 +12,7 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - config: twain
+          - config: 'nalabelle@twain'
             runner: ubuntu-latest
           - config: nalabelle
             runner: ubuntu-latest
@@ -30,6 +30,8 @@ jobs:
 
       - name: Activate home configuration ${{ matrix.config }}
         run: ./result/activate
+        env:
+          USER: nalabelle
 
       - name: Run native Kilo Code verification
         run: bash test/verify
