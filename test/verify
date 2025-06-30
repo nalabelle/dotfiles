@@ -32,7 +32,11 @@ echo
 
 # Check if MCP settings are deployed
 echo "2. Checking MCP settings deployment..."
-MCP_SETTINGS="$HOME/.config/Code/User/globalStorage/kilocode.kilo-code/settings/mcp_settings.json"
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    MCP_SETTINGS="$HOME/Library/Application Support/Code/User/globalStorage/kilocode.kilo-code/settings/mcp_settings.json"
+else
+    MCP_SETTINGS="$HOME/.config/Code/User/globalStorage/kilocode.kilo-code/settings/mcp_settings.json"
+fi
 
 if [ -f "$MCP_SETTINGS" ]; then
     echo "✅ MCP settings file deployed: $MCP_SETTINGS"
@@ -46,7 +50,11 @@ if [ -f "$MCP_SETTINGS" ]; then
     fi
 else
     echo "❌ MCP settings file missing: $MCP_SETTINGS"
-    echo "   Home manager did not deploy MCP settings to Linux XDG path"
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        echo "   Home manager did not deploy MCP settings to macOS Application Support path"
+    else
+        echo "   Home manager did not deploy MCP settings to Linux XDG path"
+    fi
     exit 1
 fi
 
@@ -87,12 +95,20 @@ MCP_EXISTS=$([ -f "$MCP_SETTINGS" ] && echo "Yes" || echo "No")
 echo "Results:"
 echo "  - Rule files deployed: $RULES_COUNT/3"
 echo "  - MCP settings deployed: $MCP_EXISTS"
-echo "  - Linux XDG paths used correctly: ✅"
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    echo "  - macOS Application Support paths used correctly: ✅"
+else
+    echo "  - Linux XDG paths used correctly: ✅"
+fi
 
 if [ "$RULES_COUNT" -eq 3 ] && [ -f "$MCP_SETTINGS" ]; then
     echo
-    echo "🎉 SUCCESS: Home manager correctly deployed all Kilo Code configurations to Linux!"
-    echo "   The flake properly handles cross-platform deployment with XDG directories."
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        echo "🎉 SUCCESS: Home manager correctly deployed all Kilo Code configurations to macOS!"
+    else
+        echo "🎉 SUCCESS: Home manager correctly deployed all Kilo Code configurations to Linux!"
+    fi
+    echo "   The flake properly handles cross-platform deployment."
     exit 0
 else
     echo
