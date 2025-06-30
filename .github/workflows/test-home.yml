@@ -28,6 +28,14 @@ jobs:
       - name: Build home configuration ${{ matrix.config }}
         run: nix build .#homeConfigurations.${{ matrix.config }}.activationPackage
 
+      - name: Prepare home directory for ${{ matrix.config }}
+        run: |
+          if [[ "${{ matrix.runner }}" == "macos-15" ]]; then
+            sudo mkdir -p /Users/nalabelle
+          else
+            sudo mkdir -p /home/nalabelle
+          fi
+
       - name: Activate home configuration ${{ matrix.config }}
         run: ./result/activate
         env:
