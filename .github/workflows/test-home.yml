@@ -32,6 +32,7 @@ jobs:
         run: ./result/activate
         env:
           USER: nalabelle
+          HOME: ${{ matrix.runner == 'macos-15' && '/Users/nalabelle' || '/home/nalabelle' }}
 
       - name: Run native Kilo Code verification
         run: bash test/verify
