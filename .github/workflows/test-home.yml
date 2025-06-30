@@ -43,10 +43,12 @@ jobs:
             sudo useradd -m -u 1500 -s /bin/bash nalabelle || true
             sudo mkdir -p /home/nalabelle
             sudo chown nalabelle:nalabelle /home/nalabelle
+            # Remove default shell files that interfere with Home Manager
+            sudo rm -f /home/nalabelle/.profile /home/nalabelle/.bash_profile /home/nalabelle/.bashrc
           fi
 
       - name: Activate home configuration ${{ matrix.config }}
         run: sudo -u nalabelle -H ./result/activate
 
       - name: Run native Kilo Code verification
-        run: bash test/verify
+        run: sudo -u nalabelle -H bash test/verify
