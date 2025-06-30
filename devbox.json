@@ -5,7 +5,6 @@
     "pre-commit@4.2.0",
     "shfmt@3.11.0",
     "nil@latest",
-    "nixfmt@0.6.0",
     "gh@2.74.2"
   ]
 }
