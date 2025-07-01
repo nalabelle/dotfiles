@@ -63,6 +63,4 @@ jobs:
           sudo ls -la "/Users/nalabelle/Library/Application Support/" 2>/dev/null || true
 
       - name: Run native Kilo Code verification
-        env:
-          CONFIG_NAME: ${{ matrix.config }}
-        run: sudo -u nalabelle -H bash test/verify
+        run: sudo -u nalabelle -H test/verify "${{ matrix.config }}"

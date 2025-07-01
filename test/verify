@@ -1,8 +1,11 @@
 #!/bin/bash
 
+CONFIG_NAME="$1"
+
 # Verification script to check that home manager properly deployed Kilo Code files
 
 echo "=== Kilo Code Linux Deployment Verification ==="
+echo "Config: $CONFIG_NAME"
 echo
 
 # Check if Kilo Code rule files are deployed to ~/.kilocode/rules/
