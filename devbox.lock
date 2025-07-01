@@ -101,7 +101,7 @@
         }
       }
     },
-    "nixfmt@latest": {
+    "nixfmt@0.6.0": {
       "last_modified": "2024-04-02T02:53:36Z",
       "resolved": "github:NixOS/nixpkgs/080a4a27f206d07724b88da096e27ef63401a504#nixfmt",
       "source": "devbox-search",
