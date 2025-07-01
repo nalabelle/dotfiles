@@ -5,6 +5,13 @@ let
     nodejs = pkgs.nodejs_22;
   };
 in {
+  programs.git = {
+    extraConfig = {
+      user.signingkey = lib.mkForce
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIRve0sisbmh3zDSJyWqPhDEbPeODk/K9YiIHnZmDv7Z";
+    };
+  };
+
   home.packages = with pkgs; [
     awscli2
     duckdb

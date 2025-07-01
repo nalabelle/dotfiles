@@ -5,7 +5,7 @@
     enable = true;
 
     userName = "nalabelle";
-    userEmail = "git@nalabelle.com";
+    userEmail = "2044448+nalabelle@users.noreply.github.com";
 
     ignores = [
       "*~"
@@ -41,10 +41,7 @@
 
       fetch.prune = true;
 
-      init = {
-        defaultBranch = "main";
-        #templateDir = "${config.xdg.configHome}/git/template";
-      };
+      init = { defaultBranch = "main"; };
 
       protocol.version = 2;
 
@@ -62,15 +59,12 @@
         required = true;
       };
 
-      #user.signingkey = "~/.ssh/id_ed25519.pub";
-
-      #commit.gpgsign = true;
-
-      #gpg.format = "ssh";
+      user.signingkey =
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINdghZWKTk7678RA/Vt4LMktDd47yLjYSgLalXEP85sh";
+      commit.gpgsign = true;
+      gpg.format = "ssh";
 
       include.path = ".gitconfig_local";
-
-      #credential.helper = "store";
     };
 
     aliases = {
