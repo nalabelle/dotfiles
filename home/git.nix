@@ -61,7 +61,7 @@
 
       user.signingkey =
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINdghZWKTk7678RA/Vt4LMktDd47yLjYSgLalXEP85sh";
-      commit.gpgsign = true;
+      commit.gpgsign = false;
       gpg.format = "ssh";
 
       include.path = ".gitconfig_local";
