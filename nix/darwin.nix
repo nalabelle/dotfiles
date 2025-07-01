@@ -128,12 +128,12 @@
       "brave-browser"
       "caldigit-docking-utility"
       "coconutbattery"
-      "docker" # docker-desktop
+      "docker-desktop"
       "iterm2"
       "plexamp"
       "raycast"
-      "syncthing"
-      "tailscale"
+      "syncthing-app"
+      "tailscale-app"
       "unnaturalscrollwheels"
     ];
   };
