@@ -6,6 +6,6 @@
     "shfmt@3.11.0",
     "nil@latest",
     "gh@2.74.2",
-    "nixfmt@latest"
+    "nixfmt@0.6.0"
   ]
 }
