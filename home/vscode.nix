@@ -98,10 +98,8 @@ in {
             "QDRANT__STORAGE__SNAPSHOTS_PATH=%h/.local/share/qdrant/snapshots"
             "QDRANT__STORAGE__TEMP_PATH=%h/.local/share/qdrant/temp"
           ];
-          StandardOutput = "append:%h/.local/var/log/qdrant.log";
-          StandardError = "append:%h/.local/var/log/qdrant.log";
           ExecStartPre = ''
-            ${pkgs.coreutils}/bin/mkdir -p $HOME/.local/var/log $HOME/.local/share/qdrant
+            ${pkgs.coreutils}/bin/mkdir -p %h/.local/share/qdrant/storage %h/.local/share/qdrant/snapshots %h/.local/share/qdrant/temp
           '';
         };
         Install = { WantedBy = [ "default.target" ]; };
@@ -111,13 +109,9 @@ in {
         Service = {
           Type = "simple";
           ExecStart = "${pkgs.ollama}/bin/ollama start";
+          ExecStartPost = "${pkgs.ollama}/bin/ollama pull nomic-embed-text";
           Restart = "always";
           LimitNOFILE = 10240;
-          StandardOutput = "append:%h/.local/var/log/ollama.log";
-          StandardError = "append:%h/.local/var/log/ollama.log";
-          ExecStartPre = ''
-            ${pkgs.coreutils}/bin/mkdir -p $HOME/.local/var/log
-          '';
         };
         Install = { WantedBy = [ "default.target" ]; };
       };
