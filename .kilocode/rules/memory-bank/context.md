@@ -2,13 +2,14 @@
 
 ## Current Work Focus
 
-**MCPM Cleanup**: ✅ **PROJECT COMPLETED** - Complete removal of Multi-Cloud Package Manager (MCPM) from dotfiles configuration:
+**GitHub Workflows Enhancement**: ✅ **PROJECT COMPLETED** - Added comprehensive GitHub Actions CI/CD pipeline:
 
-- ✅ Removed mcpm package from both host configurations (tennyson, bst)
-- ✅ Deleted config/mcpm/ directory and configuration files
-- ✅ Removed xdg.configFile references from home/tools.nix
-- ✅ Updated all memory bank documentation to remove MCPM references
-- ✅ Verified configuration builds successfully with `make test`
+- ✅ Added `.github/workflows/pre-commit.yml` for automated code quality validation
+- ✅ Existing workflows: `test-darwin.yml` and `test-home.yml` for comprehensive Nix configuration testing
+- ✅ Pre-commit hooks simplified to remove Nix-specific validation (moved to manual `make test`)
+- ✅ CI now provides lightweight validation while preserving comprehensive local testing
+
+**Previous Achievement**: MCPM Cleanup completed - Complete removal of Multi-Cloud Package Manager from dotfiles configuration.
 
 **Previous Achievement**: ZSH Directory Cleanup and Migration completed - All 4 steps successfully implemented with legacy shell scripts migrated to declarative Nix configuration.
 
@@ -30,7 +31,7 @@
 - **Architecture**: Nix flakes-based with automatic host discovery working reliably
 - **Services**: Qdrant and Ollama configured as launchd user agents with proper logging
 - **Development Environment**: Full stack with Vim (35+ plugins), Zsh, Git (25+ aliases), and Tmux
-- **Quality Assurance**: Pre-commit hooks with shellcheck, formatting, and Nix build validation. **Testing Pattern**: Always use `make test` or `pre-commit run --all-files` for configuration testing, never direct nix commands.
+- **Quality Assurance**: Pre-commit hooks with shellcheck and formatting validation. **Testing Pattern**: Always use `make test` for comprehensive Nix configuration testing (manual trigger required), and `pre-commit run --all-files` for code quality validation.
 - **Editor Integration**: VS Code with Kilocode MCP servers (context7, fetch, github) configured
 
 ## Recent Changes
@@ -67,9 +68,10 @@
 - **System Architecture**: Host-specific configurations override base settings through dedicated directories
 - **Update Pattern**: `nix-refresh` script handles both darwin and home-manager updates with intelligent fallbacks
 - **Quality Controls**: Pre-commit hooks ensure code quality before configuration changes are committed. Running `pre-commit run --all-files` is **required** after any configuration changes to validate:
-  - Nix configuration formatting and evaluation
-  - Shell script syntax and style
-  - Linux deployment compatibility via Docker
+  - Shell script syntax and style via shellcheck
+  - File format validation (JSON, YAML, TOML, XML)
+  - Basic file hygiene (trailing whitespace, line endings, etc.)
+  - **Note**: Nix configuration testing moved to manual `make test` trigger
 - **Service Management**: AI/ML services (Qdrant, Ollama) auto-start and maintain persistent storage
 
 ## Configuration Patterns
