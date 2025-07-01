@@ -1,0 +1,63 @@
+#!/bin/bash
+set -euo pipefail
+
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+NC='\033[0m' # No Color
+
+echo -e "${YELLOW}🚀 Triggering GitHub Actions workflows...${NC}"
+
+# Trigger workflows
+echo "Triggering test-darwin.yml..."
+gh workflow run test-darwin.yml
+echo "Triggering test-home.yml..."
+gh workflow run test-home.yml
+
+echo "Waiting for workflows to start..."
+sleep 15
+
+# Function to get run ID for a workflow triggered by current user
+get_user_run_id() {
+    local workflow="$1"
+    local username
+    username=$(gh api user --jq '.login')
+    gh run list --workflow="$workflow" --user="$username" --limit 10 --json databaseId,status \
+        --jq '.[] | select(.status == "queued" or .status == "in_progress") | .databaseId' | head -1
+}
+
+# Get run IDs
+DARWIN_RUN=$(get_user_run_id "test-darwin.yml")
+HOME_RUN=$(get_user_run_id "test-home.yml")
+
+echo "Darwin run ID: '${DARWIN_RUN:-}'"
+echo "Home run ID: '${HOME_RUN:-}'"
+
+# Check if we got run IDs
+if [[ -z "$DARWIN_RUN" ]]; then
+    echo -e "${RED}❌ No active Darwin workflow found${NC}"
+    exit 1
+fi
+
+if [[ -z "$HOME_RUN" ]]; then
+    echo -e "${RED}❌ No active Home workflow found${NC}"
+    exit 1
+fi
+
+# Watch workflows
+echo -e "${YELLOW}👀 Watching workflows...${NC}"
+
+echo "Watching test-darwin.yml (run ID: $DARWIN_RUN)"
+if ! gh run watch "$DARWIN_RUN" --exit-status; then
+    echo -e "${RED}❌ Darwin workflow failed. Check GitHub Actions for details.${NC}"
+    exit 1
+fi
+
+echo "Watching test-home.yml (run ID: $HOME_RUN)"
+if ! gh run watch "$HOME_RUN" --exit-status; then
+    echo -e "${RED}❌ Home workflow failed. Check GitHub Actions for details.${NC}"
+    exit 1
+fi
+
+echo -e "${GREEN}✅ All workflows completed successfully!${NC}"
