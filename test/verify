@@ -36,7 +36,7 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
     MCP_SETTINGS="$HOME/Library/Application Support/Code/User/globalStorage/kilocode.kilo-code/settings/mcp_settings.json"
 else
     # twain host uses VS Code server path, others use standard XDG path
-    if [ "$USER" = "nalabelle" ] && [ "$(hostname)" = "twain" ]; then
+    if [ "$CONFIG_NAME" = "nalabelle@twain" ]; then
         MCP_SETTINGS="$HOME/.vscode-server/data/User/globalStorage/kilocode.kilo-code/settings/mcp_settings.json"
         echo "   Using VS Code server path for twain host"
     else
