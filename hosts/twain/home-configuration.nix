@@ -1,4 +1,21 @@
-{ config, pkgs, inputs, lib, ... }: {
+{ config, pkgs, inputs, lib, ... }:
+
+let
+  # Read base MCP settings (same logic as home/vscode.nix)
+  baseSettings = lib.importJSON ../../config/vscode/kilocode-mcp-settings.json;
+
+  # Merge base settings with host-specific MCP servers
+  mergedSettings = lib.recursiveUpdate baseSettings {
+    mcpServers = config.vscode.hostMcpServers;
+  };
+
+  # Create the settings file content with pretty JSON formatting
+  settingsFile = pkgs.runCommand "mcp_settings.json" { } ''
+    echo '${
+      lib.generators.toJSON { } mergedSettings
+    }' | ${pkgs.jq}/bin/jq '.' > $out
+  '';
+in {
   # VSCode tunnel service configuration
   systemd.user.services.vscode-tunnel = {
     Unit = {
@@ -58,14 +75,14 @@
   # Ensure proper file permissions for VS Code Server
   # home.file.".vscode-server".recursive = true; # Commenting out as we don't need this
 
-  # Override VSCode settings path for remote server
+  # Disable the standard XDG config file (not used on this machine)
   xdg.configFile."Code/User/globalStorage/kilocode.kilo-code/settings/mcp_settings.json".enable =
     false;
 
+  # VS Code Server MCP settings (uses the same settings file logic as main vscode.nix)
   home.file.".vscode-server/data/User/globalStorage/kilocode.kilo-code/settings/mcp_settings.json" =
     {
-      source = config.lib.file.mkOutOfStoreSymlink
-        "/home/nalabelle/git/dotfiles/config/vscode/kilocode-mcp-settings.json";
+      source = settingsFile;
     };
 
   # Configure home-manager auto-upgrade for flakes
