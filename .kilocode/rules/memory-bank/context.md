@@ -2,11 +2,28 @@
 
 ## Current Work Focus
 
-**Homebrew Cask Name Fix**: ✅ **PROJECT COMPLETED** - Fixed cask naming mismatches causing unnecessary application removals during nix-refresh:
+**Renovate Configuration Migration & CI/CD Infrastructure Consolidation**: ✅ **MAJOR INFRASTRUCTURE UPGRADE COMPLETED**
 
-- ✅ Identified root cause: Configuration used shortened names (`docker`, `syncthing`, `tailscale`) vs actual cask names (`docker-desktop`, `syncthing-app`, `tailscale-app`)
-- ✅ Updated nix/darwin.nix with correct cask names to prevent removal/reinstallation cycles
-- ✅ Verified configuration builds successfully with `make test`
+- **Renovate Configuration Migration (COMPLETED):**
+  - Migrated from external `github.com/nalabelle/renovate-config` repository to local [`git/renovate/default.json5`](git/renovate/default.json5:1)
+  - Updated both [`renovate.json`](renovate.json:1) and [`git/template/renovate.json`](git/template/renovate.json:1) to extend `github>nalabelle/dotfiles//git/renovate/default.json5`
+  - Added timezone support: `"timezone": "America/Los_Angeles"` with schedule `* 1-5 * * 6` (1-5 AM Pacific Time on Saturdays)
+  - Removed Earthfile references, converted custom regex manager for standard Dockerfile usage
+  - Fixed automerge configuration with dedicated packageRule for standalone pin updates
+  - External renovate-config repository can now be safely deleted
+
+- **CI/CD Workflow Consolidation (COMPLETED):**
+  - Consolidated 3 separate workflows (`pre-commit.yml`, `test-home.yml`, `test-darwin.yml`) into single [`.github/workflows/ci.yml`](.github/workflows/ci.yml:1)
+  - Pre-commit runs first, tests only execute if pre-commit passes (eliminates redundant runs)
+  - Updated [`test/test-workflows`](test/test-workflows:1) script to reference new consolidated workflow
+  - All automation scripts synchronized with new structure
+
+- **Infrastructure Benefits:**
+  - Dependency elimination, centralized management, optimized CI pipeline
+  - Error-free operation for both Renovate and CI/CD verification
+  - Template compatibility maintained for all projects
+
+**Previous Achievement**: Homebrew Cask Name Fix completed - Fixed cask naming mismatches causing unnecessary application removals during nix-refresh.
 
 **Previous Achievement**: GitHub Workflows Enhancement completed - Added comprehensive GitHub Actions CI/CD pipeline with automated code quality validation.
 
@@ -37,24 +54,7 @@
 
 ## Recent Changes
 
-### Renovate Configuration Migration (Final Syntax)
-
-- Renovate configuration migrated from external `github.com/nalabelle/renovate-config` to local [`git/renovate/default.json5`](git/renovate/default.json5:1)
-- **Final working configuration:** Both [`renovate.json`](renovate.json:1) and [`git/template/renovate.json`](git/template/renovate.json:1) now extend `github>nalabelle/dotfiles//git/renovate/default.json5`
-- Uses the full path including filename (no colon `:` preset notation), which avoids the "Sub-presets cannot be combined with a custom path" error
-- Directly resolves to the `git/renovate/default.json5` file, maintaining the organized git/ directory structure and JSON5 format
-- All references to the old repository removed; preset resolution path validated for monorepo support
-- Eliminates dependency on a separate renovate-config repository, centralizing all configuration within dotfiles
-- Maintains same Renovate functionality for all template-based projects
-- **Technical solution:** Use `github>nalabelle/dotfiles//git/renovate/default.json5` as the extend path in all Renovate configs
-
-#### Timezone Support and Schedule
-
-- Added `"timezone": "America/Los_Angeles"` to [`git/renovate/default.json5`](git/renovate/default.json5:1)
-- Renovate schedule now runs **1 AM to 5 AM Pacific Time (America/Los_Angeles) on Saturdays** (`* 1-5 * * 6`)
-- All schedule interpretation now happens in Pacific Time instead of UTC
-- Documentation updated to clarify Pacific Time scheduling
-- **Benefits:** Runs during low-traffic hours, completes before typical work hours on Saturday, and aligns with likely developer timezone
+- **Renovate configuration migration and CI/CD workflow consolidation completed. See Current Work Focus for details.**
 
 ### Kilocode Integration Stabilized
 
@@ -72,9 +72,9 @@
 
 ### Immediate Priorities
 
-1. **Memory Bank Validation**: Verify updated memory bank accuracy through practical usage
-2. **Configuration Stability**: Monitor system reliability across both host configurations
-3. **Performance Optimization**: Review activation script efficiency and resource usage
+- Monitor infrastructure stability and validate consolidated Renovate and CI/CD workflows in practical usage.
+- Continue Memory Bank validation and configuration stability checks.
+- Review activation script efficiency and resource usage.
 
 ### Potential Areas for Enhancement
 
