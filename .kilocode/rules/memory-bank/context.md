@@ -48,6 +48,14 @@
 - Maintains same Renovate functionality for all template-based projects
 - **Technical solution:** Use `github>nalabelle/dotfiles//git/renovate/default.json5` as the extend path in all Renovate configs
 
+#### Timezone Support and Schedule
+
+- Added `"timezone": "America/Los_Angeles"` to [`git/renovate/default.json5`](git/renovate/default.json5:1)
+- Renovate schedule now runs **1 AM to 5 AM Pacific Time (America/Los_Angeles) on Saturdays** (`* 1-5 * * 6`)
+- All schedule interpretation now happens in Pacific Time instead of UTC
+- Documentation updated to clarify Pacific Time scheduling
+- **Benefits:** Runs during low-traffic hours, completes before typical work hours on Saturday, and aligns with likely developer timezone
+
 ### Kilocode Integration Stabilized
 
 - Workaround implemented for Kilocode extension symlink exclusion bug

@@ -14,7 +14,11 @@
     "docker:enableMajor",
     "regexManagers:dockerfileVersions" //Like the regex customManager below for Earthfiles
   ],
-  "schedule": ["* 8-12 * * 6"],
+  // schedule uses cron syntax: minute hour day-of-month month day-of-week
+  // "* 1-5 * * 6" means: any minute, between 1 AM and 5 AM, any day of month, any month, on Saturday (day 6)
+  // This schedules Renovate to run between 1 AM to 5 AM Pacific Time on Saturdays only
+  "schedule": ["* 1-5 * * 6"],
+  "timezone": "America/Los_Angeles",
   "dockerfile": {
     // Support Earthfile as dockerfile for now
     "fileMatch": ["(^|/|\\.)Earthfile$"]
