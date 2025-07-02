@@ -63,6 +63,34 @@ For each template improvement you want to adopt:
 - Generally safe to adopt template version
 - Template versions usually have better/newer standards
 
+#### Renovate configuration migration
+
+**Important:** Projects may still reference the deprecated external Renovate configuration repository.
+
+- **What to look for:** Check if `renovate.json` extends `github>nalabelle/renovate-config`
+- **Required action:** Update to use the new dotfiles-based configuration:
+
+  ```json
+  {
+    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+    "extends": ["github>nalabelle/dotfiles//git/renovate/default.json5"]
+  }
+  ```
+
+- **Context:** The external `renovate-config` repository has been migrated and consolidated into the dotfiles repository at `git/renovate/default.json5`
+- **Template reference:** The git template already uses the new configuration path
+
+#### Pre-commit workflow duplication check
+
+Before adding or updating pre-commit workflows from the template:
+
+- **Check for existing pre-commit workflows** in the project. Some repositories may already have pre-commit integrated into other workflows (such as `ci.yml` or consolidated CI/CD files).
+- **How to identify existing pre-commit setups:**
+  - Inspect `.github/workflows/` for any workflow files that include pre-commit steps.
+  - Look for jobs or steps named `pre-commit` or referencing `pre-commit run` in consolidated workflows.
+  - Avoid creating duplicate standalone pre-commit workflows if pre-commit is already covered by another workflow.
+- Only add or update pre-commit workflows if they are missing or not already handled by existing CI/CD configuration.
+
 ### Environment files (.envrc, devbox.json)
 
 - Merge carefully - preserve project-specific dependencies
