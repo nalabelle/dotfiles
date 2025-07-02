@@ -15,16 +15,42 @@ RULES_DIR="$HOME/.kilocode/rules"
 if [ -d "$RULES_DIR" ]; then
     echo "✅ Rules directory exists: $RULES_DIR"
 
-    for rule_file in global.md python.md typescript.md; do
+    # Dynamically determine expected rule files from source config
+    SRC_RULES_DIR="$(dirname "$0")/../config/kilocode/rules"
+    if [ ! -d "$SRC_RULES_DIR" ]; then
+        echo "❌ Source rules directory missing: $SRC_RULES_DIR"
+        exit 1
+    fi
+
+    mapfile -t expected_files < <(cd "$SRC_RULES_DIR" && find . -maxdepth 1 -name '*.md' -printf '%f\n' | sort)
+    mapfile -t deployed_files < <(cd "$RULES_DIR" && find . -maxdepth 1 -name '*.md' -printf '%f\n' 2>/dev/null | sort)
+
+    echo "Expected rule files: ${expected_files[*]}"
+    echo "Deployed rule files: ${deployed_files[*]}"
+
+    missing=0
+    for rule_file in "${expected_files[@]}"; do
         if [ -f "$RULES_DIR/$rule_file" ]; then
             echo "✅ Rule file deployed: $rule_file"
             echo "   Content preview:"
             head -3 "$RULES_DIR/$rule_file" | sed 's/^/   /'
         else
             echo "❌ Missing rule file: $rule_file"
-            exit 1
+            missing=1
         fi
     done
+
+    extra=0
+    for rule_file in "${deployed_files[@]}"; do
+        if [[ ! " ${expected_files[*]} " =~ $rule_file ]]; then
+            echo "❌ Extra rule file deployed: $rule_file"
+            extra=1
+        fi
+    done
+
+    if [ $missing -ne 0 ] || [ $extra -ne 0 ]; then
+        exit 1
+    fi
 else
     echo "❌ Rules directory missing: $RULES_DIR"
     echo "   Home manager did not deploy Kilo Code rule files"
@@ -99,10 +125,11 @@ echo
 # Final summary
 echo "=== Deployment Verification Complete ==="
 RULES_COUNT=$(find "$RULES_DIR" -name "*.md" 2>/dev/null | wc -l)
+EXPECTED_COUNT=$(find "$SRC_RULES_DIR" -maxdepth 1 -name '*.md' 2>/dev/null | wc -l)
 MCP_EXISTS=$([ -f "$MCP_SETTINGS" ] && echo "Yes" || echo "No")
 
 echo "Results:"
-echo "  - Rule files deployed: $RULES_COUNT/3"
+echo "  - Rule files deployed: $RULES_COUNT/$EXPECTED_COUNT"
 echo "  - MCP settings deployed: $MCP_EXISTS"
 if [[ "$OSTYPE" == "darwin"* ]]; then
     echo "  - macOS Application Support paths used correctly: ✅"
@@ -110,7 +137,7 @@ else
     echo "  - Linux XDG paths used correctly: ✅"
 fi
 
-if [ "$RULES_COUNT" -eq 3 ] && [ -f "$MCP_SETTINGS" ]; then
+if [ "$RULES_COUNT" -eq "$EXPECTED_COUNT" ] && [ -f "$MCP_SETTINGS" ]; then
     echo
     if [[ "$OSTYPE" == "darwin"* ]]; then
         echo "🎉 SUCCESS: Home manager correctly deployed all Kilo Code configurations to macOS!"
