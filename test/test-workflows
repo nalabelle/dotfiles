@@ -9,13 +9,11 @@ NC='\033[0m' # No Color
 
 echo -e "${YELLOW}🚀 Triggering GitHub Actions workflows...${NC}"
 
-# Trigger workflows
-echo "Triggering test-darwin.yml..."
-gh workflow run test-darwin.yml
-echo "Triggering test-home.yml..."
-gh workflow run test-home.yml
+# Trigger consolidated workflow
+echo "Triggering ci.yml..."
+gh workflow run ci.yml
 
-echo "Waiting for workflows to start..."
+echo "Waiting for workflow to start..."
 sleep 15
 
 # Function to get run ID for a workflow triggered by current user
@@ -27,37 +25,24 @@ get_user_run_id() {
         --jq '.[] | select(.status == "queued" or .status == "in_progress") | .databaseId' | head -1
 }
 
-# Get run IDs
-DARWIN_RUN=$(get_user_run_id "test-darwin.yml")
-HOME_RUN=$(get_user_run_id "test-home.yml")
+# Get run ID
+CI_RUN=$(get_user_run_id "ci.yml")
 
-echo "Darwin run ID: '${DARWIN_RUN:-}'"
-echo "Home run ID: '${HOME_RUN:-}'"
+echo "CI run ID: '${CI_RUN:-}'"
 
-# Check if we got run IDs
-if [[ -z "$DARWIN_RUN" ]]; then
-    echo -e "${RED}❌ No active Darwin workflow found${NC}"
+# Check if we got run ID
+if [[ -z "$CI_RUN" ]]; then
+    echo -e "${RED}❌ No active CI workflow found${NC}"
     exit 1
 fi
 
-if [[ -z "$HOME_RUN" ]]; then
-    echo -e "${RED}❌ No active Home workflow found${NC}"
+# Watch workflow
+echo -e "${YELLOW}👀 Watching workflow...${NC}"
+
+echo "Watching ci.yml (run ID: $CI_RUN)"
+if ! gh run watch "$CI_RUN" --exit-status; then
+    echo -e "${RED}❌ CI workflow failed. Check GitHub Actions for details.${NC}"
     exit 1
 fi
 
-# Watch workflows
-echo -e "${YELLOW}👀 Watching workflows...${NC}"
-
-echo "Watching test-darwin.yml (run ID: $DARWIN_RUN)"
-if ! gh run watch "$DARWIN_RUN" --exit-status; then
-    echo -e "${RED}❌ Darwin workflow failed. Check GitHub Actions for details.${NC}"
-    exit 1
-fi
-
-echo "Watching test-home.yml (run ID: $HOME_RUN)"
-if ! gh run watch "$HOME_RUN" --exit-status; then
-    echo -e "${RED}❌ Home workflow failed. Check GitHub Actions for details.${NC}"
-    exit 1
-fi
-
-echo -e "${GREEN}✅ All workflows completed successfully!${NC}"
+echo -e "${GREEN}✅ Workflow completed successfully!${NC}"
