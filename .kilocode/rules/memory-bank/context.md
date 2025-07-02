@@ -37,6 +37,17 @@
 
 ## Recent Changes
 
+### Renovate Configuration Migration (Final Syntax)
+
+- Renovate configuration migrated from external `github.com/nalabelle/renovate-config` to local [`git/renovate/default.json5`](git/renovate/default.json5:1)
+- **Final working configuration:** Both [`renovate.json`](renovate.json:1) and [`git/template/renovate.json`](git/template/renovate.json:1) now extend `github>nalabelle/dotfiles//git/renovate/default.json5`
+- Uses the full path including filename (no colon `:` preset notation), which avoids the "Sub-presets cannot be combined with a custom path" error
+- Directly resolves to the `git/renovate/default.json5` file, maintaining the organized git/ directory structure and JSON5 format
+- All references to the old repository removed; preset resolution path validated for monorepo support
+- Eliminates dependency on a separate renovate-config repository, centralizing all configuration within dotfiles
+- Maintains same Renovate functionality for all template-based projects
+- **Technical solution:** Use `github>nalabelle/dotfiles//git/renovate/default.json5` as the extend path in all Renovate configs
+
 ### Kilocode Integration Stabilized
 
 - Workaround implemented for Kilocode extension symlink exclusion bug
