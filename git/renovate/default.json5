@@ -35,6 +35,13 @@
   ],
   "packageRules": [
     {
+      // Add 2-week delay for Node.js updates in DevBox configurations
+      // Avoids needing to run builds by waiting for packages to be cached
+      "matchFileNames": ["devbox.json"],
+      "matchPackagePatterns": ["^nodejs(_\\d+)?$"],
+      "stabilityDays": 14
+    },
+    {
       "groupName": "all non-major dependencies, including digests",
       "groupSlug": "all-minor-patch-digest",
       "matchPackagePatterns": ["*"],
