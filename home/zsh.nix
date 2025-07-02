@@ -42,6 +42,15 @@
     '';
 
     initContent = ''
+      # Homebrew environment setup (essential for PATH and completions)
+      HOMEBREW=""
+      [ -d /opt/homebrew ] && HOMEBREW="/opt/homebrew"
+      [ -d /home/linuxbrew/.linuxbrew ] && HOMEBREW="/home/linuxbrew/.linuxbrew"
+      if [ -n "$HOMEBREW" ] && [ -d "$HOMEBREW" ]; then
+        eval "$("$HOMEBREW/bin/brew" shellenv)"
+        fpath+=("$(brew --prefix)/share/zsh/site-functions")
+      fi
+
       # Globbing options (no built-in Home Manager support)
       setopt nocaseglob
       setopt extendedglob
