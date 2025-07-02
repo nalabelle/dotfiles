@@ -2,7 +2,8 @@
   "mcpServers": {
     "context7": {
       "command": "nix",
-      "args": ["shell", "nixpkgs#nodejs", "--command", "npx", "--", "@upstash/context7-mcp"]
+      "args": ["shell", "nixpkgs#nodejs", "--command", "npx", "--", "@upstash/context7-mcp"],
+      "alwaysAllow": ["resolve-library-id", "get-library-docs"]
     },
     "fetch": {
       "command": "nix",
