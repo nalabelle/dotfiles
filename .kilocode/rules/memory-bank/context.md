@@ -2,26 +2,20 @@
 
 ## Current Work Focus
 
-**Renovate Configuration Migration & CI/CD Infrastructure Consolidation**: ✅ **MAJOR INFRASTRUCTURE UPGRADE COMPLETED**
+**macOS GUI Application PATH Inheritance Fix**: ✅ **MAJOR SYSTEM INTEGRATION ISSUE RESOLVED**
 
-- **Renovate Configuration Migration (COMPLETED):**
-  - Migrated from external `github.com/nalabelle/renovate-config` repository to local [`git/renovate/default.json5`](git/renovate/default.json5:1)
-  - Updated both [`renovate.json`](renovate.json:1) and [`git/template/renovate.json`](git/template/renovate.json:1) to extend `github>nalabelle/dotfiles//git/renovate/default.json5`
-  - Added timezone support: `"timezone": "America/Los_Angeles"` with schedule `* 1-5 * * 6` (1-5 AM Pacific Time on Saturdays)
-  - Removed Earthfile references, converted custom regex manager for standard Dockerfile usage
-  - Fixed automerge configuration with dedicated packageRule for standalone pin updates
-  - External renovate-config repository can now be safely deleted
+- **Problem Identified**: VS Code and other GUI applications launched from Finder didn't inherit user's development environment PATH, causing "command not found" errors for `gh`, `nix`, and other development tools
+- **Root Cause**: macOS GUI applications launched from Finder use launchd's default PATH, not the user's shell environment PATH
+- **Solution Implemented**:
+  - Consolidated nix-darwin activation scripts from invalid individual `activationScripts."custom-name"` to proper `system.activationScripts.postActivation.text`
+  - Fixed Homebrew analytics command to run with proper user environment: `sudo -u ${username} HOME="/Users/${username}" /opt/homebrew/bin/brew analytics off`
+  - Implemented `launchctl config user path` to set persistent PATH for GUI applications launched from Finder
+  - Documented inspection and reset commands for troubleshooting launchctl configuration
 
-- **CI/CD Workflow Consolidation (COMPLETED):**
-  - Consolidated 3 separate workflows (`pre-commit.yml`, `test-home.yml`, `test-darwin.yml`) into single [`.github/workflows/ci.yml`](.github/workflows/ci.yml:1)
-  - Pre-commit runs first, tests only execute if pre-commit passes (eliminates redundant runs)
-  - Updated [`test/test-workflows`](test/test-workflows:1) script to reference new consolidated workflow
-  - All automation scripts synchronized with new structure
+- **Technical Discovery**: nix-darwin only supports three customizable activation scripts: `preActivation`, `extraActivation`, and `postActivation` - custom script names are invalid
+- **Results**: VS Code launched from Finder now has access to complete development environment (Nix packages, Home Manager tools, Homebrew applications)
 
-- **Infrastructure Benefits:**
-  - Dependency elimination, centralized management, optimized CI pipeline
-  - Error-free operation for both Renovate and CI/CD verification
-  - Template compatibility maintained for all projects
+**Previous Achievement**: Renovate Configuration Migration & CI/CD Infrastructure Consolidation completed - Migrated from external renovate-config repository to local configuration with consolidated GitHub Actions workflows.
 
 **Previous Achievement**: Homebrew Cask Name Fix completed - Fixed cask naming mismatches causing unnecessary application removals during nix-refresh.
 

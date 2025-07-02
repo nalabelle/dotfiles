@@ -472,6 +472,8 @@
 				<key>Red Component</key>
 				<integer>0</integer>
 			</dict>
+			<key>Load Shell Integration Automatically</key>
+			<false/>
 			<key>Match Background Color</key>
 			<dict>
 				<key>Alpha Component</key>

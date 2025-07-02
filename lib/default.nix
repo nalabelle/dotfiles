@@ -13,6 +13,11 @@ let
         ../nix/nixos.nix
         ../nix/darwin.nix
         ../hosts/${hostname}/darwin-configuration.nix
+        inputs.home-manager.darwinModules.home-manager
+        {
+          home-manager.useGlobalPkgs = true;
+          home-manager.useUserPackages = true;
+        }
       ];
       specialArgs = { inherit inputs username hostname; };
     };

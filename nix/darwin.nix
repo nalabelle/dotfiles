@@ -24,30 +24,46 @@
     primaryUser = username;
 
     # activationScripts are executed every time you boot the system or run `nixos-rebuild` / `darwin-rebuild`.
-    activationScripts."activate-settings".text = ''
-      # activateSettings -u will reload the settings from the database and apply them to the current session,
-      # so we do not need to logout and login again to make the changes take effect.
-      /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
-    '';
+    # Only preActivation, extraActivation, and postActivation can be customized.
+    activationScripts.postActivation.text = ''
+      echo "Running custom darwin activation script for user: ${username}"
 
-    activationScripts."24-hour-login-clock".text = ''
       # Set 24-hour clock on login. The "global system" setting below only applies to user clock I guess?
+      echo "Setting 24-hour clock format..."
       defaults write /Library/Preferences/.GlobalPreferences.plist AppleICUForce24HourTime -bool true
-    '';
 
-    activationScripts."disable-homebrew-analytics".text = ''
       # Attempt to disable Homebrew analytics
       if [ -x "/opt/homebrew/bin/brew" ]; then
         echo "Attempting to disable Homebrew analytics..."
-        /opt/homebrew/bin/brew analytics off
+        sudo -u ${username} HOME="/Users/${username}" /opt/homebrew/bin/brew analytics off
       fi
-    '';
 
-    activationScripts."create-screenshots-directory".text = ''
       # Create the Screenshots directory if it doesn't exist
       mkdir -p "/Users/${username}/Screenshots"
       # Set ownership to the user
       chown "${username}:staff" "/Users/${username}/Screenshots"
+
+      # Global PATH for GUI applications launched from Finder
+      # Uses launchctl to configure PATH in user's launchd domain
+      # Sources:
+      #  https://stackoverflow.com/questions/51636338/what-does-launchctl-config-user-path-do/70510488
+      #  https://apple.stackexchange.com/questions/51677/how-to-set-path-for-finder-launched-applications/198282
+      #
+      # NOTE: This sets PATH globally across all users on the system, but since this is a
+      # single-user system configuration, this is acceptable.
+      #
+      # You can query launchd's current custom PATH setting (will return an empty string if you haven't configured one) with:
+      # launchctl getenv PATH
+      #
+      # You can query the default PATH by executing:
+      # sysctl -n user.cs_path
+      #
+      launchctl config user path /Users/${username}/.nix-profile/bin:/etc/profiles/per-user/${username}/bin:/opt/homebrew/bin:/run/current-system/sw/bin:/nix/var/nix/profiles/default/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+
+      # activateSettings -u will reload the settings from the database and apply them to the current session,
+      # so we do not need to logout and login again to make the changes take effect.
+      echo "Activating system settings..."
+      /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
     '';
 
     defaults = {
@@ -116,6 +132,7 @@
   # Enable Homebrew and configure it based on the current machine
   homebrew = {
     enable = true;
+
     onActivation = {
       autoUpdate = true;
       cleanup = "zap";

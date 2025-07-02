@@ -91,6 +91,35 @@ The system uses **launchd user agents** for service management:
 - **Ollama LLM Service**: Background service for local AI model serving
 - **Configuration**: Defined in [`nix/darwin.nix`](nix/darwin.nix:151) with proper logging and resource limits
 
+### macOS Activation Scripts Architecture
+
+**Critical Discovery**: nix-darwin only supports three customizable activation scripts:
+
+- **`preActivation`**: Runs before system configuration
+- **`extraActivation`**: Runs during system configuration
+- **`postActivation`**: Runs after system configuration (used for Homebrew-dependent operations)
+
+**Invalid Pattern**: Individual `activationScripts."custom-name"` entries are not supported and will be silently ignored.
+
+**Current Implementation**: All custom activation logic consolidated into `postActivation.text` including:
+
+- System settings activation
+- Homebrew analytics disable (with proper user environment)
+- Screenshot directory creation
+- **GUI PATH Configuration**: `launchctl config user path` for Finder-launched applications
+
+**Key Technical Pattern**:
+
+```nix
+system.activationScripts.postActivation.text = ''
+  # Homebrew operations require user context
+  sudo -u ${username} HOME="/Users/${username}" /opt/homebrew/bin/brew analytics off
+
+  # GUI application PATH inheritance
+  launchctl config user path /Users/${username}/.nix-profile/bin:...
+'';
+```
+
 ### Environment Integration
 
 - **Direnv**: Automatic environment loading for project directories

@@ -13,6 +13,7 @@
 ### System Integration
 
 - **macOS Integration**: Native system preferences, launchd services, Homebrew bridge
+- **GUI Application Environment**: launchctl PATH configuration for Finder-launched applications
 - **Linux Support**: Home Manager configurations with systemd patterns
 - **Cross-Platform**: Unified configuration with platform-specific adaptations
 
@@ -24,6 +25,27 @@
 - **Starship**: Cross-shell prompt with Git integration and status indicators
 - **Tmux**: Terminal multiplexer with vi key bindings and custom status line
 - **FZF**: Fuzzy finder with shell and tmux integration
+
+#### Home Manager Zsh Configuration
+
+**programs.zsh.initContent** supports ordered initialization with `lib.mkOrder`:
+
+- **500 (mkBefore)**: Early initialization (replaces initExtraFirst)
+- **550**: Before completion initialization (replaces initExtraBeforeCompInit)
+- **1000 (default)**: General configuration (replaces initExtra)
+- **1500 (mkAfter)**: Last to run configuration
+
+**Pattern for multiple initialization phases:**
+
+```nix
+initContent = let
+  zshConfigEarlyInit = lib.mkOrder 500 "early initialization";
+  zshConfig = lib.mkOrder 1000 "general configuration";
+in
+  lib.mkMerge [ zshConfigEarlyInit zshConfig ];
+```
+
+**Critical for direnv integration**: Homebrew setup must use `lib.mkOrder 500` to ensure PATH is properly established before direnv hooks initialize.
 
 ### Editor & Development Tools
 
