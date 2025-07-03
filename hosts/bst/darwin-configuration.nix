@@ -5,6 +5,6 @@
 
     brews = [ "graphite" ];
 
-    casks = [ "dbeaver-community" "linear-linear" ];
+    casks = [ "dbeaver-community" "linear-linear" "slack" ];
   };
 }

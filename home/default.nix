@@ -16,8 +16,6 @@
 
   home.stateVersion = "24.11";
 
-  home.packages = with pkgs; [ curl fzf ripgrep htop bat jq tmux wget less ];
-
   programs.home-manager.enable = true;
   services.home-manager = lib.mkIf pkgs.stdenv.isLinux {
     autoExpire = {
@@ -33,7 +31,7 @@
 
   nix = {
     enable = true;
-    package = pkgs.nix;
+    package = lib.mkDefault pkgs.nix;
     settings = { experimental-features = [ "nix-command" "flakes" ]; };
     gc = {
       automatic = true;

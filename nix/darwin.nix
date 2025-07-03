@@ -3,20 +3,17 @@
 
   networking.computerName = hostname;
   networking.hostName = hostname;
-  nix = {
-    settings.trusted-users = [ username ];
-    extraOptions = ''
-      experimental-features = nix-command flakes
-    '';
-  };
   users.users."${username}".home = "/Users/${username}";
 
   # Upgrade ancient osx bash
   environment.systemPackages = [ pkgs.bash ];
   environment.systemPath = lib.mkBefore [
     # User-specific Nix profiles (needed for GUI applications)
-    "/Users/${username}/.nix-profile/bin"
-    "/nix/var/nix/profiles/per-user/${username}/bin"
+    # When useUserPackages = true: packages managed by nix-darwin in /etc/profiles/per-user/
+    # Note for system setup: root is in /nix/var/nix/profiles/per-user/root
+    # When useUserPackages = false: packages managed by user in ~/.nix-profile
+    # Since this is a darwin setup, we'll pick the etc version
+    "/etc/profiles/per-user/${username}/bin"
     # Homebrew paths
     "/opt/homebrew/bin"
     "/opt/homebrew/sbin"

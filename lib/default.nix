@@ -7,9 +7,9 @@ let
 
   # Create a darwin configuration for a host
   mkDarwinSystem = { hostname }:
-    inputs.nix-darwin.lib.darwinSystem {
-      system = "aarch64-darwin";
-      modules = [
+   inputs.nix-darwin.lib.darwinSystem {
+     system = "aarch64-darwin";
+     modules = [
         ../nix/nixos.nix
         ../nix/darwin.nix
         ../hosts/${hostname}/darwin-configuration.nix
@@ -17,6 +17,15 @@ let
         {
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
+          home-manager.users.${username} = {
+            imports = [
+              ../home
+              (if builtins.pathExists ../hosts/${hostname}/home-configuration.nix then
+                ../hosts/${hostname}/home-configuration.nix
+              else
+                { })
+            ];
+          };
         }
       ];
       specialArgs = { inherit inputs username hostname; };

@@ -73,9 +73,11 @@ refresh_home_manager() {
 main() {
   case "$system" in
     "Darwin")
+      # Darwin systems use integrated home-manager via nix-darwin
       refresh_darwin "$flake_path" "$hostname"
-      ;& # Fall through to home-manager
+      ;;
     *)
+      # Non-Darwin systems use standalone home-manager
       refresh_home_manager "$flake_path" "$hostname"
       ;;
   esac

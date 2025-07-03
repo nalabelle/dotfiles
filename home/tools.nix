@@ -1,5 +1,17 @@
 { config, lib, pkgs, system ? builtins.currentSystem, ... }: {
   home.packages = with pkgs; [
+    curl
+    fzf
+    ripgrep
+    htop
+    bat
+    jq
+    tmux
+    wget
+    less
+    watch
+
+
     # Dev tools
     act
     gh
