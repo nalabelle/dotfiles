@@ -1,4 +1,4 @@
-{ pkgs, system, flakeInputs, config, lib, vars, hostname, username, ... }: {
+{ pkgs, system, flakeInputs, config, lib, vars, hostname, username,... }: {
   nixpkgs.hostPlatform = "aarch64-darwin";
 
   networking.computerName = hostname;
@@ -13,6 +13,14 @@
 
   # Upgrade ancient osx bash
   environment.systemPackages = [ pkgs.bash ];
+  environment.systemPath = lib.mkBefore [
+    # User-specific Nix profiles (needed for GUI applications)
+    "/Users/${username}/.nix-profile/bin"
+    "/nix/var/nix/profiles/per-user/${username}/bin"
+    # Homebrew paths
+    "/opt/homebrew/bin"
+    "/opt/homebrew/sbin"
+  ];
 
   security.pam.services.sudo_local = {
     enable = true;
@@ -44,15 +52,12 @@
       chown "${username}:staff" "/Users/${username}/Screenshots"
 
       # Global PATH for GUI applications launched from Finder
-      # This must be synchronized with home.sessionPath in home/shell.nix
-      #
-      # Components (in order of precedence):
-      # 1. User's Nix profile (Home Manager packages)
-      # 2. Per-user system packages
-      # 3. Homebrew packages (/opt/homebrew/bin + /opt/homebrew/sbin)
-      # 4. System-wide Nix packages
-      # 5. Default Nix profile
-      # 6. Standard system paths (/usr/local/bin + default system paths)
+      # Uses nix-darwin's systemPath which includes:
+      # - User-specific Nix profiles (/Users/${username}/.nix-profile/bin, per-user profiles)
+      # - Homebrew paths (/opt/homebrew/bin, /opt/homebrew/sbin)
+      # - System packages (/run/current-system/sw/bin)
+      # - Default Nix profile (/nix/var/nix/profiles/default/bin)
+      # - Standard system paths (/usr/local/bin, /usr/bin, etc.)
       #
       # Sources:
       #  https://stackoverflow.com/questions/51636338/what-does-launchctl-config-user-path-do/70510488
@@ -62,7 +67,8 @@
       # - Query current custom PATH: launchctl getenv PATH
       # - Query default system PATH: sysctl -n user.cs_path
       #
-      launchctl config user path /Users/${username}/.nix-profile/bin:/etc/profiles/per-user/${username}/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/run/current-system/sw/bin:/nix/var/nix/profiles/default/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+      echo "Setting GUI application PATH: ${config.environment.systemPath}"
+      launchctl config user path "${config.environment.systemPath}"
 
       # activateSettings -u will reload the settings from the database and apply them to the current session,
       # so we do not need to logout and login again to make the changes take effect.
@@ -156,6 +162,7 @@
       "syncthing-app"
       "tailscale-app"
       "unnaturalscrollwheels"
+      "visual-studio-code"
     ];
   };
 

@@ -1,25 +1,23 @@
 { config, lib, pkgs, ... }:
+let profileSettings = ''
+  ulimit -n 10240
 
+  # Homebrew
+  HOMEBREW=""
+  [ -d /opt/homebrew ] && HOMEBREW="/opt/homebrew"
+  [ -d /home/linuxbrew/.linuxbrew ] && HOMEBREW="/home/linuxbrew/.linuxbrew"
+  if [ -n "$HOMEBREW" ] && [ -d "$HOMEBREW" ]; then
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+      # On macOS: Get Homebrew env vars but let nix-darwin manage PATH
+      eval "$("$HOMEBREW/bin/brew" shellenv | grep -v 'export PATH')"
+    else
+      # On Linux: Use full Homebrew shellenv including PATH
+      eval "$("$HOMEBREW/bin/brew" shellenv)"
+    fi
+  fi
+'';
+in
 {
-  # Unified PATH management using Home Manager's declarative approach
-  # This ensures consistent PATH across shell environments and GUI applications
-  #
-  # IMPORTANT: The launchctl PATH in nix/darwin.nix must be kept synchronized
-  # with these components to ensure GUI applications have the same environment
-  home.sessionPath = [
-    # Homebrew paths (platform-specific)
-    (if pkgs.stdenv.isDarwin then
-      "/opt/homebrew/bin"
-    else
-      "/home/linuxbrew/.linuxbrew/bin")
-    (if pkgs.stdenv.isDarwin then
-      "/opt/homebrew/sbin"
-    else
-      "/home/linuxbrew/.linuxbrew/sbin")
-    # Standard system paths that may not be in default PATH
-    "/usr/local/bin"
-  ];
-
   # Environment variables from .profile that aren't already handled by other modules
   home.sessionVariables = {
     # Core environment variables
@@ -76,15 +74,16 @@
   # Configure bash
   programs.bash = {
     enable = true;
+    profileExtra = profileSettings;
     initExtra = ''
-      # Set file descriptor limit (from .profile)
-      ulimit -n 10240
+      [[ -f ~/.profile ]] && . ~/.profile
     '';
   };
 
-  # Configure zsh ulimit (this will be merged with existing zsh config)
-  programs.zsh.initContent = lib.mkBefore ''
-    # Set file descriptor limit (from .profile)
-    ulimit -n 10240
-  '';
+  programs.zsh = {
+    profileExtra = profileSettings;
+    initContent = lib.mkBefore ''
+      [[ -f ~/.profile ]] && . ~/.profile
+    '';
+  };
 }

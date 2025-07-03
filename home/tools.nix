@@ -5,10 +5,8 @@
     gh
     git-lfs
     devbox
-    convco
     mkcert
     _1password-cli
-    copier
 
     # Environment
     direnv
@@ -107,6 +105,8 @@
   programs.direnv = {
     enable = true;
     enableZshIntegration = true;
+    enableBashIntegration = true;
+    nix-direnv.enable = true;
     config = {
       global = {
         strict_env = true;

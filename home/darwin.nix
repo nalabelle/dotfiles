@@ -4,6 +4,13 @@
       if [ -e '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh' ]; then
         . '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh'
       fi
+
+      # Fix PATH duplication: use nix-darwin's systemPath instead of nix-daemon.sh PATH
+      # This preserves all other Nix environment variables while using the clean PATH
+      DARWIN_PATH=$(launchctl getenv PATH 2>/dev/null)
+      if [ -n "$DARWIN_PATH" ]; then
+        export PATH="$DARWIN_PATH"
+      fi
     '';
 
     targets.darwin = {
