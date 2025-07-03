@@ -85,6 +85,8 @@
         mru-spaces = false;
         tilesize = 32;
         largesize = 64;
+        # Hot corner configuration
+        wvous-br-corner = 13; # Bottom right corner - Lock Screen
       };
       NSGlobalDomain = {
         AppleICUForce24HourTime = true;
