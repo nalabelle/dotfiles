@@ -1,6 +1,25 @@
 { config, lib, pkgs, ... }:
 
 {
+  # Unified PATH management using Home Manager's declarative approach
+  # This ensures consistent PATH across shell environments and GUI applications
+  #
+  # IMPORTANT: The launchctl PATH in nix/darwin.nix must be kept synchronized
+  # with these components to ensure GUI applications have the same environment
+  home.sessionPath = [
+    # Homebrew paths (platform-specific)
+    (if pkgs.stdenv.isDarwin then
+      "/opt/homebrew/bin"
+    else
+      "/home/linuxbrew/.linuxbrew/bin")
+    (if pkgs.stdenv.isDarwin then
+      "/opt/homebrew/sbin"
+    else
+      "/home/linuxbrew/.linuxbrew/sbin")
+    # Standard system paths that may not be in default PATH
+    "/usr/local/bin"
+  ];
+
   # Environment variables from .profile that aren't already handled by other modules
   home.sessionVariables = {
     # Core environment variables

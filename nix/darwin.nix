@@ -44,21 +44,25 @@
       chown "${username}:staff" "/Users/${username}/Screenshots"
 
       # Global PATH for GUI applications launched from Finder
-      # Uses launchctl to configure PATH in user's launchd domain
+      # This must be synchronized with home.sessionPath in home/shell.nix
+      #
+      # Components (in order of precedence):
+      # 1. User's Nix profile (Home Manager packages)
+      # 2. Per-user system packages
+      # 3. Homebrew packages (/opt/homebrew/bin + /opt/homebrew/sbin)
+      # 4. System-wide Nix packages
+      # 5. Default Nix profile
+      # 6. Standard system paths (/usr/local/bin + default system paths)
+      #
       # Sources:
       #  https://stackoverflow.com/questions/51636338/what-does-launchctl-config-user-path-do/70510488
       #  https://apple.stackexchange.com/questions/51677/how-to-set-path-for-finder-launched-applications/198282
       #
-      # NOTE: This sets PATH globally across all users on the system, but since this is a
-      # single-user system configuration, this is acceptable.
+      # Debugging commands:
+      # - Query current custom PATH: launchctl getenv PATH
+      # - Query default system PATH: sysctl -n user.cs_path
       #
-      # You can query launchd's current custom PATH setting (will return an empty string if you haven't configured one) with:
-      # launchctl getenv PATH
-      #
-      # You can query the default PATH by executing:
-      # sysctl -n user.cs_path
-      #
-      launchctl config user path /Users/${username}/.nix-profile/bin:/etc/profiles/per-user/${username}/bin:/opt/homebrew/bin:/run/current-system/sw/bin:/nix/var/nix/profiles/default/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+      launchctl config user path /Users/${username}/.nix-profile/bin:/etc/profiles/per-user/${username}/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/run/current-system/sw/bin:/nix/var/nix/profiles/default/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
 
       # activateSettings -u will reload the settings from the database and apply them to the current session,
       # so we do not need to logout and login again to make the changes take effect.

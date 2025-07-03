@@ -41,28 +41,34 @@
       compinit -d ${config.xdg.cacheHome}/zsh/zcompdump-$ZSH_VERSION
     '';
 
-    initContent = let
+    initContent = ''
+      # Homebrew completions setup (PATH is managed declaratively in home/shell.nix)
+      # We only need to add completions to fpath, not modify PATH
+      HOMEBREW=""
+      [ -d /opt/homebrew ] && HOMEBREW="/opt/homebrew"
+      [ -d /home/linuxbrew/.linuxbrew ] && HOMEBREW="/home/linuxbrew/.linuxbrew"
+      if [ -n "$HOMEBREW" ] && [ -d "$HOMEBREW" ]; then
+        # Only add completions, PATH is managed by home.sessionPath
+        fpath+=("$HOMEBREW/share/zsh/site-functions")
+      fi
 
-      # General configuration (order 1000) - AFTER direnv hooks
-      zshConfig = lib.mkOrder 1000 ''
-        # Globbing options (no built-in Home Manager support)
-        setopt nocaseglob
-        setopt extendedglob
-        setopt globdots
-        setopt no_nomatch
+      # Globbing options (no built-in Home Manager support)
+      setopt nocaseglob
+      setopt extendedglob
+      setopt globdots
+      setopt no_nomatch
 
-        # Corrections (no built-in Home Manager support)
-        setopt correct
+      # Corrections (no built-in Home Manager support)
+      setopt correct
 
-        # History verify (supplement existing history config)
-        setopt histverify
+      # History verify (supplement existing history config)
+      setopt histverify
 
-        # Vi mode key bindings (supplement built-in vi mode)
-        bindkey -v '^?' backward-delete-char
-        bindkey -M vicmd 'k' history-substring-search-up
-        bindkey -M vicmd 'j' history-substring-search-down
-      '';
-    in zshConfig;
+      # Vi mode key bindings (supplement built-in vi mode)
+      bindkey -v '^?' backward-delete-char
+      bindkey -M vicmd 'k' history-substring-search-up
+      bindkey -M vicmd 'j' history-substring-search-down
+    '';
   };
 
   programs.starship = {
