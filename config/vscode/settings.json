@@ -1,0 +1,32 @@
+{
+	"telemetry.feedback.enabled": false,
+	"telemetry.telemetryLevel": "off",
+  "projectManager.sortList": "Path",
+  "projectManager.showParentFolderInfoOnDuplicates": true,
+  "projectManager.removeCurrentProjectFromList": false,
+  "projectManager.git.baseFolders": [
+    "/Users/nalabelle/git",
+    "/home/nalabelle/git"
+  ],
+  "projectManager.git.ignoredFolders": [
+    "node_modules",
+    "out",
+    "typings",
+    "test",
+    ".haxelib",
+    ".devbox",
+    "result"
+  ],
+  "projectManager.vscode.baseFolders": [
+    "/Users/nalabelle/git",
+    "/home/nalabelle/git"
+  ],
+  "projectManager.vscode.ignoredFolders": [
+    "node_modules",
+    "out",
+    "typings",
+    "test",
+    ".devbox",
+    "result"
+  ]
+}

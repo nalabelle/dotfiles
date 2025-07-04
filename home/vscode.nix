@@ -30,6 +30,54 @@ in {
   };
 
   config = {
+    # Use Home Manager's vscode module but with Homebrew-installed VS Code
+    # We create a lightweight wrapper package that points to the Homebrew installation
+    programs.vscode = {
+      # Source: https://github.com/nix-community/home-manager/blob/master/modules/programs/vscode/default.nix
+      enable = true;
+
+      # Platform-specific package handling:
+      # - macOS: Use wrapper for Homebrew-installed VS Code (avoids extra Nix installation)
+      # - Linux: Use regular Nix package
+      package = if pkgs.stdenv.isDarwin then
+        pkgs.runCommand "vscode-homebrew-wrapper" {
+          pname = "vscode";
+          version = "homebrew";
+          meta.mainProgram = "code";
+        } ''
+          mkdir -p $out/bin
+
+          # Create symlink to Homebrew-installed VS Code
+          ln -s "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code" $out/bin/code
+        ''
+      else
+        # Use regular Nix package on Linux
+        pkgs.vscode;
+
+      # Configure extensions using Home Manager's built-in functionality
+      profiles.default = {
+        # UpdateChecks apply to all profiles
+        enableUpdateCheck = false;
+        enableExtensionUpdateCheck = false;
+        userSettings = lib.importJSON ../config/vscode/settings.json;
+        extensions = with pkgs.vscode-marketplace; [
+          alefragnani.project-manager
+          editorconfig.editorconfig
+          jetpack-io.devbox
+          kilocode.kilo-code
+          michelemelluso.gitignore
+          mikestead.dotenv
+          mkhl.direnv
+          ms-vscode-remote.remote-ssh
+          ms-vscode-remote.remote-ssh-edit
+          ms-vscode.makefile-tools
+          ms-vscode.remote-explorer
+          vscodevim.vim
+          jnoortheen.nix-ide
+        ];
+      };
+    };
+
     # MCP settings for Kilo Code extension
     # This only manages the settings file, not the VSCode installation
 

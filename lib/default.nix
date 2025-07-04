@@ -3,7 +3,12 @@ let
   systems = [ "aarch64-darwin" "x86_64-linux" "aarch64-linux" ];
   lib = inputs.nixpkgs.lib;
   username = "nalabelle";
-  nixpkgsConfig = { allowUnfree = true; };
+  nixpkgsConfig = {
+    allowUnfree = true;
+    overlays = [
+      inputs.nix-vscode-extensions.overlays.default
+    ];
+  };
 
   # Create a darwin configuration for a host
   mkDarwinSystem = { hostname }:
@@ -15,6 +20,9 @@ let
         ../hosts/${hostname}/darwin-configuration.nix
         inputs.home-manager.darwinModules.home-manager
         {
+          nixpkgs.overlays = [
+            inputs.nix-vscode-extensions.overlays.default
+          ];
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
           home-manager.users.${username} = {
@@ -90,18 +98,8 @@ in {
           } else
             null) hosts));
 
-      # Create system-specific packages
-      mkSystemPackages = system:
-        let
-          homeConfig = mkHomeConfig {
-            hostname = "default";
-            inherit system;
-          };
-        in { homeConfigurations."${username}" = homeConfig; };
-
     in {
       darwinConfigurations = darwinConfigs;
       homeConfigurations = hostHomeConfigs;
-      packages = lib.genAttrs systems mkSystemPackages;
     };
 }
