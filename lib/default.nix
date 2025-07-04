@@ -15,7 +15,7 @@ let
    inputs.nix-darwin.lib.darwinSystem {
      system = "aarch64-darwin";
      modules = [
-        ../nix/nixos.nix
+        ../nix/common.nix
         ../nix/darwin.nix
         ../hosts/${hostname}/darwin-configuration.nix
         inputs.home-manager.darwinModules.home-manager
@@ -53,6 +53,9 @@ let
             "/Users/${username}"
           else
             "/home/${username}";
+          nixpkgs.overlays = [
+            inputs.nix-vscode-extensions.overlays.default
+          ];
         }
         ../home
         (if builtins.pathExists ../hosts/${hostname}/home-configuration.nix then
@@ -64,42 +67,6 @@ let
     };
 
 in {
-  __functor = _: _args:
-    let
-      # Get all hosts from the hosts directory
-      hostsDir = ../hosts;
-      entries = builtins.readDir hostsDir;
-      hosts = builtins.attrNames
-        (lib.filterAttrs (_: type: type == "directory") entries);
-
-      # Create darwin configurations for hosts with darwin-configuration.nix
-      darwinConfigs = lib.listToAttrs (lib.filter (x: x != null) (map (hostname:
-        if builtins.pathExists
-        ../hosts/${hostname}/darwin-configuration.nix then {
-          name = hostname;
-          value = mkDarwinSystem { inherit hostname; };
-        } else
-          null) hosts));
-
-      # Create home configurations for all hosts with home-configuration.nix
-      hostHomeConfigs = lib.listToAttrs (lib.filter (x: x != null) (map
-        (hostname:
-          if builtins.pathExists
-          ../hosts/${hostname}/home-configuration.nix then {
-            name = "${username}@${hostname}";
-            value = mkHomeConfig {
-              inherit hostname;
-              system = if builtins.pathExists
-              ../hosts/${hostname}/darwin-configuration.nix then
-                "aarch64-darwin"
-              else
-                "x86_64-linux";
-            };
-          } else
-            null) hosts));
-
-    in {
-      darwinConfigurations = darwinConfigs;
-      homeConfigurations = hostHomeConfigs;
-    };
+  # Export the functions directly for explicit configuration
+  inherit mkDarwinSystem mkHomeConfig;
 }

@@ -120,26 +120,7 @@ system.activationScripts.postActivation.text = ''
 '';
 ```
 
-### Environment Integration
-
-- **Direnv**: Automatic environment loading for project directories
-- **FZF**: Fuzzy finding integration across shell and tmux
-
 ## Kilocode Extension Architecture
-
-### MCP Server Integration
-
-The system integrates with Kilocode's Model Context Protocol (MCP) servers:
-
-- **Context7**: Library documentation and code examples via Nix shell
-- **Fetch**: Internet access for up-to-date information via UV
-- **GitHub**: Repository management and operations via Docker
-
-### Configuration Management
-
-- **Base Settings**: [`config/vscode/kilocode-mcp-settings.json`](config/vscode/kilocode-mcp-settings.json:1) defines MCP server configurations
-- **Host Override**: [`home/vscode.nix`](home/vscode.nix:20) allows host-specific MCP server additions
-- **Cross-Platform**: Supports both macOS and Linux VS Code installations
 
 ### Rule File Workaround
 
@@ -184,21 +165,6 @@ Custom scripts are packaged as Nix shell applications in [`home/tools.nix`](home
 - Command existence checking (`+cmd.exists`)
 - Path management utilities (`+any.exists`, `+any.executable`)
 
-## Platform-Specific Adaptations
-
-### macOS Integration
-
-- **System Preferences**: Comprehensive macOS defaults configuration
-- **Homebrew Integration**: Managed Homebrew packages for GUI applications
-- **TouchID sudo**: Enhanced authentication for administrative tasks
-- **Screenshot Management**: Custom screenshot directory and settings
-
-### Cross-Platform Considerations
-
-- **Home Directory Paths**: Dynamic path resolution based on system type
-- **Package Availability**: Platform-specific package selections
-- **Service Management**: launchd on macOS, systemd patterns for Linux
-
 ## Configuration Patterns
 
 ### Host-Specific Overrides
@@ -215,40 +181,3 @@ Hosts can override base configurations through:
 - **Vim Plugins**: Curated plugin ecosystem with language-specific support
 - **Zsh Configuration**: Custom prompt, completion, and history management
 - **Tmux Customization**: Productivity-focused key bindings and status line
-
-### Legacy Shell Script Migration Pattern
-
-The system follows a systematic approach for migrating legacy shell scripts to declarative Nix configuration:
-
-#### Migration Strategy
-
-1. **Analysis Phase**: Examine legacy shell scripts to identify:
-   - Tool completions that need preservation
-   - Unique shell options not covered by Home Manager defaults
-   - Redundant functionality already handled by nix-darwin/Home Manager
-   - Unused or commented-out functions
-
-2. **Classification**: Categorize script components as:
-   - **MIGRATE**: Functional components requiring declarative equivalents
-   - **REDUNDANT**: Functionality superseded by Nix ecosystem tools
-   - **CLEANUP**: Unused code that can be safely removed
-
-3. **Implementation Patterns**:
-   - **Completions**: `legacy shell completion` → `programs.zsh.completions`
-   - **Shell Options**: `sourced option files` → `programs.zsh.initExtra`
-   - **Environment Setup**: `manual environment sourcing` → `nix-darwin integration`
-   - **Custom Functions**: `shell functions` → `Nix shell applications` or removal if unused
-
-#### Current Migration: ZSH Directory
-
-**Target**: [`zsh/`](zsh/) directory with 4 legacy files
-**Pattern Application**:
-
-- `zsh/completions`: MIGRATE tool completions (gt, devbox) to `programs.zsh.completions`
-- `zsh/imports`: REDUNDANT Homebrew/Homeshick setup handled by nix-darwin
-- `zsh/options`: PARTIALLY REDUNDANT unique globbing/vi-mode settings need migration
-- `zsh/prompt`: CLEANUP custom prompt functions (unused, Starship active)
-
-**Success Criteria**: Preserve all functional capabilities while eliminating maintenance burden through declarative configuration management.
-
-This architecture provides a robust foundation for declarative system management while maintaining flexibility for host-specific customization and easy extensibility.

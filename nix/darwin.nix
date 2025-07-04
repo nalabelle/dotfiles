@@ -1,4 +1,4 @@
-{ pkgs, system, flakeInputs, config, lib, vars, hostname, username,... }: {
+{ pkgs, config, lib, hostname, username, ... }: {
   nixpkgs.hostPlatform = "aarch64-darwin";
 
   networking.computerName = hostname;

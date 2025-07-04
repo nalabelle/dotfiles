@@ -56,11 +56,6 @@ in {
     Install = { WantedBy = [ "default.target" ]; };
   };
 
-  # VSCode specific configuration
-  programs.vscode = {
-    enable = true;
-    package = pkgs.vscode;
-  };
 
   # Enable SSH for GitHub authentication
   programs.ssh = {

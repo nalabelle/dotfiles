@@ -17,8 +17,28 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
-
   outputs = inputs:
-    let generator = import ./lib { inherit inputs; };
-    in generator { };
+    let
+      libFunctions = import ./lib { inherit inputs; };
+    in {
+      # Darwin Configs
+      darwinConfigurations.bst = libFunctions.mkDarwinSystem {
+        hostname = "bst";
+      };
+      darwinConfigurations.tennyson = libFunctions.mkDarwinSystem {
+        hostname = "tennyson";
+      };
+      # Test target to ensure home-manager config works when testing on darwin
+      homeConfigurations."nalabelle@darwin" = libFunctions.mkHomeConfig {
+        hostname = "default";
+        system = "aarch64-darwin";
+      };
+
+
+      # Home Manager Configs
+      homeConfigurations."nalabelle@twain" = libFunctions.mkHomeConfig {
+        hostname = "twain";
+        system = "x86_64-linux";
+      };
+    };
 }

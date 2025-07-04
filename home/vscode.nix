@@ -16,10 +16,99 @@ let
     }' | ${pkgs.jq}/bin/jq '.' > $out
   '';
 
+  # Extract VS Code config directory name based on package
+  vscodePname = if pkgs.stdenv.isDarwin then
+    # On macOS, we use a wrapper, so we need to determine the actual VS Code type
+    "vscode"
+  else
+    # On Linux, use the actual package name
+    pkgs.vscode.pname;
+
+  configDir = {
+    "vscode" = "Code";
+    "vscode-insiders" = "Code - Insiders";
+    "vscodium" = "VSCodium";
+    "openvscode-server" = "OpenVSCode Server";
+    "windsurf" = "Windsurf";
+    "cursor" = "Cursor";
+  }.${vscodePname};
+
+  # Build platform-specific state database path
+  configPath = if pkgs.stdenv.isDarwin then
+    "Library/Application Support/${configDir}"
+  else
+    "${config.xdg.configHome}/${configDir}";
+
+
   # Create a source directory with all kilocode files (rules and workflows)
   kilocodeSource = pkgs.runCommand "kilocode-source" { } ''
     mkdir -p $out
     cp -r ${../config/kilocode}/* $out/
+  '';
+
+  # Create script to update VS Code state database with Kilocode settings
+  updateStateScript = pkgs.writeShellScript "update-vscode-state" ''
+    set -euo pipefail
+
+    STATE_DB="$1"
+    SETTINGS_JSON="$2"
+
+    if [ ! -f "$STATE_DB" ]; then
+      echo "No state database found: $STATE_DB"
+      exit 0
+    fi
+
+    # Create database backup with timestamp-based naming
+    create_backup() {
+      local db_path="$1"
+      local db_dir=$(dirname "$db_path")
+      local db_name=$(basename "$db_path")
+      local timestamp=$(${pkgs.coreutils}/bin/date +"%Y%m%d-%H%M%S")
+      local backup_path="$db_dir/$db_name.backup.$timestamp"
+
+      echo "Creating backup: $backup_path"
+      if ${pkgs.coreutils}/bin/cp "$db_path" "$backup_path" 2>/dev/null; then
+        echo "Backup created successfully"
+      else
+        echo "Warning: Failed to create backup, continuing with update"
+        return 1
+      fi
+
+      # Clean up old backups, keeping only 5 generations
+      local backup_pattern="$db_dir/$db_name.backup.*"
+      local old_backups=$(${pkgs.findutils}/bin/find "$db_dir" -name "$db_name.backup.*" -type f | ${pkgs.coreutils}/bin/sort -r | ${pkgs.coreutils}/bin/tail -n +6)
+
+      if [ -n "$old_backups" ]; then
+        echo "Removing old backups:"
+        echo "$old_backups" | while read -r old_backup; do
+          echo "  Removing: $old_backup"
+          ${pkgs.coreutils}/bin/rm -f "$old_backup" 2>/dev/null || echo "  Warning: Failed to remove $old_backup"
+        done
+      fi
+    }
+
+    # Create backup before any write operations
+    create_backup "$STATE_DB" || echo "Backup failed, but continuing with database update"
+
+    # Get existing value for kilocode.kilo-code key
+    EXISTING_VALUE=$(${pkgs.sqlite}/bin/sqlite3 "$STATE_DB" "SELECT value FROM ItemTable WHERE key = 'kilocode.kilo-code';" 2>/dev/null || echo "{}")
+
+    # If no existing value, use empty object
+    if [ -z "$EXISTING_VALUE" ] || [ "$EXISTING_VALUE" = "" ]; then
+      EXISTING_VALUE="{}"
+    fi
+
+    # Read new settings from JSON file
+    NEW_SETTINGS=$(cat "$SETTINGS_JSON")
+
+    # Merge existing settings with new settings using jq
+    # The new settings will override existing ones with the same keys
+    MERGED_VALUE=$(echo "$EXISTING_VALUE" | ${pkgs.jq}/bin/jq --argjson new "$NEW_SETTINGS" '. * $new')
+
+    # Update or insert the merged value
+    ${pkgs.sqlite}/bin/sqlite3 "$STATE_DB" "INSERT OR REPLACE INTO ItemTable (key, value) VALUES ('kilocode.kilo-code', '$MERGED_VALUE');"
+
+    echo "Updated VS Code state database with Kilocode settings"
   '';
 
 in {
@@ -60,7 +149,7 @@ in {
         enableUpdateCheck = false;
         enableExtensionUpdateCheck = false;
         userSettings = lib.importJSON ../config/vscode/settings.json;
-        extensions = with pkgs.vscode-marketplace; [
+        extensions = with pkgs.nix-vscode-extensions.vscode-marketplace; [
           alefragnani.project-manager
           editorconfig.editorconfig
           jetpack-io.devbox
@@ -82,7 +171,7 @@ in {
     # This only manages the settings file, not the VSCode installation
 
     # macOS MCP settings
-    home.file."Library/Application Support/Code/User/globalStorage/kilocode.kilo-code/settings/mcp_settings.json" =
+    home.file."${configPath}/User/globalStorage/kilocode.kilo-code/settings/mcp_settings.json" =
       lib.mkIf pkgs.stdenv.isDarwin { source = settingsFile; };
 
     # Kilo Code rule files (both platforms)
@@ -119,6 +208,15 @@ in {
       ${pkgs.rsync}/bin/rsync --delete --recursive \
         "${kilocodeSource}/" \
         "$HOME/.kilocode/"
+    '';
+
+    # Update VS Code state database with Kilocode extension settings
+    home.activation.kilocodeState = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+      # Build full state database path using configPath
+      STATE_VSCDB="$HOME/${configPath}/User/globalStorage/state.vscdb"
+
+      # Call the update script with database path and settings file
+      ${updateStateScript} "$STATE_VSCDB" "${../config/vscode/kilocode-state.json}"
     '';
 
     # Linux MCP settings

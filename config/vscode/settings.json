@@ -4,6 +4,7 @@
   "projectManager.sortList": "Path",
   "projectManager.showParentFolderInfoOnDuplicates": true,
   "projectManager.removeCurrentProjectFromList": false,
+  "projectManager.git.maxDepthRecursion": 1,
   "projectManager.git.baseFolders": [
     "/Users/nalabelle/git",
     "/home/nalabelle/git"
@@ -28,5 +29,15 @@
     "test",
     ".devbox",
     "result"
+  ],
+  "kilo-code.allowedCommands": [
+    "npm test",
+    "npm install",
+    "tsc",
+    "git log",
+    "git diff",
+    "git show",
+    "pre-commit run --all-files",
+    "make test"
   ]
 }

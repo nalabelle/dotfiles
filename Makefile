@@ -1,3 +1,8 @@
+SHELL := bash
+.SHELLFLAGS := -eu -o pipefail -c
+MAKEFLAGS += --warn-undefined-variables
+MAKEFLAGS += --no-builtin-rules
+
 # Default target to show help
 .DEFAULT_GOAL := help
 
@@ -10,12 +15,23 @@ help:
 	}' $(MAKEFILE_LIST)
 
 # Test build system and home configurations via GitHub Actions
-.PHONY: test
-test: ## Runs GitHub Actions tests for Darwin and Home configurations
+.PHONY: test-workflows
+test-workflows: ## Runs GitHub Actions tests for Darwin and Home configurations
 	./test/test-workflows
 
-test-local: ## Quick local home test
-	nix build .#homeConfigurations.nalabelle.activationPackage
+.PHONY: test
+test: ## Test configurations appropriate for current OS (mirrors CI workflow)
+	@echo "Testing configurations for $(shell uname -s)..."
+	@if [[ "$(shell uname -s)" == "Darwin" ]]; then \
+		echo "Testing Darwin configurations..."; \
+		nix build .#darwinConfigurations.tennyson.system; \
+		nix build .#darwinConfigurations.bst.system; \
+		nix build .#homeConfigurations."nalabelle@darwin".activationPackage; \
+	else \
+		echo "Testing Linux home configurations..."; \
+		nix build '.#homeConfigurations."nalabelle@twain".activationPackage'; \
+	fi
+	@echo "All tests completed successfully!"
 
 # Remove build artifacts
 .PHONY: clean
