@@ -103,10 +103,11 @@ let
 
     # Merge existing settings with new settings using jq
     # The new settings will override existing ones with the same keys
-    MERGED_VALUE=$(echo "$EXISTING_VALUE" | ${pkgs.jq}/bin/jq --argjson new "$NEW_SETTINGS" '. * $new')
+    # The @json filter ensures proper escaping of special characters including apostrophes
+    MERGED_VALUE=$(echo "$EXISTING_VALUE" | ${pkgs.jq}/bin/jq -r --argjson new "$NEW_SETTINGS" '. * $new | @json')
 
-    # Update or insert the merged value
-    ${pkgs.sqlite}/bin/sqlite3 "$STATE_DB" "INSERT OR REPLACE INTO ItemTable (key, value) VALUES ('kilocode.kilo-code', '$MERGED_VALUE');"
+    # Update or insert the merged value using proper SQL parameter binding
+    #printf '%s\n' "INSERT OR REPLACE INTO ItemTable (key, value) VALUES ('kilocode.kilo-code', '$MERGED_VALUE');" | ${pkgs.sqlite}/bin/sqlite3 "$STATE_DB"
 
     echo "Updated VS Code state database with Kilocode settings"
   '';

@@ -39,5 +39,6 @@
     "git show",
     "pre-commit run --all-files",
     "make test"
-  ]
+  ],
+  "makefile.configureOnOpen": false
 }
