@@ -5,28 +5,20 @@ let
   mergeVscodeSettings =
     import ../node/merge-vscode-settings.nix { inherit pkgs; };
 
-  # Create the settings file content with 1Password secret resolution
-  settingsFile = pkgs.runCommand "mcp_settings.json" {
-    buildInputs = [ pkgs._1password-cli ];
-  } ''
-    # Use op inject to resolve 1Password references in the template
-    ${pkgs._1password-cli}/bin/op inject \
-      --in-file ${
-        ../config/vscode/User/globalStorage/kilocode.kilo-code/settings/mcp_settings.json
-      } \
-      --out-file base_settings.json || {
-      echo "Warning: Could not resolve 1Password secrets. Using template as-is."
-      cp ${
-        ../config/vscode/User/globalStorage/kilocode.kilo-code/settings/mcp_settings.json
-      } base_settings.json
-    }
+  # Read base MCP settings and merge with host-specific servers
+  baseSettings = lib.importJSON
+    ../config/vscode/User/globalStorage/kilocode.kilo-code/settings/mcp_settings.json;
 
-    # Merge with host-specific MCP servers
-    ${pkgs.jq}/bin/jq --argjson hostServers '${
-      lib.generators.toJSON { } config.vscode.hostMcpServers
-    }' \
-      '.mcpServers = (.mcpServers + $hostServers)' \
-      base_settings.json > $out
+  # Merge base settings with host-specific MCP servers
+  mergedSettings = lib.recursiveUpdate baseSettings {
+    mcpServers = config.vscode.hostMcpServers;
+  };
+
+  # Create the settings file content with pretty JSON formatting
+  settingsFile = pkgs.runCommand "mcp_settings.json" { } ''
+    echo '${
+      lib.generators.toJSON { } mergedSettings
+    }' | ${pkgs.jq}/bin/jq '.' > $out
   '';
 
   # VS Code user settings

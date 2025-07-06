@@ -1,20 +1,46 @@
 {
   "mcpServers": {
     "context7": {
-      "command": "nix",
-      "args": ["shell", "nixpkgs#nodejs", "--command", "npx", "--", "@upstash/context7-mcp"],
-      "alwaysAllow": ["resolve-library-id", "get-library-docs"]
+      "alwaysAllow": [
+        "resolve-library-id",
+        "get-library-docs"
+      ],
+      "args": [
+        "shell",
+        "nixpkgs#nodejs",
+        "--command",
+        "npx",
+        "--",
+        "@upstash/context7-mcp"
+      ],
+      "command": "nix"
     },
     "fetch": {
-      "command": "nix",
-      "args": ["shell", "nixpkgs#uv", "--command", "uvx", "--", "mcp-server-fetch"]
+      "args": [
+        "shell",
+        "nixpkgs#uv",
+        "--command",
+        "uvx",
+        "--",
+        "mcp-server-fetch"
+      ],
+      "command": "nix"
     },
     "github": {
-      "url": "https://api.githubcopilot.com/mcp/",
-      "headers": {
-        "Authorization": "Bearer op://Private/GitHub/rkynpinraqlexstucctkkh6esm"
+      "args": [
+        "run",
+        "github:NixOS/nixpkgs/nixos-unstable#github-mcp-server",
+        "--",
+        "stdio",
+        "--read-only"
+      ],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${env:GITHUB_MCP_TOKEN}"
       },
-      "alwaysAllow": ["get_me"]
+      "command": "nix",
+      "alwaysAllow": [
+        "get_me"
+      ]
     }
   }
 }
