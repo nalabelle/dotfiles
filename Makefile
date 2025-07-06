@@ -23,7 +23,7 @@ test-workflows: ## Runs GitHub Actions tests for Darwin and Home configurations
 .PHONY: test-js
 test-js: ## Test JavaScript utilities
 	@echo "Testing JavaScript utilities..."
-	@cd node/merge-vscode-settings && nix-shell -p nodejs --run "npm test"
+	@cd node/merge-vscode-settings && nix shell nixpkgs#nodejs nixpkgs#nodePackages.npm --command bash -c "npm install && npm test"
 	@echo "JavaScript tests completed successfully!"
 
 .PHONY: test
