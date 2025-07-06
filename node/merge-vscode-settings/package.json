@@ -1,0 +1,18 @@
+{
+  "name": "merge-vscode-settings",
+  "version": "1.0.0",
+  "description": "Merge VS Code settings while preserving JSONC comments",
+  "main": "merge-vscode-settings.js",
+  "bin": {
+    "merge-vscode-settings": "./merge-vscode-settings.js"
+  },
+  "scripts": {
+    "test": "node tests/test.js"
+  },
+  "dependencies": {
+    "comment-json": "^4.2.3"
+  },
+  "keywords": ["vscode", "settings", "jsonc", "merge"],
+  "author": "nalabelle",
+  "license": "MIT"
+}

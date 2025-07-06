@@ -2,18 +2,18 @@
 
 ## Current Work Focus
 
-**macOS GUI Application PATH Inheritance Fix**: ✅ **MAJOR SYSTEM INTEGRATION ISSUE RESOLVED**
+**VS Code Settings Declarative Management**: ✅ **CONFIGURATION MANAGEMENT ENHANCEMENT COMPLETED**
 
-- **Problem Identified**: VS Code and other GUI applications launched from Finder didn't inherit user's development environment PATH, causing "command not found" errors for `gh`, `nix`, and other development tools
-- **Root Cause**: macOS GUI applications launched from Finder use launchd's default PATH, not the user's shell environment PATH
-- **Solution Implemented**:
-  - Consolidated nix-darwin activation scripts from invalid individual `activationScripts."custom-name"` to proper `system.activationScripts.postActivation.text`
-  - Fixed Homebrew analytics command to run with proper user environment: `sudo -u ${username} HOME="/Users/${username}" /opt/homebrew/bin/brew analytics off`
-  - Implemented `launchctl config user path` to set persistent PATH for GUI applications launched from Finder
-  - Documented inspection and reset commands for troubleshooting launchctl configuration
+- **Task Completed**: Successfully moved VS Code settings from standalone JSON file to declarative Nix configuration with smart merge capabilities
+- **Implementation Details**:
+  - Converted `config/vscode/settings.json` to `userSettings` attribute set in `home/vscode.nix`
+  - Added comprehensive comments for each settings section (privacy, extensions, development tools)
+  - Implemented activation script with robust jq merge logic that handles null values and type conflicts
+  - Settings merge only occurs if existing VS Code settings file exists (silent operation otherwise)
+  - Managed settings take precedence over existing user settings
+- **Benefits**: VS Code settings are now version-controlled, commentable, and consistently deployed across machines while preserving user customizations
 
-- **Technical Discovery**: nix-darwin only supports three customizable activation scripts: `preActivation`, `extraActivation`, and `postActivation` - custom script names are invalid
-- **Results**: VS Code launched from Finder now has access to complete development environment (Nix packages, Home Manager tools, Homebrew applications)
+**Previous Achievement**: macOS GUI Application PATH Inheritance Fix completed - Major system integration issue resolved enabling GUI applications to access complete development environment.
 
 **Previous Achievement**: Renovate Configuration Migration & CI/CD Infrastructure Consolidation completed - Migrated from external renovate-config repository to local configuration with consolidated GitHub Actions workflows.
 
@@ -43,7 +43,7 @@
 - **Architecture**: Nix flakes-based with automatic host discovery working reliably
 - **Services**: Qdrant and Ollama configured as launchd user agents with proper logging
 - **Development Environment**: Full stack with Vim (35+ plugins), Zsh, Git (25+ aliases), and Tmux
-- **Quality Assurance**: Pre-commit hooks with shellcheck and formatting validation. **Testing Pattern**: Always use `make test` for comprehensive Nix configuration testing (manual trigger required), and `pre-commit run --all-files` for code quality validation.
+- **Quality Assurance**: Pre-commit hooks with shellcheck and formatting validation. **Testing Pattern**: Use `pre-commit run --all-files` for comprehensive validation - it includes `make test` for Nix configuration testing, so never run `make test` separately.
 - **Editor Integration**: VS Code with Kilocode MCP servers (context7, fetch, github) configured
 
 ## Recent Changes
@@ -85,7 +85,7 @@
   - Shell script syntax and style via shellcheck
   - File format validation (JSON, YAML, TOML, XML)
   - Basic file hygiene (trailing whitespace, line endings, etc.)
-  - **Note**: Nix configuration testing moved to manual `make test` trigger
+  - **Note**: `pre-commit run --all-files` includes `make test` for Nix configuration testing - never run `make test` separately
 - **Service Management**: AI/ML services (Qdrant, Ollama) auto-start and maintain persistent storage
 
 ## Configuration Patterns

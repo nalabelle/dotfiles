@@ -10,17 +10,9 @@
       "args": ["shell", "nixpkgs#uv", "--command", "uvx", "--", "mcp-server-fetch"]
     },
     "github": {
-      "command": "docker",
-      "args": [
-        "run",
-        "-i",
-        "--rm",
-        "-e",
-        "GITHUB_PERSONAL_ACCESS_TOKEN",
-        "ghcr.io/github/github-mcp-server"
-      ],
-      "env": {
-        "GITHUB_PERSONAL_ACCESS_TOKEN": "${env:GITHUB_TOKEN}"
+      "url": "https://api.githubcopilot.com/mcp/",
+      "headers": {
+        "Authorization": "Bearer op://Private/GitHub/rkynpinraqlexstucctkkh6esm"
       },
       "alwaysAllow": ["get_me"]
     }

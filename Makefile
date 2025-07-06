@@ -19,8 +19,15 @@ help:
 test-workflows: ## Runs GitHub Actions tests for Darwin and Home configurations
 	./test/test-workflows
 
+# Test JavaScript utilities
+.PHONY: test-js
+test-js: ## Test JavaScript utilities
+	@echo "Testing JavaScript utilities..."
+	@cd node/merge-vscode-settings && nix-shell -p nodejs --run "npm test"
+	@echo "JavaScript tests completed successfully!"
+
 .PHONY: test
-test: ## Test configurations appropriate for current OS (mirrors CI workflow)
+test: test-js ## Test configurations appropriate for current OS (mirrors CI workflow)
 	@echo "Testing configurations for $(shell uname -s)..."
 	@if [[ "$(shell uname -s)" == "Darwin" ]]; then \
 		echo "Testing Darwin configurations..."; \

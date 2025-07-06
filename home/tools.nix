@@ -11,7 +11,6 @@
     less
     watch
 
-
     # Dev tools
     act
     gh
@@ -70,6 +69,9 @@
       runtimeInputs = [ git diffutils coreutils ];
       text = builtins.readFile ../bin/template-diff;
     })
+
+    # VS Code settings merger with JSONC comment preservation
+    (import ../node/merge-vscode-settings.nix { inherit pkgs; })
   ];
 
   # Containers configuration

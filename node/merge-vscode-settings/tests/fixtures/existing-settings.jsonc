@@ -1,0 +1,12 @@
+{
+  // User preferences
+  "editor.fontSize": 14,
+  "editor.theme": "dark", // My favorite theme
+
+  /* Block comment example */
+  "workbench.colorTheme": "Default Dark+",
+
+  // Git settings
+  "git.autofetch": true,
+  "git.confirmSync": false,
+}

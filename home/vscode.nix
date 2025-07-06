@@ -1,27 +1,104 @@
 { config, lib, pkgs, ... }:
 
 let
-  # Read base MCP settings
-  baseSettings = lib.importJSON ../config/vscode/kilocode-mcp-settings.json;
+  # Import merge-vscode-settings package
+  mergeVscodeSettings =
+    import ../node/merge-vscode-settings.nix { inherit pkgs; };
 
-  # Merge base settings with host-specific MCP servers
-  mergedSettings = lib.recursiveUpdate baseSettings {
-    mcpServers = config.vscode.hostMcpServers;
+  # Create the settings file content with 1Password secret resolution
+  settingsFile = pkgs.runCommand "mcp_settings.json" {
+    buildInputs = [ pkgs._1password-cli ];
+  } ''
+    # Use op inject to resolve 1Password references in the template
+    ${pkgs._1password-cli}/bin/op inject \
+      --in-file ${
+        ../config/vscode/User/globalStorage/kilocode.kilo-code/settings/mcp_settings.json
+      } \
+      --out-file base_settings.json || {
+      echo "Warning: Could not resolve 1Password secrets. Using template as-is."
+      cp ${
+        ../config/vscode/User/globalStorage/kilocode.kilo-code/settings/mcp_settings.json
+      } base_settings.json
+    }
+
+    # Merge with host-specific MCP servers
+    ${pkgs.jq}/bin/jq --argjson hostServers '${
+      lib.generators.toJSON { } config.vscode.hostMcpServers
+    }' \
+      '.mcpServers = (.mcpServers + $hostServers)' \
+      base_settings.json > $out
+  '';
+
+  # VS Code user settings
+  userSettings = {
+    # Privacy and telemetry settings
+    "telemetry.feedback.enabled" = false;
+    "telemetry.telemetryLevel" = "off";
+
+    # Project Manager extension settings
+    "remote.extensionKind" = {
+      "alefragnani.project-manager" = [ "workspace" ];
+    };
+    "projectManager.sortList" = "Path";
+    "projectManager.showParentFolderInfoOnDuplicates" = true;
+    "projectManager.removeCurrentProjectFromList" = false;
+    "projectManager.git.maxDepthRecursion" = 1;
+    "projectManager.git.baseFolders" = [
+      "/Users/nalabelle/git" # macOS path
+      "/home/nalabelle/git" # Linux path
+    ];
+    "projectManager.git.ignoredFolders" = [
+      "node_modules"
+      "out"
+      "typings"
+      "test"
+      ".haxelib"
+      ".devbox"
+      ".venv"
+      "result" # Nix build result directory
+    ];
+    "projectManager.vscode.baseFolders" = [
+      "/Users/nalabelle/git" # macOS path
+      "/home/nalabelle/git" # Linux path
+    ];
+    "projectManager.vscode.ignoredFolders" = [
+      "node_modules"
+      "out"
+      "typings"
+      "test"
+      ".devbox"
+      ".venv"
+      "result" # Nix build result directory
+    ];
+
+    # Git repository scanning settings
+    "git.repositoryScanIgnoredFolders" = [ "node_modules" ".devbox" ".venv" ];
+
+    # Makefile extension settings
+    "makefile.configureOnOpen" = false;
+
+    # Auto-run command settings for Kilo Code
+    "auto-run-command.rules" = [{
+      condition = "always";
+      command =
+        "kilo-code.importSettings ${config.home.homeDirectory}/.kilocode/settings.json";
+      message = "Importing Kilo Code settings from file";
+    }];
   };
 
-  # Create the settings file content with pretty JSON formatting
-  settingsFile = pkgs.runCommand "mcp_settings.json" { } ''
+  # Create VS Code user settings file (base settings from Nix)
+  userSettingsFile = pkgs.runCommand "settings.json" { } ''
     echo '${
-      lib.generators.toJSON { } mergedSettings
+      lib.generators.toJSON { } userSettings
     }' | ${pkgs.jq}/bin/jq '.' > $out
   '';
 
   # Extract VS Code config directory name based on package
   vscodePname = if pkgs.stdenv.isDarwin then
-    # On macOS, we use a wrapper, so we need to determine the actual VS Code type
+  # On macOS, we use a wrapper, so we need to determine the actual VS Code type
     "vscode"
   else
-    # On Linux, use the actual package name
+  # On Linux, use the actual package name
     pkgs.vscode.pname;
 
   configDir = {
@@ -39,77 +116,10 @@ let
   else
     "${config.xdg.configHome}/${configDir}";
 
-
   # Create a source directory with all kilocode files (rules and workflows)
   kilocodeSource = pkgs.runCommand "kilocode-source" { } ''
     mkdir -p $out
     cp -r ${../config/kilocode}/* $out/
-  '';
-
-  # Create script to update VS Code state database with Kilocode settings
-  updateStateScript = pkgs.writeShellScript "update-vscode-state" ''
-    set -euo pipefail
-
-    STATE_DB="$1"
-    SETTINGS_JSON="$2"
-
-    if [ ! -f "$STATE_DB" ]; then
-      echo "No state database found: $STATE_DB"
-      exit 0
-    fi
-
-    # Create database backup with timestamp-based naming
-    create_backup() {
-      local db_path="$1"
-      local db_dir=$(dirname "$db_path")
-      local db_name=$(basename "$db_path")
-      local timestamp=$(${pkgs.coreutils}/bin/date +"%Y%m%d-%H%M%S")
-      local backup_path="$db_dir/$db_name.backup.$timestamp"
-
-      echo "Creating backup: $backup_path"
-      if ${pkgs.coreutils}/bin/cp "$db_path" "$backup_path" 2>/dev/null; then
-        echo "Backup created successfully"
-      else
-        echo "Warning: Failed to create backup, continuing with update"
-        return 1
-      fi
-
-      # Clean up old backups, keeping only 5 generations
-      local backup_pattern="$db_dir/$db_name.backup.*"
-      local old_backups=$(${pkgs.findutils}/bin/find "$db_dir" -name "$db_name.backup.*" -type f | ${pkgs.coreutils}/bin/sort -r | ${pkgs.coreutils}/bin/tail -n +6)
-
-      if [ -n "$old_backups" ]; then
-        echo "Removing old backups:"
-        echo "$old_backups" | while read -r old_backup; do
-          echo "  Removing: $old_backup"
-          ${pkgs.coreutils}/bin/rm -f "$old_backup" 2>/dev/null || echo "  Warning: Failed to remove $old_backup"
-        done
-      fi
-    }
-
-    # Create backup before any write operations
-    create_backup "$STATE_DB" || echo "Backup failed, but continuing with database update"
-
-    # Get existing value for kilocode.kilo-code key
-    EXISTING_VALUE=$(${pkgs.sqlite}/bin/sqlite3 "$STATE_DB" "SELECT value FROM ItemTable WHERE key = 'kilocode.kilo-code';" 2>/dev/null || echo "{}")
-
-    # If no existing value, use empty object
-    if [ -z "$EXISTING_VALUE" ] || [ "$EXISTING_VALUE" = "" ]; then
-      EXISTING_VALUE="{}"
-    fi
-
-    # Read new settings from JSON file
-    NEW_SETTINGS=$(cat "$SETTINGS_JSON")
-
-    # Merge existing settings with new settings using jq
-    # The new settings will override existing ones with the same keys
-    # The @json filter ensures proper escaping of special characters including apostrophes
-    MERGED_VALUE=$(echo "$EXISTING_VALUE" | ${pkgs.jq}/bin/jq -r --argjson new "$NEW_SETTINGS" '. * $new | @json')
-
-    # Update or insert the merged value using proper SQL parameter binding
-    #printf '%s\n' "INSERT OR REPLACE INTO ItemTable (key, value) VALUES ('kilocode.kilo-code', '$MERGED_VALUE');" | ${pkgs.sqlite}/bin/sqlite3 "$STATE_DB"
-
-    echo "Updated VS Code state database with Kilocode settings"
   '';
 
 in {
@@ -120,60 +130,32 @@ in {
   };
 
   config = {
-    # Use Home Manager's vscode module but with Homebrew-installed VS Code
-    # We create a lightweight wrapper package that points to the Homebrew installation
-    programs.vscode = {
-      # Source: https://github.com/nix-community/home-manager/blob/master/modules/programs/vscode/default.nix
-      enable = true;
+    # VS Code user settings - merged with existing settings via activation script
+    home.activation.vscodeSettings =
+      lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+        EXISTING_SETTINGS="$HOME/${configPath}/User/settings.json"
+        MANAGED_SETTINGS="${userSettingsFile}"
 
-      # Platform-specific package handling:
-      # - macOS: Use wrapper for Homebrew-installed VS Code (avoids extra Nix installation)
-      # - Linux: Use regular Nix package
-      package = if pkgs.stdenv.isDarwin then
-        pkgs.runCommand "vscode-homebrew-wrapper" {
-          pname = "vscode";
-          version = "homebrew";
-          meta.mainProgram = "code";
-        } ''
-          mkdir -p $out/bin
+        if [ -f "$EXISTING_SETTINGS" ]; then
+          # Merge existing settings with managed settings (managed settings take precedence)
+          echo "Merging existing VS Code settings with managed settings..."
 
-          # Create symlink to Homebrew-installed VS Code
-          ln -s "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code" $out/bin/code
-        ''
-      else
-        # Use regular Nix package on Linux
-        pkgs.vscode;
-
-      # Configure extensions using Home Manager's built-in functionality
-      profiles.default = {
-        # UpdateChecks apply to all profiles
-        enableUpdateCheck = false;
-        enableExtensionUpdateCheck = false;
-        userSettings = lib.importJSON ../config/vscode/settings.json;
-        extensions = with pkgs.nix-vscode-extensions.vscode-marketplace; [
-          alefragnani.project-manager
-          editorconfig.editorconfig
-          jetpack-io.devbox
-          kilocode.kilo-code
-          michelemelluso.gitignore
-          mikestead.dotenv
-          mkhl.direnv
-          ms-vscode-remote.remote-ssh
-          ms-vscode-remote.remote-ssh-edit
-          ms-vscode.makefile-tools
-          ms-vscode.remote-explorer
-          vscodevim.vim
-          jnoortheen.nix-ide
-        ];
-      };
-    };
+          # Use comment-preserving merge tool for JSONC format
+          if ${mergeVscodeSettings}/bin/merge-vscode-settings "$EXISTING_SETTINGS" "$MANAGED_SETTINGS" "$EXISTING_SETTINGS.tmp"; then
+            mv "$EXISTING_SETTINGS.tmp" "$EXISTING_SETTINGS"
+          else
+            echo "Warning: Skipping VS Code settings merge due to error"
+          fi
+        fi
+        # If no existing settings file exists, silently exit without creating one
+      '';
 
     # MCP settings for Kilo Code extension
     # This only manages the settings file, not the VSCode installation
-
-    # macOS MCP settings
     home.file."${configPath}/User/globalStorage/kilocode.kilo-code/settings/mcp_settings.json" =
-      lib.mkIf pkgs.stdenv.isDarwin { source = settingsFile; };
+      {
+        source = settingsFile;
+      };
 
     # Kilo Code rule files (both platforms)
     #
@@ -211,22 +193,6 @@ in {
         "$HOME/.kilocode/"
     '';
 
-    # Update VS Code state database with Kilocode extension settings
-    home.activation.kilocodeState = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-      # Build full state database path using configPath
-      STATE_VSCDB="$HOME/${configPath}/User/globalStorage/state.vscdb"
-
-      # Call the update script with database path and settings file
-      ${updateStateScript} "$STATE_VSCDB" "${../config/vscode/kilocode-state.json}"
-    '';
-
-    # Linux MCP settings
-    xdg.configFile = lib.mkIf pkgs.stdenv.isLinux {
-      "Code/User/globalStorage/kilocode.kilo-code/settings/mcp_settings.json" =
-        {
-          source = settingsFile;
-        };
-    };
     # Linux systemd user services for Qdrant and Ollama (VS Code context)
     systemd.user.services = lib.mkIf pkgs.stdenv.isLinux {
       qdrant = lib.mkIf (pkgs ? qdrant && pkgs ? vscode) {
