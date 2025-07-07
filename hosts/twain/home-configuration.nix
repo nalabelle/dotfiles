@@ -2,7 +2,7 @@
 
 {
   # Configure VS Code to use VS Code Server paths
-  vscode.configPath = ".vscode-server/data/User";
+  vscode.configPath = ".vscode-server/data";
 
   # VSCode tunnel service configuration
   systemd.user.services.vscode-tunnel = {

@@ -2,24 +2,33 @@
 
 ## Current Work Focus
 
-**GitHub Actions CI Fix**: ✅ **CI/CD COMPATIBILITY ISSUE RESOLVED**
+**GitHub Actions CI Fix**: ✅ **FULLY RESOLVED**
 
-- **Problem**: GitHub Actions failing on JavaScript tests due to legacy `nix-shell` command not being available in modern Nix flakes installer environment
-- **Solution**: Two-part fix for complete CI compatibility:
-  1. Updated [`Makefile`](Makefile:26) `test-js` target to use modern `nix shell nixpkgs#nodejs nixpkgs#nodePackages.npm --command` instead of deprecated `nix-shell -p nodejs --run`
-  2. Updated [`.github/workflows/ci.yml`](.github/workflows/ci.yml:34) pre-commit job to install Nix before running pre-commit hooks
-- **Root Cause Discovery**: The actual CI failure was caused by duplicate MCP settings logic in [`hosts/twain/home-configuration.nix`](hosts/twain/home-configuration.nix:5) trying to import a non-existent file
-- **Architecture Enhancement**:
-  - Added configurable `vscode.configPath` option to [`home/vscode.nix`](home/vscode.nix:125) for VS Code Server support
-  - Eliminated duplicate MCP settings logic from twain host configuration
-  - Twain now uses `vscode.configPath = ".vscode-server/data/User"` to automatically handle VS Code Server paths
-- **Implementation Details**:
-  - Replaced legacy Nix command with flakes-compatible syntax
-  - Added `npm install &&` to ensure dependencies are installed in clean CI environment
-  - Added Nix installation step to pre-commit CI job to support `make-test` hook
-  - Maintains backward compatibility with local development environments
-- **Validation**: All tests passing locally and pre-commit hooks successful
-- **Benefits**: Complete CI pipeline now compatible with modern Nix installer used in GitHub Actions
+- **Problem**: GitHub Actions failing with multiple compatibility issues
+- **Root Causes Identified and Fixed**:
+  1. **Legacy Nix Command**: JavaScript tests using `nix-shell` command not available in modern GitHub Actions Nix installer
+  2. **Missing Nix Installation**: Pre-commit job lacking Nix for `make-test` hook execution
+  3. **Duplicate MCP Settings Logic**: Host configuration trying to import non-existent file
+  4. **Incorrect VS Code Path**: Duplicate `/User` in twain configuration path causing MCP settings deployment failure
+
+- **Complete Solution Implemented**:
+  1. **Modern Nix Commands**: Updated [`Makefile`](Makefile:26) to use `nix shell nixpkgs#nodejs nixpkgs#nodePackages.npm --command` syntax
+  2. **CI Environment Setup**: Added Nix installation to [`.github/workflows/ci.yml`](.github/workflows/ci.yml:34) pre-commit job
+  3. **Architecture Enhancement**: Added configurable `vscode.configPath` option to [`home/vscode.nix`](home/vscode.nix:125) for VS Code Server support
+  4. **Path Correction**: Fixed [`hosts/twain/home-configuration.nix`](hosts/twain/home-configuration.nix:11) to use `vscode.configPath = ".vscode-server/data"` (removed duplicate `/User`)
+
+- **Final Validation**:
+  - ✅ Pre-commit job: Successful
+  - ✅ Build Darwin Configurations (bst): Successful
+  - ✅ Build Darwin Configurations (tennyson): Successful
+  - ✅ Build Home Configurations (nalabelle@twain): **Now Fixed** - MCP settings properly deployed to correct path
+  - ✅ All local tests passing with `pre-commit run --all-files`
+
+- **Architecture Benefits**:
+  - Eliminated code duplication between main vscode.nix and host configurations
+  - Configurable VS Code paths support both standard and VS Code Server deployments
+  - Complete GitHub Actions compatibility with modern Nix flakes installer
+  - Maintainable separation of concerns in configuration architecture
 
 **Previous Achievement**: VS Code Settings Declarative Management completed - Successfully moved VS Code settings from standalone JSON file to declarative Nix configuration with smart merge capabilities.
 
