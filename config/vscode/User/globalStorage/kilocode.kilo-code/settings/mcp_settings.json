@@ -39,7 +39,10 @@
       },
       "command": "nix",
       "alwaysAllow": [
-        "get_me"
+        "get_me",
+        "list_workflow_jobs",
+        "get_job_logs",
+        "get_workflow_run"
       ]
     }
   }
