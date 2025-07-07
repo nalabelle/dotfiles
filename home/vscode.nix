@@ -102,11 +102,8 @@ let
     "cursor" = "Cursor";
   }.${vscodePname};
 
-  # Build platform-specific state database path
-  configPath = if pkgs.stdenv.isDarwin then
-    "Library/Application Support/${configDir}"
-  else
-    "${config.xdg.configHome}/${configDir}";
+  # Build platform-specific state database path (can be overridden by host config)
+  configPath = config.vscode.configPath;
 
   # Create a source directory with all kilocode files (rules and workflows)
   kilocodeSource = pkgs.runCommand "kilocode-source" { } ''
@@ -119,6 +116,16 @@ in {
     type = lib.types.attrs;
     default = { };
     description = "Host-specific MCP servers for VSCode";
+  };
+
+  options.vscode.configPath = lib.mkOption {
+    type = lib.types.str;
+    default = if pkgs.stdenv.isDarwin then
+      "Library/Application Support/${configDir}"
+    else
+      "${config.xdg.configHome}/${configDir}";
+    description =
+      "Override the VS Code configuration path (useful for VS Code Server)";
   };
 
   config = {

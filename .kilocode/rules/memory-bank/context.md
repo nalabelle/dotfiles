@@ -5,13 +5,21 @@
 **GitHub Actions CI Fix**: ✅ **CI/CD COMPATIBILITY ISSUE RESOLVED**
 
 - **Problem**: GitHub Actions failing on JavaScript tests due to legacy `nix-shell` command not being available in modern Nix flakes installer environment
-- **Solution**: Updated [`Makefile`](Makefile:26) `test-js` target to use modern `nix shell nixpkgs#nodejs nixpkgs#nodePackages.npm --command` instead of deprecated `nix-shell -p nodejs --run`
+- **Solution**: Two-part fix for complete CI compatibility:
+  1. Updated [`Makefile`](Makefile:26) `test-js` target to use modern `nix shell nixpkgs#nodejs nixpkgs#nodePackages.npm --command` instead of deprecated `nix-shell -p nodejs --run`
+  2. Updated [`.github/workflows/ci.yml`](.github/workflows/ci.yml:34) pre-commit job to install Nix before running pre-commit hooks
+- **Root Cause Discovery**: The actual CI failure was caused by duplicate MCP settings logic in [`hosts/twain/home-configuration.nix`](hosts/twain/home-configuration.nix:5) trying to import a non-existent file
+- **Architecture Enhancement**:
+  - Added configurable `vscode.configPath` option to [`home/vscode.nix`](home/vscode.nix:125) for VS Code Server support
+  - Eliminated duplicate MCP settings logic from twain host configuration
+  - Twain now uses `vscode.configPath = ".vscode-server/data/User"` to automatically handle VS Code Server paths
 - **Implementation Details**:
   - Replaced legacy Nix command with flakes-compatible syntax
   - Added `npm install &&` to ensure dependencies are installed in clean CI environment
+  - Added Nix installation step to pre-commit CI job to support `make-test` hook
   - Maintains backward compatibility with local development environments
 - **Validation**: All tests passing locally and pre-commit hooks successful
-- **Benefits**: CI pipeline now compatible with modern Nix installer used in GitHub Actions
+- **Benefits**: Complete CI pipeline now compatible with modern Nix installer used in GitHub Actions
 
 **Previous Achievement**: VS Code Settings Declarative Management completed - Successfully moved VS Code settings from standalone JSON file to declarative Nix configuration with smart merge capabilities.
 

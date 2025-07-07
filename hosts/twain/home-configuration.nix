@@ -1,21 +1,9 @@
 { config, pkgs, inputs, lib, ... }:
 
-let
-  # Read base MCP settings (same logic as home/vscode.nix)
-  baseSettings = lib.importJSON ../../config/vscode/kilocode-mcp-settings.json;
+{
+  # Configure VS Code to use VS Code Server paths
+  vscode.configPath = ".vscode-server/data/User";
 
-  # Merge base settings with host-specific MCP servers
-  mergedSettings = lib.recursiveUpdate baseSettings {
-    mcpServers = config.vscode.hostMcpServers;
-  };
-
-  # Create the settings file content with pretty JSON formatting
-  settingsFile = pkgs.runCommand "mcp_settings.json" { } ''
-    echo '${
-      lib.generators.toJSON { } mergedSettings
-    }' | ${pkgs.jq}/bin/jq '.' > $out
-  '';
-in {
   # VSCode tunnel service configuration
   systemd.user.services.vscode-tunnel = {
     Unit = {
@@ -56,7 +44,6 @@ in {
     Install = { WantedBy = [ "default.target" ]; };
   };
 
-
   # Enable SSH for GitHub authentication
   programs.ssh = {
     enable = true;
@@ -66,19 +53,6 @@ in {
         IdentityFile ~/.ssh/id_ed25519
     '';
   };
-
-  # Ensure proper file permissions for VS Code Server
-  # home.file.".vscode-server".recursive = true; # Commenting out as we don't need this
-
-  # Disable the standard XDG config file (not used on this machine)
-  xdg.configFile."Code/User/globalStorage/kilocode.kilo-code/settings/mcp_settings.json".enable =
-    false;
-
-  # VS Code Server MCP settings (uses the same settings file logic as main vscode.nix)
-  home.file.".vscode-server/data/User/globalStorage/kilocode.kilo-code/settings/mcp_settings.json" =
-    {
-      source = settingsFile;
-    };
 
   # Configure home-manager auto-upgrade for flakes
   systemd.user.services.home-manager-auto-upgrade = {
