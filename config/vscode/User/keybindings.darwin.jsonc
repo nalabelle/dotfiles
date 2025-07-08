@@ -34,5 +34,23 @@
     "key": "cmd+v",
     "command": "editor.action.clipboardPasteAction",
     "when": "editorTextFocus && vim.active && vim.mode == 'Insert'"
+  },
+  // Vim extension: Cmd+I should jump forward in jump list (like Ctrl+I in vim)
+  {
+    "key": "cmd+i",
+    "command": "extension.vim_ctrl+i",
+    "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
+  },
+  // Vim extension: Cmd+O should jump backward in jump list (like Ctrl+O in vim)
+  {
+    "key": "cmd+o",
+    "command": "extension.vim_ctrl+o",
+    "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
+  },
+  // Vim extension: Cmd+] should go to definition (like Ctrl+] in vim)
+  {
+    "key": "cmd+]",
+    "command": "extension.vim_ctrl+]",
+    "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
   }
 ]
