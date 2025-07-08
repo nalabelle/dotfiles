@@ -32,7 +32,9 @@
       "template-diff",
       "pre-commit run --all-files",
       "npm test",
-      "npm install"
+      "npm install",
+      "pnpm test",
+      "pnpm install"
     ],
     "autoCondenseContext": true,
     "autoCondenseContextPercent": 85,
