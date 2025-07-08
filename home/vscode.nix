@@ -156,6 +156,12 @@ in {
         source = settingsFile;
       };
 
+    # VS Code keybindings - managed declaratively
+    home.file."${configPath}/User/keybindings.json" =
+      lib.mkIf pkgs.stdenv.isDarwin {
+        source = ../config/vscode/User/keybindings.darwin.jsonc;
+      };
+
     # Kilo Code rule files (both platforms)
     #
     # WORKAROUND: Using activation scripts to copy files instead of symlinks.

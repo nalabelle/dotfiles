@@ -1,0 +1,38 @@
+[
+  // Map Cmd+C to Ctrl+C in integrated terminal on macOS
+  {
+    "key": "cmd+c",
+    "command": "workbench.action.terminal.sendSequence",
+    "args": {
+      "text": "\u0003"
+    },
+    "when": "terminalFocus && !terminalTextSelected"
+  },
+  // Keep default Cmd+C behavior when text is selected in terminal
+  {
+    "key": "cmd+c",
+    "command": "workbench.action.terminal.copySelection",
+    "when": "terminalFocus && terminalTextSelected"
+  },
+  // Map Cmd+D to Ctrl+D (EOF/exit) in integrated terminal on macOS
+  {
+    "key": "cmd+d",
+    "command": "workbench.action.terminal.sendSequence",
+    "args": {
+      "text": "\u0004"
+    },
+    "when": "terminalFocus"
+  },
+  // Vim extension: Cmd+V in normal mode should enter visual mode (like Ctrl+V in vim)
+  {
+    "key": "cmd+v",
+    "command": "extension.vim_ctrl+v",
+    "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
+  },
+  // Vim extension: Cmd+V in insert mode should paste
+  {
+    "key": "cmd+v",
+    "command": "editor.action.clipboardPasteAction",
+    "when": "editorTextFocus && vim.active && vim.mode == 'Insert'"
+  }
+]
