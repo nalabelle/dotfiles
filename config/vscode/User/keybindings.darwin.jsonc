@@ -39,18 +39,24 @@
   {
     "key": "cmd+i",
     "command": "extension.vim_ctrl+i",
-    "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
+    "when": "editorTextFocus && vim.active && (vim.mode == 'Normal' || vim.mode == 'Insert')"
   },
   // Vim extension: Cmd+O should jump backward in jump list (like Ctrl+O in vim)
   {
     "key": "cmd+o",
     "command": "extension.vim_ctrl+o",
-    "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
+    "when": "editorTextFocus && vim.active && (vim.mode == 'Normal' || vim.mode == 'Insert')"
+  },
+  // Disable default Cmd+O (Open File) when Vim is active to prevent conflict
+  {
+    "key": "cmd+o",
+    "command": "-workbench.action.files.openFile",
+    "when": "vim.active"
   },
   // Vim extension: Cmd+] should go to definition (like Ctrl+] in vim)
   {
     "key": "cmd+]",
     "command": "extension.vim_ctrl+]",
-    "when": "editorTextFocus && vim.active && vim.mode == 'Normal'"
+    "when": "editorTextFocus && vim.active && (vim.mode == 'Normal' || vim.mode == 'Insert')"
   }
 ]
