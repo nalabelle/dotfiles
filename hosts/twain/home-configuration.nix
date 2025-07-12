@@ -1,48 +1,8 @@
 { config, pkgs, inputs, lib, ... }:
 
 {
-  # Configure VS Code to use VS Code Server paths
+  # Configure VS Code to use VS Code SSH path
   vscode.configPath = ".vscode-server/data";
-
-  # VSCode tunnel service configuration
-  systemd.user.services.vscode-tunnel = {
-    Unit = {
-      Description = "VS Code Tunnel Service";
-      After = "network.target";
-    };
-
-    Service = {
-      Type = "simple";
-      Environment = [
-        "USER=%u"
-        "LOGNAME=%u"
-        "HOME=%h"
-        "SHELL=/usr/bin/zsh"
-        "TERM=xterm-256color"
-        "XDG_RUNTIME_DIR=/run/user/1000"
-        "FZF_TMUX=1"
-        "TMUX_TMPDIR=/run/user/1000"
-        "XDG_CACHE_HOME=%h/.cache"
-        "XDG_CONFIG_HOME=%h/.config"
-        "XDG_DATA_HOME=%h/.local/share"
-        "XDG_STATE_HOME=%h/.local/state"
-        "EDITOR=vim"
-        "PAGER=less"
-        "LESSHISTSIZE=0"
-        "KEYTIMEOUT=1"
-        "STARSHIP_SHELL=zsh"
-        "DIRENV_DIR=-%h"
-        "DIRENV_FILE=%h/.envrc"
-        "PATH=%h/.cache/.bun/bin:%h/.local/share/../bin:%h/.nix-profile/bin:%h/.local/bin:%h/.homesick/repos/dotfiles/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin"
-      ];
-      ExecStart =
-        "${config.programs.vscode.package}/bin/code tunnel --accept-server-license-terms";
-      Restart = "on-failure";
-      RestartSec = "90s";
-    };
-
-    Install = { WantedBy = [ "default.target" ]; };
-  };
 
   # Enable SSH for GitHub authentication
   programs.ssh = {
