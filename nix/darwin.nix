@@ -5,8 +5,11 @@
   networking.hostName = hostname;
   users.users."${username}".home = "/Users/${username}";
 
-  # Upgrade ancient osx bash
-  environment.systemPackages = [ pkgs.bash ];
+  environment.systemPackages = [
+    # Upgrade ancient osx bash
+    pkgs.bash
+    (pkgs.callPackage ../packages/peazip.nix { })
+  ];
   environment.systemPath = lib.mkBefore [
     # User-specific Nix profiles (needed for GUI applications)
     # When useUserPackages = true: packages managed by nix-darwin in /etc/profiles/per-user/
