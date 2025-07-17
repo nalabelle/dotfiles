@@ -3,7 +3,7 @@
 let
   # Import merge-vscode-settings package
   mergeVscodeSettings =
-    import ../packages/node/merge-vscode-settings.nix { inherit pkgs; };
+    import ../packages/merge-vscode-settings.nix { inherit pkgs; };
 
   # Read base MCP settings and merge with host-specific servers
   baseSettings = lib.importJSON

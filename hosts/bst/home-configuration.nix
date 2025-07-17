@@ -1,10 +1,4 @@
-{ pkgs, inputs, lib, ... }:
-let
-  extraNodePackages = import ../../packages/node {
-    inherit pkgs;
-    nodejs = pkgs.nodejs_22;
-  };
-in {
+{ pkgs, inputs, lib, ... }: {
   programs.git = {
     extraConfig = {
       user.signingkey = lib.mkForce
@@ -12,11 +6,7 @@ in {
     };
   };
 
-  home.packages = with pkgs; [
-    awscli2
-    duckdb
-    extraNodePackages."@anthropic-ai/claude-code"
-  ];
+  home.packages = with pkgs; [ awscli2 duckdb claude-code ];
 
   # BST-specific MCP server configurations
   vscode.hostMcpServers = {
