@@ -6,7 +6,7 @@
     };
   };
 
-  home.packages = with pkgs; [ awscli2 duckdb claude-code ];
+  home.packages = with pkgs; [ awscli2 duckdb ];
 
   # BST-specific MCP server configurations
   vscode.hostMcpServers = {
