@@ -4,6 +4,7 @@
       "android-ndk"
       "android-platform-tools"
       "android-studio"
+      "balenaetcher"
       "calibre"
       "kopiaui"
       "mountain-duck"
