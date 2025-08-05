@@ -6,6 +6,7 @@
       "android-studio"
       "balenaetcher"
       "calibre"
+      "foobar2000"
       "kopiaui"
       "mountain-duck"
       "obsidian"
