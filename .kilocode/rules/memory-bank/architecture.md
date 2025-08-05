@@ -25,12 +25,6 @@ dotfiles/
 │   ├── fonts.nix               # Font configuration
 │   └── vscode.nix              # VS Code configuration
 ├── hosts/                       # Host-specific configurations
-│   ├── tennyson/               # Personal development machine
-│   │   ├── darwin-configuration.nix
-│   │   └── home-configuration.nix
-│   └── bst/                    # Work machine
-│       ├── darwin-configuration.nix
-│       └── home-configuration.nix
 ├── config/                      # Application configuration files
 │   ├── vim/                    # Vim configuration files
 │   ├── vscode/                 # VS Code settings

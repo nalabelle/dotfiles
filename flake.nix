@@ -18,22 +18,16 @@
     };
   };
   outputs = inputs:
-    let
-      libFunctions = import ./lib { inherit inputs; };
+    let libFunctions = import ./lib { inherit inputs; };
     in {
       # Darwin Configs
-      darwinConfigurations.bst = libFunctions.mkDarwinSystem {
-        hostname = "bst";
-      };
-      darwinConfigurations.tennyson = libFunctions.mkDarwinSystem {
-        hostname = "tennyson";
-      };
+      darwinConfigurations.tennyson =
+        libFunctions.mkDarwinSystem { hostname = "tennyson"; };
       # Test target to ensure home-manager config works when testing on darwin
       homeConfigurations."nalabelle@darwin" = libFunctions.mkHomeConfig {
         hostname = "default";
         system = "aarch64-darwin";
       };
-
 
       # Home Manager Configs
       homeConfigurations."nalabelle@twain" = libFunctions.mkHomeConfig {

@@ -19,7 +19,7 @@
 
 - **Final Validation**:
   - ✅ Pre-commit job: Successful
-  - ✅ Build Darwin Configurations (bst): Successful
+  - ✅ Build Darwin Configurations (): Successful
   - ✅ Build Darwin Configurations (tennyson): Successful
   - ✅ Build Home Configurations (nalabelle@twain): **Now Fixed** - MCP settings properly deployed to correct path
   - ✅ All local tests passing with `pre-commit run --all-files`
@@ -47,15 +47,6 @@
 **Previous Achievement**: Kilocode extension integration stabilized with workaround for symlink handling bug implemented via activation scripts.
 
 ## Project Status
-
-### Active Configurations
-
-- **tennyson**: Personal development machine with full macOS configuration
-  - Additional tools: Android development (NDK, Studio), Obsidian, Calibre, Zed editor
-  - Cloud tools: Mountain Duck, ProtonVPN, KopiaUI backup
-- **bst**: Work machine with streamlined configuration
-  - Development tools: DBeaver, Linear, Graphite CLI
-  - Custom Nix build group configuration (gid: 30000)
 
 ### Current System State
 

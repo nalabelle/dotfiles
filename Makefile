@@ -32,7 +32,6 @@ test: test-js ## Test configurations appropriate for current OS (mirrors CI work
 	@if [[ "$(shell uname -s)" == "Darwin" ]]; then \
 		echo "Testing Darwin configurations..."; \
 		nix build .#darwinConfigurations.tennyson.system; \
-		nix build .#darwinConfigurations.bst.system; \
 		nix build .#homeConfigurations."nalabelle@darwin".activationPackage; \
 	else \
 		echo "Testing Linux home configurations..."; \
