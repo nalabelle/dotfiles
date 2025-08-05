@@ -59,15 +59,6 @@
             sha256 = "0j012i6nklc4p92cbh3l1zqs850plxh847b52lskb533rhygx9kf";
           };
         };
-        vim-svelte = pkgs.vimUtils.buildVimPlugin {
-          name = "vim-svelte";
-          src = pkgs.fetchFromGitHub {
-            owner = "evanleck";
-            repo = "vim-svelte";
-            rev = "0e93ec53c3667753237282926fec626785622c1c";
-            sha256 = "1vv10bx2q463bjg7gvjy5lfxn0177s2r8i8xlwy2kg4620n0g5xi";
-          };
-        };
         terminalkeys = pkgs.vimUtils.buildVimPlugin {
           name = "terminalkeys-vim";
           src = pkgs.fetchFromGitHub {
@@ -90,7 +81,6 @@
         vim-indent-guides
         fastfold
         vista-vim
-        nerdtree
         fzf-vim
 
         # Git
@@ -104,10 +94,8 @@
         tabular
         vim-markdown
         ale
-        markdown-preview-nvim
         html5-vim
         vim-javascript
-        vim-svelte
 
         # Nix Support
         tlib_vim
