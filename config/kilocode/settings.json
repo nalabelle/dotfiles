@@ -36,6 +36,11 @@
       "pnpm test",
       "pnpm install"
     ],
+    "deniedCommands": [
+      "cd pulumi && pulumi up --yes",
+      "pulumi up",
+      "pulumi up --yes"
+    ],
     "autoCondenseContext": true,
     "autoCondenseContextPercent": 85,
     "maxConcurrentFileReads": 5,
