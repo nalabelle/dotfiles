@@ -54,4 +54,39 @@
       StandardErrorPath = "/Users/${username}/.local/var/log/nix-gc.log";
     };
   };
+
+  # Automatic file cleanup service for Downloads and Screenshots directories
+  launchd.user.agents.file-cleaner =
+    let cleanerPkg = pkgs.callPackage ../../packages/cleaner.nix { };
+    in {
+      serviceConfig = {
+        Label = "org.nixos.file-cleaner";
+        ProgramArguments = [
+          "/bin/sh"
+          "-c"
+          ''
+            set -eu
+            set -o pipefail
+            set -x
+            # Clean Downloads directory (files older than 3 days)
+            ${cleanerPkg}/bin/cleaner --not-modified-within 3d "/Users/${username}/Downloads"
+
+            # Clean Screenshots directory (files older than 1 week)
+            ${cleanerPkg}/bin/cleaner --not-modified-within 7d "/Users/${username}/Screenshots"
+          ''
+        ];
+        RunAtLoad = true; # Run at login if scheduled time was missed
+        KeepAlive = false;
+        StartCalendarInterval = [{
+          Hour = 3; # 3 AM
+          Minute = 0; # On the hour
+        }];
+        ProcessType = "Background";
+        Nice = 10; # Lower priority than normal processes
+        LowPriorityIO = true;
+        TimeOut = 1800; # 30 minute timeout to prevent hanging
+        StandardOutPath = "/Users/${username}/Library/Logs/cleaner.log";
+        StandardErrorPath = "/Users/${username}/Library/Logs/cleaner.log";
+      };
+    };
 }
