@@ -161,6 +161,7 @@
       "coconutbattery"
       "docker-desktop"
       "iterm2"
+      "logitune" # Needs manual install
       "plexamp"
       "raycast"
       "syncthing-app"
