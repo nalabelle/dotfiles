@@ -1,4 +1,11 @@
-{ config, lib, pkgs, system ? builtins.currentSystem, ... }: {
+{
+  config,
+  lib,
+  pkgs,
+  system ? builtins.currentSystem,
+  ...
+}:
+{
   home.packages = with pkgs; [
     curl
     fzf
@@ -18,6 +25,7 @@
     devbox
     mkcert
     _1password-cli
+    nixfmt-rfc-style
 
     # Environment
     direnv
@@ -41,7 +49,10 @@
     # Custom scripts
     (writeShellApplication {
       name = "nix-refresh";
-      runtimeInputs = [ home-manager git ];
+      runtimeInputs = [
+        home-manager
+        git
+      ];
       text = builtins.readFile ../bin/nix-refresh;
     })
     (writeShellApplication {
@@ -51,7 +62,10 @@
     })
     (writeShellApplication {
       name = "find-and-replace";
-      runtimeInputs = [ findutils gnused ];
+      runtimeInputs = [
+        findutils
+        gnused
+      ];
       text = builtins.readFile ../bin/find-and-replace;
     })
     (writeShellApplication {
@@ -66,7 +80,11 @@
     })
     (writeShellApplication {
       name = "template-diff";
-      runtimeInputs = [ git diffutils coreutils ];
+      runtimeInputs = [
+        git
+        diffutils
+        coreutils
+      ];
       text = builtins.readFile ../bin/template-diff;
     })
     (writeShellApplication {
@@ -111,7 +129,11 @@
     enable = true;
     # this is installed per project
     package = null;
-    settings = { virtualenvs = { in-project = true; }; };
+    settings = {
+      virtualenvs = {
+        in-project = true;
+      };
+    };
   };
 
   programs.fzf = {
