@@ -1,4 +1,11 @@
-{ pkgs, inputs, hostname, username, ... }: {
+{
+  pkgs,
+  inputs,
+  hostname,
+  username,
+  ...
+}:
+{
   homebrew = {
     casks = [
       "android-ndk"
@@ -14,12 +21,17 @@
       "protonvpn"
       "zed"
     ];
+    taps = [
+      "sst/tap/opencode"
+    ];
   };
 
   # Aggressive Nix garbage collection and safe store optimization
   nix = {
     # 1) GC configuration: disable built-in scheduler; use custom launchd agent below
-    gc = { automatic = false; };
+    gc = {
+      automatic = false;
+    };
 
     # 2) Safe store optimization via nix-darwin
     optimise.automatic = true;
@@ -41,11 +53,13 @@
       ];
       RunAtLoad = true; # Run at login if missed
       KeepAlive = false; # Don't restart after completion
-      StartCalendarInterval = [{
-        Weekday = 1; # Monday
-        Hour = 3; # 3 AM
-        Minute = 0; # On the hour
-      }];
+      StartCalendarInterval = [
+        {
+          Weekday = 1; # Monday
+          Hour = 3; # 3 AM
+          Minute = 0; # On the hour
+        }
+      ];
       ProcessType = "Background";
       Nice = 19; # Lowest priority
       LowPriorityIO = true; # Reduce I/O priority
@@ -57,8 +71,10 @@
 
   # Automatic file cleanup service for Downloads and Screenshots directories
   launchd.user.agents.file-cleaner =
-    let cleanerPkg = pkgs.callPackage ../../packages/cleaner.nix { };
-    in {
+    let
+      cleanerPkg = pkgs.callPackage ../../packages/cleaner.nix { };
+    in
+    {
       serviceConfig = {
         Label = "org.nixos.file-cleaner";
         ProgramArguments = [
@@ -77,10 +93,12 @@
         ];
         RunAtLoad = true; # Run at login if scheduled time was missed
         KeepAlive = false;
-        StartCalendarInterval = [{
-          Hour = 3; # 3 AM
-          Minute = 0; # On the hour
-        }];
+        StartCalendarInterval = [
+          {
+            Hour = 3; # 3 AM
+            Minute = 0; # On the hour
+          }
+        ];
         ProcessType = "Background";
         Nice = 10; # Lower priority than normal processes
         LowPriorityIO = true;
