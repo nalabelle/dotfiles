@@ -1,62 +1,47 @@
 { pkgs, ... }:
 
-let
-  python = pkgs.python3;
-  pythonPackages = python.pkgs;
-
-  mcp-server-fetch = pythonPackages.buildPythonPackage rec {
-    pname = "mcp_server_fetch";
-    version = "2025.4.7";
-    format = "wheel";
-
-    src = pythonPackages.fetchPypi {
-      inherit pname version;
-      sha256 = "sha256-VieePFXLHlBrlYypuyPtRBOUSm8jC8oh4ESu5Rc0/kc=";
-    };
-
-    doCheck = false; # Skip tests for now
-  };
-in
-
-pkgs.stdenv.mkDerivation rec {
+pkgs.buildNpmPackage rec {
   pname = "fetch-mcp-server";
   version = "2025.4.7";
 
-  # No source needed
-  src = null;
-  dontUnpack = true;
+  src = ./fetch-mcp-server;
 
-  nativeBuildInputs = [ python ];
-  buildInputs = [ mcp-server-fetch ];
+  npmDepsHash = "sha256-rLb/VMNPezr03IwT8f2ubLP8qVhNlc3t18G2/vmAwZ8=";
+
+  nativeBuildInputs = with pkgs; [
+    nodejs
+    typescript
+  ];
 
   buildPhase = ''
-    # Nothing to build, just prepare the wrapper
+    runHook preBuild
+    npm run build
+    runHook postBuild
   '';
 
   installPhase = ''
+        runHook preInstall
+
+        mkdir -p $out/lib/node_modules/fetch-mcp-server
+        cp -r dist package.json node_modules $out/lib/node_modules/fetch-mcp-server/
+
         mkdir -p $out/bin
-
-        # Create a fake node executable that makes have_node() return False
-        mkdir -p $out/fake-bin
-        cat > $out/fake-bin/node << 'FAKE_NODE_EOF'
-    #!${pkgs.bash}/bin/bash
-    # Fake node that exits with error to make readabilipy use Python-only mode
-    exit 1
-    FAKE_NODE_EOF
-        chmod +x $out/fake-bin/node
-
-        # Create wrapper script that uses fake node
-        cat > $out/bin/fetch-mcp-wrapper << EOF
-    #!${pkgs.bash}/bin/bash
-    # Put fake node first in PATH to force Python-only mode in readabilipy
-    export PATH="$out/fake-bin:\$PATH"
-    exec ${python.withPackages (ps: [ mcp-server-fetch ])}/bin/python -m mcp_server_fetch "\$@"
+        cat > $out/bin/fetch-mcp-server << EOF
+    #!/usr/bin/env bash
+    exec ${pkgs.nodejs}/bin/node $out/lib/node_modules/fetch-mcp-server/dist/index.js "\$@"
     EOF
-        chmod +x $out/bin/fetch-mcp-wrapper
+        chmod +x $out/bin/fetch-mcp-server
+
+        # Create wrapper with the expected name
+        ln -s $out/bin/fetch-mcp-server $out/bin/fetch-mcp-wrapper
+
+        runHook postInstall
   '';
 
   meta = with pkgs.lib; {
-    description = "MCP Fetch Server with Node.js support";
+    description = "A Model Context Protocol server providing tools to fetch and convert web content for usage by LLMs";
     license = licenses.mit;
+    maintainers = [ ];
+    platforms = platforms.all;
   };
 }
