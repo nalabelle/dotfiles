@@ -1,13 +1,16 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   # Import merge-vscode-settings package
-  mergeVscodeSettings =
-    import ../packages/merge-vscode-settings.nix { inherit pkgs; };
+  mergeVscodeSettings = import ../packages/merge-vscode-settings.nix { inherit pkgs; };
 
   # Read base MCP settings and merge with host-specific servers
-  baseSettings = lib.importJSON
-    ../config/vscode/User/globalStorage/kilocode.kilo-code/settings/mcp_settings.json;
+  baseSettings = lib.importJSON ../config/vscode/User/globalStorage/kilocode.kilo-code/settings/mcp_settings.json;
 
   # Merge base settings with host-specific MCP servers
   mergedSettings = lib.recursiveUpdate baseSettings {
@@ -16,9 +19,7 @@ let
 
   # Create the settings file content with pretty JSON formatting
   settingsFile = pkgs.runCommand "mcp_settings.json" { } ''
-    echo '${
-      lib.generators.toJSON { } mergedSettings
-    }' | ${pkgs.jq}/bin/jq '.' > $out
+    echo '${lib.generators.toJSON { } mergedSettings}' | ${pkgs.jq}/bin/jq '.' > $out
   '';
 
   # VS Code user settings
@@ -64,43 +65,49 @@ let
     ];
 
     # Git repository scanning settings
-    "git.repositoryScanIgnoredFolders" = [ "node_modules" ".devbox" ".venv" ];
+    "git.repositoryScanIgnoredFolders" = [
+      "node_modules"
+      ".devbox"
+      ".venv"
+    ];
 
     # Makefile extension settings
     "makefile.configureOnOpen" = false;
 
     # Auto-run command settings for Kilo Code
-    "auto-run-command.rules" = [{
-      condition = "always";
-      command =
-        "kilo-code.importSettings ${config.home.homeDirectory}/.kilocode/settings.json";
-      message = "Importing Kilo Code settings from file";
-    }];
+    "auto-run-command.rules" = [
+      {
+        condition = "always";
+        command = "kilo-code.importSettings ${config.home.homeDirectory}/.kilocode/settings.json";
+        message = "Importing Kilo Code settings from file";
+      }
+    ];
   };
 
   # Create VS Code user settings file (base settings from Nix)
   userSettingsFile = pkgs.runCommand "settings.json" { } ''
-    echo '${
-      lib.generators.toJSON { } userSettings
-    }' | ${pkgs.jq}/bin/jq '.' > $out
+    echo '${lib.generators.toJSON { } userSettings}' | ${pkgs.jq}/bin/jq '.' > $out
   '';
 
   # Extract VS Code config directory name based on package
-  vscodePname = if pkgs.stdenv.isDarwin then
-  # On macOS, we use a wrapper, so we need to determine the actual VS Code type
-    "vscode"
-  else
-  # On Linux, use the actual package name
-    pkgs.vscode.pname;
+  vscodePname =
+    if pkgs.stdenv.isDarwin then
+      # On macOS, we use a wrapper, so we need to determine the actual VS Code type
+      "vscode"
+    else
+      # On Linux, use the actual package name
+      pkgs.vscode.pname;
 
-  configDir = {
-    "vscode" = "Code";
-    "vscode-insiders" = "Code - Insiders";
-    "vscodium" = "VSCodium";
-    "openvscode-server" = "OpenVSCode Server";
-    "windsurf" = "Windsurf";
-    "cursor" = "Cursor";
-  }.${vscodePname};
+  configDir =
+    {
+      "vscode" = "Code";
+      "vscode-insiders" = "Code - Insiders";
+      "vscodium" = "VSCodium";
+      "openvscode-server" = "OpenVSCode Server";
+      "windsurf" = "Windsurf";
+      "cursor" = "Cursor";
+    }
+    .${vscodePname};
 
   # Build platform-specific state database path (can be overridden by host config)
   configPath = config.vscode.configPath;
@@ -111,7 +118,8 @@ let
     cp -r ${../config/kilocode}/* $out/
   '';
 
-in {
+in
+{
   options.vscode.hostMcpServers = lib.mkOption {
     type = lib.types.attrs;
     default = { };
@@ -120,47 +128,49 @@ in {
 
   options.vscode.configPath = lib.mkOption {
     type = lib.types.str;
-    default = if pkgs.stdenv.isDarwin then
-      "Library/Application Support/${configDir}"
-    else
-      "${config.xdg.configHome}/${configDir}";
-    description =
-      "Override the VS Code configuration path (useful for VS Code Server)";
+    default =
+      if pkgs.stdenv.isDarwin then
+        "Library/Application Support/${configDir}"
+      else
+        "${config.xdg.configHome}/${configDir}";
+    description = "Override the VS Code configuration path (useful for VS Code Server)";
   };
 
   config = {
     # VS Code user settings - merged with existing settings via activation script
-    home.activation.vscodeSettings =
-      lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-        EXISTING_SETTINGS="$HOME/${configPath}/User/settings.json"
-        MANAGED_SETTINGS="${userSettingsFile}"
+    home.activation.vscodeSettings = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+      EXISTING_SETTINGS="$HOME/${configPath}/User/settings.json"
+      MANAGED_SETTINGS="${userSettingsFile}"
 
-        if [ -f "$EXISTING_SETTINGS" ]; then
-          # Merge existing settings with managed settings (managed settings take precedence)
-          echo "Merging existing VS Code settings with managed settings..."
+      if [ -f "$EXISTING_SETTINGS" ]; then
+        # Merge existing settings with managed settings (managed settings take precedence)
+        echo "Merging existing VS Code settings with managed settings..."
 
-          # Use comment-preserving merge tool for JSONC format
-          if ${mergeVscodeSettings}/bin/merge-vscode-settings "$EXISTING_SETTINGS" "$MANAGED_SETTINGS" "$EXISTING_SETTINGS.tmp"; then
-            mv "$EXISTING_SETTINGS.tmp" "$EXISTING_SETTINGS"
-          else
-            echo "Warning: Skipping VS Code settings merge due to error"
-          fi
+        # Use comment-preserving merge tool for JSONC format
+        if ${mergeVscodeSettings}/bin/merge-vscode-settings "$EXISTING_SETTINGS" "$MANAGED_SETTINGS" "$EXISTING_SETTINGS.tmp"; then
+          mv "$EXISTING_SETTINGS.tmp" "$EXISTING_SETTINGS"
+        else
+          echo "Warning: Skipping VS Code settings merge due to error"
         fi
-        # If no existing settings file exists, silently exit without creating one
-      '';
+      fi
+      # If no existing settings file exists, silently exit without creating one
+    '';
 
     # MCP settings for Kilo Code extension
     # This only manages the settings file, not the VSCode installation
-    home.file."${configPath}/User/globalStorage/kilocode.kilo-code/settings/mcp_settings.json" =
-      {
-        source = settingsFile;
-      };
+    home.file."${configPath}/User/globalStorage/kilocode.kilo-code/settings/mcp_settings.json" = {
+      source = settingsFile;
+    };
 
     # VS Code keybindings - managed declaratively
-    home.file."${configPath}/User/keybindings.json" =
-      lib.mkIf pkgs.stdenv.isDarwin {
-        source = ../config/vscode/User/keybindings.darwin.jsonc;
-      };
+    home.file."${configPath}/User/keybindings.json" = lib.mkIf pkgs.stdenv.isDarwin {
+      source = ../config/vscode/User/keybindings.darwin.jsonc;
+    };
+
+    # OpenCode configuration file
+    home.file.".config/opencode/opencode.json" = {
+      source = ../config/opencode/opencode.json;
+    };
 
     # Kilo Code rule files (both platforms)
     #
@@ -220,10 +230,14 @@ in {
             ${pkgs.coreutils}/bin/mkdir -p %h/.local/share/qdrant/storage %h/.local/share/qdrant/snapshots %h/.local/share/qdrant/temp
           '';
         };
-        Install = { WantedBy = [ "default.target" ]; };
+        Install = {
+          WantedBy = [ "default.target" ];
+        };
       };
       ollama = lib.mkIf (pkgs ? ollama && pkgs ? vscode) {
-        Unit = { Description = "Ollama LLM Service"; };
+        Unit = {
+          Description = "Ollama LLM Service";
+        };
         Service = {
           Type = "simple";
           ExecStart = "${pkgs.ollama}/bin/ollama start";
@@ -231,7 +245,9 @@ in {
           Restart = "always";
           LimitNOFILE = 10240;
         };
-        Install = { WantedBy = [ "default.target" ]; };
+        Install = {
+          WantedBy = [ "default.target" ];
+        };
       };
     };
   };
