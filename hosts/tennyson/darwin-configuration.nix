@@ -22,6 +22,9 @@
       "zed"
     ];
     taps = [
+      "sst/tap"
+    ];
+    brews = [
       "sst/tap/opencode"
     ];
   };
