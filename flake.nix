@@ -17,8 +17,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
-  outputs = inputs:
+  outputs = inputs @ { nixpkgs, ... }:
     let libFunctions = import ./lib { inherit inputs; };
+        systems = [ "aarch64-darwin" "aarch64-linux" "x86_64-darwin" "x86_64-linux" ];
+        forAllSystems = nixpkgs.lib.genAttrs systems;
     in {
       # Darwin Configs
       darwinConfigurations.tennyson =
@@ -34,5 +36,12 @@
         hostname = "twain";
         system = "x86_64-linux";
       };
+
+      # Development shell - import from shell.nix
+      devShells = forAllSystems (system:
+        let pkgs = nixpkgs.legacyPackages.${system};
+        in {
+          default = import ./shell.nix { inherit pkgs; };
+        });
     };
 }

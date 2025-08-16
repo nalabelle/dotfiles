@@ -91,7 +91,7 @@ Before adding or updating pre-commit workflows from the template:
   - Avoid creating duplicate standalone pre-commit workflows if pre-commit is already covered by another workflow.
 - Only add or update pre-commit workflows if they are missing or not already handled by existing CI/CD configuration.
 
-### Environment files (.envrc, devbox.json)
+### Environment files (.envrc, shell.nix, flake.nix)
 
 - Merge carefully - preserve project-specific dependencies
 - Add template tools that benefit the project
