@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+# Wrapper script for Fetch MCP server
+# This script executes the Fetch MCP server using nix shell
+
+set -euo pipefail
+
+# Execute the fetch MCP server with nix shell
+nix shell nixpkgs#uv --command uvx -- mcp-server-fetch "$@"

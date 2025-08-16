@@ -16,28 +16,12 @@
       "command": "nix"
     },
     "fetch": {
-      "args": [
-        "shell",
-        "nixpkgs#uv",
-        "--command",
-        "uvx",
-        "--",
-        "mcp-server-fetch"
-      ],
-      "command": "nix"
+      "args": [],
+      "command": "fetch-mcp-wrapper"
     },
     "github": {
-      "args": [
-        "run",
-        "github:NixOS/nixpkgs/nixos-unstable#github-mcp-server",
-        "--",
-        "stdio",
-        "--read-only"
-      ],
-      "env": {
-        "GITHUB_PERSONAL_ACCESS_TOKEN": "${env:GITHUB_MCP_TOKEN}"
-      },
-      "command": "nix",
+      "args": [],
+      "command": "github-mcp-wrapper",
       "alwaysAllow": [
         "get_me",
         "list_workflow_jobs",
