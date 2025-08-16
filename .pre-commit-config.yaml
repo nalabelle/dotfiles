@@ -27,10 +27,3 @@ repos:
         exclude: \.envrc$
       - id: script-must-not-have-extension
       - id: shellcheck
-  - repo: local
-    hooks:
-      - id: make-test
-        name: Make Test
-        entry: make test
-        language: system
-        pass_filenames: false

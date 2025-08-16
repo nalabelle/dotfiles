@@ -19,6 +19,24 @@ jobs:
         with:
           extra_args: --all-files --show-diff-on-failure
 
+  test-js:
+    needs: pre-commit
+    name: Test JavaScript utilities
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@main
+
+      - name: Test JavaScript utilities
+        run: |
+          echo "Testing JavaScript utilities..."
+          cd packages/merge-vscode-settings
+          nix shell nixpkgs#nodejs nixpkgs#nodePackages.npm --command bash -c "npm install && npm test"
+          echo "JavaScript tests completed successfully!"
+
   build-home:
     needs: pre-commit
     name: Build Home Configurations (${{ matrix.config }})
@@ -93,3 +111,6 @@ jobs:
 
       - name: Build Darwin configuration
         run: nix build .#darwinConfigurations.${{ matrix.config }}.system
+
+      - name: Build Darwin home configuration
+        run: nix build .#homeConfigurations."nalabelle@darwin".activationPackage

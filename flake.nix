@@ -17,14 +17,21 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
-  outputs = inputs @ { nixpkgs, ... }:
-    let libFunctions = import ./lib { inherit inputs; };
-        systems = [ "aarch64-darwin" "aarch64-linux" "x86_64-darwin" "x86_64-linux" ];
-        forAllSystems = nixpkgs.lib.genAttrs systems;
-    in {
+  outputs =
+    inputs@{ nixpkgs, ... }:
+    let
+      libFunctions = import ./lib { inherit inputs; };
+      systems = [
+        "aarch64-darwin"
+        "aarch64-linux"
+        "x86_64-darwin"
+        "x86_64-linux"
+      ];
+      forAllSystems = nixpkgs.lib.genAttrs systems;
+    in
+    {
       # Darwin Configs
-      darwinConfigurations.tennyson =
-        libFunctions.mkDarwinSystem { hostname = "tennyson"; };
+      darwinConfigurations.tennyson = libFunctions.mkDarwinSystem { hostname = "tennyson"; };
       # Test target to ensure home-manager config works when testing on darwin
       homeConfigurations."nalabelle@darwin" = libFunctions.mkHomeConfig {
         hostname = "default";
@@ -37,11 +44,26 @@
         system = "x86_64-linux";
       };
 
+      # Packages
+      packages = forAllSystems (
+        system:
+        let
+          pkgs = nixpkgs.legacyPackages.${system};
+        in
+        {
+          fetch-mcp-server = import ./packages/fetch-mcp-server.nix { inherit pkgs; };
+        }
+      );
+
       # Development shell - import from shell.nix
-      devShells = forAllSystems (system:
-        let pkgs = nixpkgs.legacyPackages.${system};
-        in {
+      devShells = forAllSystems (
+        system:
+        let
+          pkgs = nixpkgs.legacyPackages.${system};
+        in
+        {
           default = import ./shell.nix { inherit pkgs; };
-        });
+        }
+      );
     };
 }
