@@ -60,16 +60,17 @@ fi
 echo
 
 # Check if MCP settings are deployed
+# Look for template since cicd likely doesn't have 1pass set up
 echo "2. Checking MCP settings deployment..."
 if [[ "$OSTYPE" == "darwin"* ]]; then
-    MCP_SETTINGS="$HOME/Library/Application Support/Code/User/globalStorage/kilocode.kilo-code/settings/mcp_settings.json"
+    MCP_SETTINGS="$HOME/Library/Application Support/Code/User/globalStorage/kilocode.kilo-code/settings/mcp_settings.template.json"
 else
     # twain host uses VS Code server path, others use standard XDG path
     if [ "$CONFIG_NAME" = "nalabelle@twain" ]; then
-        MCP_SETTINGS="$HOME/.vscode-server/data/User/globalStorage/kilocode.kilo-code/settings/mcp_settings.json"
+        MCP_SETTINGS="$HOME/.vscode-server/data/User/globalStorage/kilocode.kilo-code/settings/mcp_settings.template.json"
         echo "   Using VS Code server path for twain host"
     else
-        MCP_SETTINGS="$HOME/.config/Code/User/globalStorage/kilocode.kilo-code/settings/mcp_settings.json"
+        MCP_SETTINGS="$HOME/.config/Code/User/globalStorage/kilocode.kilo-code/settings/mcp_settings.template.json"
     fi
 fi
 
