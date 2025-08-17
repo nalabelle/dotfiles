@@ -6,7 +6,7 @@ pkgs.buildNpmPackage rec {
 
   src = ./fetch-mcp-server;
 
-  npmDepsHash = "sha256-WMSfbgTerrZQMJWeoTtYm0VRlMffIcTUlACHPi1uf/s=";
+  npmDepsHash = "sha256-Of6ig6SxY3/7lI0k+QpyThRriR6tJ77k7xN1WzqcDRk=";
 
   nativeBuildInputs = with pkgs; [
     nodejs
