@@ -3,7 +3,6 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
-    nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -36,6 +35,12 @@
       homeConfigurations."nalabelle@darwin" = libFunctions.mkHomeConfig {
         hostname = "default";
         system = "aarch64-darwin";
+      };
+
+      # NixOS Configs
+      nixosConfigurations.chandler = libFunctions.mkNixOSSystem {
+        hostname = "chandler";
+        system = "x86_64-linux";
       };
 
       # Home Manager Configs

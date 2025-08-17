@@ -168,7 +168,7 @@ in
       # Check if 1Password CLI is available and authenticated
       if ! ${pkgs.direnv}/bin/direnv exec $HOME ${pkgs._1password-cli}/bin/op whoami >/dev/null 2>&1; then
         echo "❌ 1Password CLI (op) not found or configured. Please install 1Password CLI and authenticate."
-        exit 1
+        exit 0
       fi
 
       # Check if template file exists
@@ -186,7 +186,7 @@ in
         echo "✅ MCP settings injected successfully"
       else
         echo "❌ Failed to inject MCP settings. Please ensure 1Password is authenticated."
-        exit 1
+        exit 0
       fi
 
     '';
