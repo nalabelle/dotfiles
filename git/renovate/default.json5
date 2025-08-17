@@ -33,7 +33,15 @@
       "versioningTemplate": "{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}"
     }
   ],
+  "postUpdateOptions": ["npmDedupe"],
   "packageRules": [
+    {
+      // Add reminder comment for npm packages that need hash updates
+      "matchFileNames": ["packages/*/package.json"],
+      "prBodyNotes": [
+        "⚠️ **Manual Action Required**: After merging this PR, run `./tools/update-npm-hashes` to update the corresponding Nix package hashes."
+      ]
+    },
     {
       // Add 2-week delay for Node.js updates in DevBox configurations
       // Avoids needing to run builds by waiting for packages to be cached
