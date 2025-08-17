@@ -87,11 +87,6 @@
       ];
       text = builtins.readFile ../bin/template-diff;
     })
-    (writeShellApplication {
-      name = "github-mcp-wrapper";
-      runtimeInputs = [ _1password-cli ];
-      text = builtins.readFile ../bin/github-mcp-wrapper;
-    })
     (import ../packages/fetch-mcp-server.nix { inherit pkgs; })
 
   ];

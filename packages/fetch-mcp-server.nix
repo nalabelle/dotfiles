@@ -32,9 +32,6 @@ pkgs.buildNpmPackage rec {
     EOF
         chmod +x $out/bin/fetch-mcp-server
 
-        # Create wrapper with the expected name
-        ln -s $out/bin/fetch-mcp-server $out/bin/fetch-mcp-wrapper
-
         runHook postInstall
   '';
 

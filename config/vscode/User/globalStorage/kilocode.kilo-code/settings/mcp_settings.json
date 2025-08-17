@@ -17,17 +17,26 @@
     },
     "fetch": {
       "args": [],
-      "command": "fetch-mcp-wrapper"
+      "command": "fetch-mcp-server"
     },
     "github": {
-      "args": [],
-      "command": "github-mcp-wrapper",
+      "command": "nix",
+      "args": [
+        "run",
+        "github:NixOS/nixpkgs/nixos-unstable#github-mcp-server",
+        "--",
+        "stdio",
+        "--read-only"
+      ],
       "alwaysAllow": [
         "get_me",
         "list_workflow_jobs",
         "get_job_logs",
         "get_workflow_run"
-      ]
-    }
+      ],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "{{op://Applications/Github MCP/password}}"
+      }
+   }
   }
 }

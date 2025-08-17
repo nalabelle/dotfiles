@@ -158,9 +158,38 @@ in
 
     # MCP settings for Kilo Code extension
     # This only manages the settings file, not the VSCode installation
-    home.file."${configPath}/User/globalStorage/kilocode.kilo-code/settings/mcp_settings.json" = {
-      source = settingsFile;
-    };
+    home.file."${configPath}/User/globalStorage/kilocode.kilo-code/settings/mcp_settings.template.json" =
+      {
+        source = settingsFile;
+      };
+
+    # Activation script to inject secrets using op inject
+    home.activation.mcpSettingsInjector = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+      # Check if 1Password CLI is available and authenticated
+      if ! ${pkgs.direnv}/bin/direnv exec $HOME ${pkgs._1password-cli}/bin/op whoami >/dev/null 2>&1; then
+        echo "❌ 1Password CLI (op) not found or configured. Please install 1Password CLI and authenticate."
+        exit 1
+      fi
+
+      # Check if template file exists
+      if [[ ! -f "${configPath}/User/globalStorage/kilocode.kilo-code/settings/mcp_settings.template.json" ]]; then
+        echo "❌ MCP settings template not found"
+        exit 1
+      fi
+
+      # Use op inject to generate the final MCP settings file
+      echo "🔐 Injecting MCP settings with 1Password secrets..."
+      if ${pkgs.direnv}/bin/direnv exec $HOME ${pkgs._1password-cli}/bin/op inject --force \
+        --in-file "${configPath}/User/globalStorage/kilocode.kilo-code/settings/mcp_settings.template.json" \
+        --out-file "${configPath}/User/globalStorage/kilocode.kilo-code/settings/mcp_settings.json"; then
+        chmod 600 "${configPath}/User/globalStorage/kilocode.kilo-code/settings/mcp_settings.json"
+        echo "✅ MCP settings injected successfully"
+      else
+        echo "❌ Failed to inject MCP settings. Please ensure 1Password is authenticated."
+        exit 1
+      fi
+
+    '';
 
     # VS Code keybindings - managed declaratively
     home.file."${configPath}/User/keybindings.json" = lib.mkIf pkgs.stdenv.isDarwin {
