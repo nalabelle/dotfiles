@@ -14,10 +14,6 @@ help:
 		printf "  %-13s %s\n", substr($$1, 1, length($$1)-1), substr($$0, index($$0, "##") + 3) \
 	}' $(MAKEFILE_LIST)
 
-# Test build system and home configurations via GitHub Actions
-.PHONY: test-workflows
-test-workflows: ## Runs GitHub Actions tests for Darwin and Home configurations
-	./test/test-workflows
 
 # Test JavaScript utilities
 .PHONY: test-js

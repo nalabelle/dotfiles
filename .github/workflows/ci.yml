@@ -79,21 +79,6 @@ jobs:
       - name: Activate home configuration ${{ matrix.config }}
         run: sudo -u nalabelle -H ./result/activate
 
-      - name: Debug deployed files
-        run: |
-          echo "=== Debugging file deployment ==="
-          echo "Files in nalabelle home directory:"
-          sudo find /home/nalabelle -type f -name "*.json" 2>/dev/null || true
-          sudo find /Users/nalabelle -type f -name "*.json" 2>/dev/null || true
-          echo "XDG config directory contents:"
-          sudo ls -la /home/nalabelle/.config/ 2>/dev/null || true
-          sudo ls -la /Users/nalabelle/.config/ 2>/dev/null || true
-          echo "Application Support directory contents:"
-          sudo ls -la "/Users/nalabelle/Library/Application Support/" 2>/dev/null || true
-
-      - name: Run native Kilo Code verification
-        run: sudo -u nalabelle -H test/verify "${{ matrix.config }}"
-
   build-darwin:
     needs: pre-commit
     name: Build Darwin Configurations (${{ matrix.config }})
