@@ -64,3 +64,19 @@ update: ## Update dependencies
 .PHONY: gc
 gc: ## Clean up old packages
 	nix-collect-garbage --delete-old
+
+# Set up 1Password service account token for opnix
+.PHONY: opnix-token-set
+opnix-token-set: ## Set up 1Password service account token for opnix
+	@echo "Setting up opnix service account token..."
+	sudo -E nix run github:brizzbuzz/opnix -- token set
+	sudo chmod 640 /etc/opnix-token
+	@if [ "$$(uname)" = "Darwin" ]; then \
+		sudo chown root:staff /etc/opnix-token; \
+	else \
+		sudo chown root:users /etc/opnix-token; \
+	fi
+
+	# Verify permissions
+	ls -la /etc/opnix-token
+	# Should show: -rw-r----- 1 root onepassword-secrets

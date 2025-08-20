@@ -17,6 +17,7 @@ let
     inputs.nix-darwin.lib.darwinSystem {
       system = "aarch64-darwin";
       modules = [
+        inputs.opnix.darwinModules.default
         ../nix/common.nix
         ../nix/darwin.nix
         ../hosts/${hostname}/darwin-configuration.nix
@@ -26,6 +27,8 @@ let
           home-manager.useUserPackages = true;
           home-manager.users.${username} = {
             imports = [
+              inputs.opnix.homeManagerModules.default
+              ./opnix-templates.nix
               ../home
               (
                 if builtins.pathExists ../hosts/${hostname}/home-configuration.nix then
@@ -46,6 +49,7 @@ let
     inputs.nixpkgs.lib.nixosSystem {
       inherit system;
       modules = [
+        inputs.opnix.nixosModules.default
         ../nix/common.nix
         ../hosts/${hostname}/configuration.nix
         inputs.home-manager.nixosModules.home-manager
@@ -54,6 +58,8 @@ let
           home-manager.useUserPackages = true;
           home-manager.users.${username} = {
             imports = [
+              inputs.opnix.homeManagerModules.default
+              ./opnix-templates.nix
               ../home
               (
                 if builtins.pathExists ../hosts/${hostname}/home-configuration.nix then
@@ -77,11 +83,13 @@ let
         config = nixpkgsConfig;
       };
       modules = [
+        inputs.opnix.homeManagerModules.default
         {
           home.username = username;
           home.homeDirectory =
             if system == "aarch64-darwin" then "/Users/${username}" else "/home/${username}";
         }
+        ./opnix-templates.nix
         ../home
         (
           if builtins.pathExists ../hosts/${hostname}/home-configuration.nix then

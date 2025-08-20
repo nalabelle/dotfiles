@@ -62,3 +62,23 @@ make switch
 # Update flake inputs
 make update
 ```
+
+## Secret Management Setup
+
+This repository uses opnix for 1Password integration. On new systems:
+
+```sh
+# Set up 1Password service account token (without repo checkout)
+sudo -E nix run github:brizzbuzz/opnix -- token set
+sudo chmod 640 /etc/opnix-token
+# macOS: sudo chown root:staff /etc/opnix-token
+# Linux: sudo chown root:users /etc/opnix-token (or appropriate group)
+
+# Or use Makefile if repo is checked out
+make opnix-token-set
+
+# Clean old Home Manager generations if needed (Removes error about files not being in store so they can't be deleted)
+home-manager expire-generations 0
+```
+
+**Important**: Each deployed system needs its own opnix token for runtime secret resolution.

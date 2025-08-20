@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   imports = [
@@ -32,7 +37,12 @@
   nix = {
     enable = true;
     package = lib.mkDefault pkgs.nix;
-    settings = { experimental-features = [ "nix-command" "flakes" ]; };
+    settings = {
+      experimental-features = [
+        "nix-command"
+        "flakes"
+      ];
+    };
     gc = {
       automatic = true;
       frequency = "weekly";
@@ -41,7 +51,9 @@
     };
   };
 
-  xdg = { enable = true; };
+  xdg = {
+    enable = true;
+  };
 
   # Prefer XDG directories for consistency with the rest of the configuration
   home.preferXdgDirectories = true;

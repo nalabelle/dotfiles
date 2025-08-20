@@ -17,3 +17,7 @@
 - **Naming**: Use kebab-case for files, camelCase for JS variables, descriptive names
 - **Comments**: Preserve existing comments in JSON/JSONC files, minimal comments elsewhere
 - **Error handling**: Always handle errors explicitly, use proper exit codes (0/1)
+
+## Secret Management
+- **opnix Templates**: Use `lib/opnix-templates.nix` for configuration files needing secret injection
+- **Template placeholders**: Reference secrets with `${config.programs.onepassword-secrets.placeholder.secretName}`
