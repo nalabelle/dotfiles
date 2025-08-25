@@ -74,10 +74,13 @@
   # Enable touchpad support (enabled default in most desktopManager).
   # services.libinput.enable = true;
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
+  # Define a user account. Don't forget to set a password with 'passwd'.
   users.users.nalabelle = {
     isNormalUser = true;
-    extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
+    extraGroups = [
+      "wheel"
+      "docker"
+    ]; # Enable 'sudo' for the user and add to docker group.
     packages = with pkgs; [ ];
   };
 
@@ -90,6 +93,7 @@
   environment.systemPackages = with pkgs; [
     vim
     git
+    docker
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -101,6 +105,12 @@
   # };
 
   # List services that you want to enable:
+
+  # Enable Docker service
+  virtualisation.docker = {
+    enable = true;
+    enableOnBoot = true;
+  };
 
   # CPU frequency scaling for power management
   # Automatically scales CPU frequency down when idle
