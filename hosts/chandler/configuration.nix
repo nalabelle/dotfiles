@@ -120,6 +120,11 @@ in
     enable = true;
   };
 
+  # Configure root user SSH authorized keys
+  users.users.root.openssh.authorizedKeys.keys = [
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILfU1p/YuQOkLEJTH3HuxX8tAMu2P8gxh2zo2UN1tUjL root@shelley"
+  ];
+
   # Configure 1Password secrets for system services
   services.onepassword-secrets = {
     enable = true;
