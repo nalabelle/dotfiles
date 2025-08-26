@@ -89,6 +89,10 @@ in
     vim
     git
     docker
+
+    # for syncoid
+    mbuffer
+    lzop
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
