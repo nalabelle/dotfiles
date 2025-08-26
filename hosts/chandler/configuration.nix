@@ -10,7 +10,9 @@
   pkgs,
   ...
 }:
-
+let
+  services_domain = "oops.city";
+in
 {
   imports = [
     # Include the results of the hardware scan. (Not tracked in git)
@@ -41,10 +43,6 @@
   # Set your time zone.
   time.timeZone = "America/Los_Angeles";
 
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
-
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
   console = {
@@ -70,9 +68,6 @@
   #   enable = true;
   #   pulse.enable = true;
   # };
-
-  # Enable touchpad support (enabled default in most desktopManager).
-  # services.libinput.enable = true;
 
   # Define a user account. Don't forget to set a password with 'passwd'.
   users.users.nalabelle = {
@@ -125,8 +120,109 @@
     enable = true;
   };
 
+  # Configure 1Password secrets for system services
+  services.onepassword-secrets = {
+    enable = true;
+    tokenFile = "/etc/opnix-token";
+    users = [
+      "nalabelle"
+      "acme"
+    ];
+    secrets = {
+      cloudflareDnsApiToken = {
+        reference = "op://Applications/PROXY/CF_DNS_API_TOKEN";
+        services = [
+          "acme"
+        ];
+        mode = "0640";
+        owner = "root";
+        group = "acme";
+      };
+      cloudflareZoneApiToken = {
+        reference = "op://Applications/PROXY/CF_ZONE_API_TOKEN";
+        services = [
+          "acme"
+        ];
+        mode = "0640";
+        owner = "root";
+        group = "acme";
+      };
+    };
+  };
+
+  # Enable Forgejo service
+  services.forgejo = {
+    enable = true;
+    database = {
+      type = "postgres";
+    };
+    lfs.enable = true;
+
+    settings = {
+      server = {
+        PROTOCOL = "http+unix";
+        ROOT_URL = "https://git.${services_domain}/";
+        DOMAIN = "git.${services_domain}";
+      };
+      actions = {
+        ENABLED = true;
+        DEFAULT_ACTIONS_URL = "github";
+      };
+    };
+    dump.enable = true;
+  };
+
+  # Enable nginx web server with reverse proxy for Forgejo
+  services.nginx = {
+    enable = true;
+    recommendedProxySettings = true;
+    recommendedTlsSettings = true;
+
+    virtualHosts."git.${services_domain}" = {
+      forceSSL = true;
+      enableACME = false;
+      useACMEHost = services_domain;
+      locations."/" = {
+        proxyPass = "http://unix:/run/forgejo/forgejo.sock";
+        proxyWebsockets = true;
+      };
+    };
+  };
+
+  users.users.nginx.extraGroups = [ "acme" ];
+
+  # Let's Encrypt certificate management
+  security.acme = {
+    acceptTerms = true;
+    defaults.email = "letsencrypt@${services_domain}";
+    # defaults.server = "https://acme-staging-v02.api.letsencrypt.org/directory";
+    defaults.extraLegoFlags = [
+      "--dns.propagation-disable-ans"
+      "--dns.propagation-rns"
+    ];
+
+    certs."${services_domain}" = {
+      domain = "*.${services_domain}";
+      dnsProvider = "cloudflare";
+      dnsResolver = "1.1.1.1";
+      environmentFile = "/etc/acme/cloudflare-env";
+    };
+  };
+
+  # Create environment file for Cloudflare credentials
+  environment.etc."acme/cloudflare-env" = {
+    text = ''
+      CLOUDFLARE_DNS_API_TOKEN_FILE=${config.services.onepassword-secrets.secretPaths.cloudflareDnsApiToken}
+      CLOUDFLARE_ZONE_API_TOKEN_FILE=${config.services.onepassword-secrets.secretPaths.cloudflareZoneApiToken}
+    '';
+  };
+
   # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
+  networking.firewall.allowedTCPPorts = [
+    22
+    80
+    443
+  ];
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
