@@ -109,6 +109,10 @@ in
   virtualisation.docker = {
     enable = true;
     enableOnBoot = true;
+    daemon.settings = {
+      fixed-cidr-v6 = "fd00::/80";
+      ipv6 = true;
+    };
   };
 
   # CPU frequency scaling for power management
@@ -156,6 +160,16 @@ in
         owner = "root";
         group = "acme";
       };
+      forgejoRunnerToken = {
+        reference = "op://Applications/Forgejo/runner-token";
+        services = [
+          "forgejo"
+          "gitea-runner-default"
+        ];
+        mode = "0640";
+        owner = "root";
+        group = "forgejo";
+      };
     };
   };
 
@@ -179,6 +193,31 @@ in
       };
     };
     dump.enable = true;
+  };
+
+  services.gitea-actions-runner = {
+    package = pkgs.forgejo-runner;
+    instances.default = {
+      enable = true;
+      name = "Default";
+      url = "https://git.${services_domain}/";
+      # tokenFile should be in format TOKEN=<secret>, since it's EnvironmentFile for systemd
+      tokenFile = config.services.onepassword-secrets.secretPaths.forgejoRunnerToken;
+      labels = [
+        "ubuntu-latest:docker://node:24-bullseye"
+        "ubuntu-22.04:docker://node:24-bullseye"
+        "nixos-latest:docker://nixos/nix"
+        "native:host"
+      ];
+      hostPackages = with pkgs; [
+        bash
+        nix
+        coreutils
+        gitMinimal
+        curl
+        wget
+      ];
+    };
   };
 
   # Enable nginx web server with reverse proxy for Forgejo
@@ -232,6 +271,8 @@ in
     80
     443
   ];
+  networking.firewall.trustedInterfaces = [ "br-+" ];
+
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
