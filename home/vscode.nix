@@ -27,7 +27,7 @@ let
         };
       in
       builtins.toJSON mcpSettings;
-    path = "${config.home.homeDirectory}/.vscode/User/globalStorage/kilocode.kilo-code/settings/mcp_settings.json";
+    path = "${config.home.homeDirectory}/${configPath}/User/globalStorage/kilocode.kilo-code/settings/mcp_settings.json";
     mode = "0600";
   };
 
@@ -189,6 +189,11 @@ in
     # OpenCode configuration file
     home.file.".config/opencode/opencode.json" = {
       source = ../config/opencode/opencode.json;
+    };
+
+    # Kilocode custom modes file
+    home.file."${configPath}/User/globalStorage/kilocode.kilo-code/settings/custom_modes.yaml" = {
+      source = ../config/vscode/User/globalStorage/kilocode.kilo-code/settings/custom_modes.yaml;
     };
 
     # Kilo Code rule files (both platforms)
