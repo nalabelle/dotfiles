@@ -15,9 +15,7 @@ jobs:
       - name: Install Nix
         uses: DeterminateSystems/nix-installer-action@main
       - name: Run pre-commit
-        uses: pre-commit/action@2c7b3805fd2a0fd8c1884dcaebf91fc102a13ecd # v3.0.1
-        with:
-          extra_args: --all-files --show-diff-on-failure
+        run: nix develop --command pre-commit run --all-files --show-diff-on-failure
 
   test-js:
     needs: pre-commit

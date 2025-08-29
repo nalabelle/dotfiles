@@ -26,6 +26,7 @@
     mkcert
     _1password-cli
     nixfmt-rfc-style
+    nixfmt-tree
 
     # Environment
     direnv

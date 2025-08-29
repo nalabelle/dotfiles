@@ -1,4 +1,9 @@
-{ lib, stdenv, unzip, fetchurl }:
+{
+  lib,
+  stdenv,
+  unzip,
+  fetchurl,
+}:
 
 # cleaner - prebuilt binary from GitHub release (v0.1.4), macOS arm64
 
@@ -7,8 +12,7 @@ stdenv.mkDerivation rec {
   version = "0.2.0";
 
   src = fetchurl {
-    url =
-      "https://github.com/nalabelle/cleaner/releases/download/v${version}/cleaner-macos-arm64.zip";
+    url = "https://github.com/nalabelle/cleaner/releases/download/v${version}/cleaner-macos-arm64.zip";
     # SRI for asset SHA256: 60a8788a3b80991a1c488f2e01951fb8694bbfb91dea95229449e2aa04d66388
     sha256 = "sha256-eRa3QaC/VMR+gyLmJi9XP3zjbhCgbFi3bmEMrl6Vw9k=";
   };

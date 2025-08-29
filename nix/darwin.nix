@@ -1,4 +1,12 @@
-{ pkgs, config, lib, hostname, username, ... }: {
+{
+  pkgs,
+  config,
+  lib,
+  hostname,
+  username,
+  ...
+}:
+{
   nixpkgs.hostPlatform = "aarch64-darwin";
 
   networking.computerName = hostname;
@@ -118,10 +126,14 @@
         # disable-shadow = true;
       };
 
-      controlcenter = { BatteryShowPercentage = true; };
+      controlcenter = {
+        BatteryShowPercentage = true;
+      };
       CustomUserPreferences = {
         ".GlobalPreferences" = {
-          AppleFirstWeekday = { gregorian = 2; };
+          AppleFirstWeekday = {
+            gregorian = 2;
+          };
           AppleICUDateFormatStrings = {
             "1" = "yyyy-MM-dd"; # Short date format
             "2" = "yyyy-MM-dd"; # Medium date format
@@ -183,34 +195,45 @@
   # Services auto-start on login and restart if they crash (KeepAlive = true)
   launchd.user.agents.qdrant = {
     serviceConfig = {
-      ProgramArguments = [ "${pkgs.qdrant}/bin/qdrant" "--disable-telemetry" ];
+      ProgramArguments = [
+        "${pkgs.qdrant}/bin/qdrant"
+        "--disable-telemetry"
+      ];
       RunAtLoad = true;
       KeepAlive = true;
       WorkingDirectory = "/tmp";
       StandardOutPath = "/Users/${username}/.local/var/log/qdrant.log";
       StandardErrorPath = "/Users/${username}/.local/var/log/qdrant.log";
-      SoftResourceLimits = { NumberOfFiles = 10240; };
-      HardResourceLimits = { NumberOfFiles = 10240; };
+      SoftResourceLimits = {
+        NumberOfFiles = 10240;
+      };
+      HardResourceLimits = {
+        NumberOfFiles = 10240;
+      };
       EnvironmentVariables = {
-        QDRANT__STORAGE__STORAGE_PATH =
-          "/Users/${username}/.local/share/qdrant/storage";
-        QDRANT__STORAGE__SNAPSHOTS_PATH =
-          "/Users/${username}/.local/share/qdrant/snapshots";
-        QDRANT__STORAGE__TEMP_PATH =
-          "/Users/${username}/.local/share/qdrant/temp";
+        QDRANT__STORAGE__STORAGE_PATH = "/Users/${username}/.local/share/qdrant/storage";
+        QDRANT__STORAGE__SNAPSHOTS_PATH = "/Users/${username}/.local/share/qdrant/snapshots";
+        QDRANT__STORAGE__TEMP_PATH = "/Users/${username}/.local/share/qdrant/temp";
       };
     };
   };
 
   launchd.user.agents.ollama = {
     serviceConfig = {
-      ProgramArguments = [ "${pkgs.ollama}/bin/ollama" "start" ];
+      ProgramArguments = [
+        "${pkgs.ollama}/bin/ollama"
+        "start"
+      ];
       RunAtLoad = true;
       KeepAlive = true;
       StandardOutPath = "/Users/${username}/.local/var/log/ollama.log";
       StandardErrorPath = "/Users/${username}/.local/var/log/ollama.log";
-      SoftResourceLimits = { NumberOfFiles = 10240; };
-      HardResourceLimits = { NumberOfFiles = 10240; };
+      SoftResourceLimits = {
+        NumberOfFiles = 10240;
+      };
+      HardResourceLimits = {
+        NumberOfFiles = 10240;
+      };
     };
   };
 }

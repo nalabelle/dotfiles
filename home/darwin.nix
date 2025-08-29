@@ -1,4 +1,10 @@
-{ config, lib, pkgs, ... }: {
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+{
   config = lib.mkIf pkgs.stdenv.isDarwin {
     programs.zsh.initContent = ''
       if [ -e '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh' ]; then
@@ -47,15 +53,13 @@
         "$UF72B" = "moveToEndOfParagraphAndModifySelection:"; # shift-end
         "^UF729" = "moveToBeginningOfDocument:"; # ctrl-home
         "^UF72B" = "moveToEndOfDocument:"; # ctrl-end
-        "^$UF729" =
-          "moveToBeginningOfDocumentAndModifySelection:"; # ctrl-shift-home
+        "^$UF729" = "moveToBeginningOfDocumentAndModifySelection:"; # ctrl-shift-home
         "^$UF72B" = "moveToEndOfDocumentAndModifySelection:"; # ctrl-shift-end
         "UF72C" = "pageUp:";
         "UF72D" = "pageDown:";
 
         # select all
-        "^a" =
-          "(moveToBeginningOfDocument:, moveToEndOfDocumentAndModifySelection:)";
+        "^a" = "(moveToBeginningOfDocument:, moveToEndOfDocumentAndModifySelection:)";
         "^x" = "cut:"; # ctrl+c  - cut
         "^v" = "paste:"; # ctrl+v - paste
         "^$v" = "pasteAsPlainText:"; # shift+ctrl+v paste as plain text

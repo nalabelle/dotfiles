@@ -1,4 +1,10 @@
-{ config, lib, pkgs, ... }: {
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+{
   fonts.fontconfig.enable = true;
   #font-caskaydia-cove-nerd-font
   #font-fantasque-sans-mono-nerd-font

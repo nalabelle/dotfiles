@@ -1,21 +1,27 @@
-{ config, lib, pkgs, ... }:
-let profileSettings = ''
-  ulimit -n 10240
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+let
+  profileSettings = ''
+    ulimit -n 10240
 
-  # Homebrew
-  HOMEBREW=""
-  [ -d /opt/homebrew ] && HOMEBREW="/opt/homebrew"
-  [ -d /home/linuxbrew/.linuxbrew ] && HOMEBREW="/home/linuxbrew/.linuxbrew"
-  if [ -n "$HOMEBREW" ] && [ -d "$HOMEBREW" ]; then
-    if [[ "$OSTYPE" == "darwin"* ]]; then
-      # On macOS: Get Homebrew env vars but let nix-darwin manage PATH
-      eval "$("$HOMEBREW/bin/brew" shellenv | grep -v 'export PATH')"
-    else
-      # On Linux: Use full Homebrew shellenv including PATH
-      eval "$("$HOMEBREW/bin/brew" shellenv)"
+    # Homebrew
+    HOMEBREW=""
+    [ -d /opt/homebrew ] && HOMEBREW="/opt/homebrew"
+    [ -d /home/linuxbrew/.linuxbrew ] && HOMEBREW="/home/linuxbrew/.linuxbrew"
+    if [ -n "$HOMEBREW" ] && [ -d "$HOMEBREW" ]; then
+      if [[ "$OSTYPE" == "darwin"* ]]; then
+        # On macOS: Get Homebrew env vars but let nix-darwin manage PATH
+        eval "$("$HOMEBREW/bin/brew" shellenv | grep -v 'export PATH')"
+      else
+        # On Linux: Use full Homebrew shellenv including PATH
+        eval "$("$HOMEBREW/bin/brew" shellenv)"
+      fi
     fi
-  fi
-'';
+  '';
 in
 {
   # Environment variables from .profile that aren't already handled by other modules

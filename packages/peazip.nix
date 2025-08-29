@@ -1,12 +1,16 @@
-{ lib, stdenv, fetchurl, _7zz }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  _7zz,
+}:
 
 stdenv.mkDerivation rec {
   pname = "peazip";
   version = "10.5.0";
 
   src = fetchurl {
-    url =
-      "https://github.com/peazip/PeaZip/releases/download/${version}/peazip-${version}.DARWIN.aarch64.dmg";
+    url = "https://github.com/peazip/PeaZip/releases/download/${version}/peazip-${version}.DARWIN.aarch64.dmg";
     sha256 = "1kvy77mfym1iahm8dx8glbg57aryjgqdvqfkpfgaxhw0arrhq4ps";
   };
 

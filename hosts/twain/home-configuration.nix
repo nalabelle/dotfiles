@@ -1,4 +1,10 @@
-{ config, pkgs, inputs, lib, ... }:
+{
+  config,
+  pkgs,
+  inputs,
+  lib,
+  ...
+}:
 
 {
   # Configure VS Code to use VS Code SSH path
@@ -18,8 +24,7 @@
   systemd.user.services.home-manager-auto-upgrade = {
     Service = {
       Environment = "PATH=/run/current-system/sw/bin";
-      ExecStart = lib.mkForce
-        "${pkgs.home-manager}/bin/home-manager switch --flake .#${config.home.username}@twain";
+      ExecStart = lib.mkForce "${pkgs.home-manager}/bin/home-manager switch --flake .#${config.home.username}@twain";
     };
   };
 }

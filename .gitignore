@@ -15,3 +15,5 @@ vim/swap
 
 result
 node_modules
+/.pre-commit-config.yaml
+git/template/flake.lock

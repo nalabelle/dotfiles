@@ -1,11 +1,5 @@
 { inputs, ... }:
 let
-  systems = [
-    "aarch64-darwin"
-    "x86_64-linux"
-    "aarch64-linux"
-  ];
-  lib = inputs.nixpkgs.lib;
   username = "nalabelle";
   nixpkgsConfig = {
     allowUnfree = true;

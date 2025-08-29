@@ -1,4 +1,10 @@
-{ config, lib, pkgs, ... }: {
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+{
   programs.vim = {
     enable = true;
     packageConfigurable = pkgs.vim-full; # Use vim with all features
@@ -12,7 +18,8 @@
       (builtins.readFile ../config/vim/plugin-config.vim)
     ]);
 
-    plugins = with pkgs.vimPlugins;
+    plugins =
+      with pkgs.vimPlugins;
       let
         xoria256 = pkgs.vimUtils.buildVimPlugin {
           name = "xoria256-vim";
@@ -68,7 +75,8 @@
             sha256 = "130sn8d2gzrw628rychk53946vvpwhsj2layhpsa0srp0h9l6snx";
           };
         };
-      in [
+      in
+      [
         # Theme
         xoria256
         vim-airline
@@ -119,11 +127,16 @@
     # ftdetect files
     map (file: {
       name = ".vim/ftdetect/${file}";
-      value = { source = ../config/vim/ftdetect + "/${file}"; };
+      value = {
+        source = ../config/vim/ftdetect + "/${file}";
+      };
     }) (builtins.attrNames (builtins.readDir ../config/vim/ftdetect))
     # ftplugin files
     ++ map (file: {
       name = ".vim/ftplugin/${file}";
-      value = { source = ../config/vim/ftplugin + "/${file}"; };
-    }) (builtins.attrNames (builtins.readDir ../config/vim/ftplugin)));
+      value = {
+        source = ../config/vim/ftplugin + "/${file}";
+      };
+    }) (builtins.attrNames (builtins.readDir ../config/vim/ftplugin))
+  );
 }

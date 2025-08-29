@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   home.packages = with pkgs; [
@@ -86,14 +91,18 @@
 
       command_timeout = 1000;
 
-      palettes.xoria = { dark_grey = "248"; };
+      palettes.xoria = {
+        dark_grey = "248";
+      };
 
       character = {
         vimcmd_symbol = "[N](bold green)";
         vimcmd_visual_symbol = "[V](bold yellow)";
       };
 
-      line_break = { disabled = true; };
+      line_break = {
+        disabled = true;
+      };
 
       time = {
         disabled = false;
@@ -114,7 +123,9 @@
         format = "[$ssh_symbol@$hostname]($style)";
       };
 
-      fill = { symbol = " "; };
+      fill = {
+        symbol = " ";
+      };
 
       nix_shell = {
         format = "[$symbol$state( \\($name\\))]($style) ";
@@ -122,7 +133,9 @@
         impure_msg = "";
       };
 
-      rust = { format = "[$symbol($version )]($style)"; };
+      rust = {
+        format = "[$symbol($version )]($style)";
+      };
 
       env_var.PROMPT_ENV = {
         style = "grey dimmed";

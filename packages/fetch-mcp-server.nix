@@ -1,6 +1,6 @@
 { pkgs, ... }:
 
-pkgs.buildNpmPackage rec {
+pkgs.buildNpmPackage {
   pname = "fetch-mcp-server";
   version = "2025.4.7";
 
