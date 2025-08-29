@@ -216,6 +216,7 @@ in
         gitMinimal
         curl
         wget
+        nodejs_latest
       ];
     };
   };
