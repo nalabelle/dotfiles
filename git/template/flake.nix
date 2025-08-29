@@ -9,7 +9,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     dotfiles = {
-      url = "path:../.."; # Local path for testing
+      url = "github:nalabelle/dotfiles";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
