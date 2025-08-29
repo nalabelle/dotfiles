@@ -1,4 +1,36 @@
 # flake/packages.nix
+#
+# Pre-commit hooks flake module that provides a standard set of git hooks
+# for code quality and consistency.
+#
+# Usage in consuming flakes:
+#   imports = [ inputs.dotfiles.flakeModules.pre-commit ];
+#
+# To extend or override hooks in your consuming flake:
+#   perSystem = { config, pkgs, ... }: {
+#     pre-commit.settings.hooks = {
+#       # Add new hooks
+#       clippy.enable = true;
+#       rustfmt.enable = true;
+#
+#       # Override existing hooks with custom settings
+#       nixfmt-rfc-style = {
+#         enable = true;
+#         excludes = [ "flake.lock" ];
+#       };
+#
+#       # Disable default hooks
+#       shellcheck.enable = false;
+#     };
+#
+#     devShells.default = pkgs.mkShell {
+#       shellHook = config.preCommitShellHook;
+#     };
+#   };
+#
+# Note: All hook configurations use the 'enable' attribute, not 'enabled'.
+# Hooks defined with lib.mkDefault can be overridden by consuming modules.
+
 { inputs, ... }:
 {
   imports = [
