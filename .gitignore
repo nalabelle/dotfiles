@@ -1,19 +1,5 @@
-*.bak
-# VIM
-## installed automatically via .vimrc
-vim/autoload/plug.vim
-vim/bundle
-## local files
-vim/backup
-vim/undo
-vim/swap
-
-/.direnv
-
-# Vendir
-/zsh/plugins
-
 result
 node_modules
+.direnv
 /.pre-commit-config.yaml
 git/template/flake.lock

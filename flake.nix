@@ -27,18 +27,18 @@
   };
 
   outputs =
-    inputs@{ flake-parts, git-hooks, ... }:
+    inputs@{ flake-parts, ... }:
     let
       libFunctions = import ./lib { inherit inputs; };
     in
     flake-parts.lib.mkFlake { inherit inputs; } {
-      imports = [
-        ./flakeModules/pre-commit
-      ];
       systems = [
         "aarch64-darwin"
         "aarch64-linux"
         "x86_64-linux"
+      ];
+      imports = [
+        (import ./flakeModules/pre-commit { inherit inputs; })
       ];
 
       perSystem =
@@ -49,11 +49,11 @@
         }:
         {
           devShells.default = pkgs.mkShell {
+            inputsFrom = [ config.pre-commit-defaults.devShell ];
             buildInputs = with pkgs; [
               nixd
             ];
             shellHook = ''
-              ${config.preCommitShellHook}
               echo "Dev environment loaded."
             '';
           };
