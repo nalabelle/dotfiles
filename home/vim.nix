@@ -48,24 +48,6 @@
             sha256 = "1s4phd9yzykg8kh40i3cj1a2wj4fwgx1417z6rqqc3bxjmyhxm25";
           };
         };
-        bufkill = pkgs.vimUtils.buildVimPlugin {
-          name = "bufkill-vim";
-          src = pkgs.fetchFromGitHub {
-            owner = "bit101";
-            repo = "bufkill";
-            rev = "112b6ba433762198282f8dd9f58a6680259234d4";
-            sha256 = "1jcpr67d9xrv0and5fsphvwqyn2ghc3drm4hpq72aiv3d5n3nizw";
-          };
-        };
-        html5-vim = pkgs.vimUtils.buildVimPlugin {
-          name = "html5-vim";
-          src = pkgs.fetchFromGitHub {
-            owner = "othree";
-            repo = "html5.vim";
-            rev = "485f2cd62162c81e56d8604b4c630f0b5ef69d1f";
-            sha256 = "0j012i6nklc4p92cbh3l1zqs850plxh847b52lskb533rhygx9kf";
-          };
-        };
         terminalkeys = pkgs.vimUtils.buildVimPlugin {
           name = "terminalkeys-vim";
           src = pkgs.fetchFromGitHub {
@@ -85,7 +67,7 @@
         # UI Enhancements
         vim-maximizer
         vim-win
-        bufkill
+        vim-bufkill
         vim-indent-guides
         fastfold
         vista-vim
