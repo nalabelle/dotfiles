@@ -19,6 +19,7 @@ let
         {
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
+          home-manager.extraSpecialArgs = { inherit inputs username hostname; };
           home-manager.users.${username} = {
             imports = [
               inputs.opnix.homeManagerModules.default
@@ -50,6 +51,7 @@ let
         {
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
+          home-manager.extraSpecialArgs = { inherit inputs username hostname; };
           home-manager.users.${username} = {
             imports = [
               inputs.opnix.homeManagerModules.default
