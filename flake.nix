@@ -75,17 +75,16 @@
           hostname = "chandler";
           system = "x86_64-linux";
         };
+        nixosConfigurations.twain = libFunctions.mkNixOSSystem {
+          hostname = "twain";
+          system = "x86_64-linux";
+        };
         # Darwin Configs
         darwinConfigurations.tennyson = libFunctions.mkDarwinSystem { hostname = "tennyson"; };
         homeConfigurations."nalabelle@darwin" = libFunctions.mkHomeConfig {
           # Test target to ensure home-manager config works when testing on darwin
           hostname = "default";
           system = "aarch64-darwin";
-        };
-        # Home Manager Configs
-        homeConfigurations."nalabelle@twain" = libFunctions.mkHomeConfig {
-          hostname = "twain";
-          system = "x86_64-linux";
         };
       };
     };

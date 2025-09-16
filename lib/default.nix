@@ -47,26 +47,34 @@ let
         inputs.opnix.nixosModules.default
         ../nix/common.nix
         ../hosts/${hostname}/configuration.nix
-        inputs.home-manager.nixosModules.home-manager
-        {
-          home-manager.useGlobalPkgs = true;
-          home-manager.useUserPackages = true;
-          home-manager.extraSpecialArgs = { inherit inputs username hostname; };
-          home-manager.users.${username} = {
-            imports = [
-              inputs.opnix.homeManagerModules.default
-              ./opnix-templates.nix
-              ../home
-              (
-                if builtins.pathExists ../hosts/${hostname}/home-configuration.nix then
-                  ../hosts/${hostname}/home-configuration.nix
-                else
-                  { }
-              )
-            ];
-          };
-        }
-      ];
+      ]
+      ++ (
+        if builtins.pathExists ../hosts/${hostname}/home-configuration.nix then
+          [
+            inputs.home-manager.nixosModules.home-manager
+            {
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.extraSpecialArgs = { inherit inputs username hostname; };
+              home-manager.users.${username} = {
+                imports = [
+                  inputs.opnix.homeManagerModules.default
+                  ./opnix-templates.nix
+                  ../home
+                  (
+                    if builtins.pathExists ../hosts/${hostname}/home-configuration.nix then
+                      ../hosts/${hostname}/home-configuration.nix
+                    else
+                      { }
+                  )
+                ];
+              };
+            }
+          ]
+        else
+          [ ]
+      );
+
       specialArgs = { inherit inputs username hostname; };
     };
 

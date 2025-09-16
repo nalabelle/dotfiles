@@ -35,15 +35,17 @@ jobs:
           nix shell nixpkgs#nodejs nixpkgs#nodePackages.npm --command bash -c "npm install && npm test"
           echo "JavaScript tests completed successfully!"
 
-  build-home:
+  build-nixos:
     needs: pre-commit
-    name: Build Home Configurations (${{ matrix.config }})
+    name: Build NixOS Configurations (${{ matrix.config }})
     runs-on: ${{ matrix.runner }}
     strategy:
       fail-fast: false
       matrix:
         include:
-          - config: 'nalabelle@twain'
+          - config: 'twain'
+            runner: ubuntu-latest
+          - config: 'chandler'
             runner: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -52,30 +54,8 @@ jobs:
       - name: Install Nix
         uses: DeterminateSystems/nix-installer-action@main
 
-      - name: Build home configuration ${{ matrix.config }}
-        run: nix build .#homeConfigurations.${{ matrix.config }}.activationPackage
-
-      - name: Prepare user and home directory for ${{ matrix.config }}
-        run: |
-          if [[ "${{ matrix.runner }}" == "macos-15" ]]; then
-            sudo dscl . -create /Users/nalabelle
-            sudo dscl . -create /Users/nalabelle UserShell /bin/bash
-            sudo dscl . -create /Users/nalabelle RealName "nalabelle"
-            sudo dscl . -create /Users/nalabelle UniqueID "505"
-            sudo dscl . -create /Users/nalabelle PrimaryGroupID 20
-            sudo dscl . -create /Users/nalabelle NFSHomeDirectory /Users/nalabelle
-            sudo mkdir -p /Users/nalabelle
-            sudo chown nalabelle:staff /Users/nalabelle
-          else
-            sudo useradd -m -u 1500 -s /bin/bash nalabelle || true
-            sudo mkdir -p /home/nalabelle
-            sudo chown nalabelle:nalabelle /home/nalabelle
-            # Remove default shell files that interfere with Home Manager
-            sudo rm -f /home/nalabelle/.profile /home/nalabelle/.bash_profile /home/nalabelle/.bashrc
-          fi
-
-      - name: Activate home configuration ${{ matrix.config }}
-        run: sudo -u nalabelle -H ./result/activate
+      - name: Build nixos configuration ${{ matrix.config }}
+        run: nix build .#nixosConfigurations.${{ matrix.config}}.config.system.build.toplevel
 
   build-darwin:
     needs: pre-commit

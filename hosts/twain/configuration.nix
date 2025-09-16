@@ -66,7 +66,6 @@ in
     enable = true;
     tokenFile = "/etc/opnix-token";
     users = [
-      "nalabelle"
       "acme"
     ];
     secrets = {
