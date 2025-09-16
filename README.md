@@ -69,7 +69,7 @@ This repository uses opnix for 1Password integration. On new systems:
 
 ```sh
 # Set up 1Password service account token (without repo checkout)
-sudo -E nix run github:brizzbuzz/opnix -- token set
+sudo -E nix --extra-experimental-features nix-command --extra-experimental-features flakes run github:brizzbuzz/opnix -- token set
 sudo chmod 640 /etc/opnix-token
 # macOS: sudo chown root:staff /etc/opnix-token
 # Linux: sudo chown root:users /etc/opnix-token (or appropriate group)
