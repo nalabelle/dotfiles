@@ -58,6 +58,7 @@ in
 
   # Configure root user SSH authorized keys
   users.users.root.openssh.authorizedKeys.keys = [
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINdghZWKTk7678RA/Vt4LMktDd47yLjYSgLalXEP85sh"
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILfU1p/YuQOkLEJTH3HuxX8tAMu2P8gxh2zo2UN1tUjL root@shelley"
   ];
 
