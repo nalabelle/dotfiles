@@ -233,7 +233,7 @@ in
   };
 
   systemd.services.gitea-runner-restart = {
-    script = builtins.readFile ./config/bin/gitea-runner-restart;
+    script = builtins.readFile ../../config/bin/gitea-runner-restart;
     serviceConfig = {
       Type = "oneshot";
       User = "root";
