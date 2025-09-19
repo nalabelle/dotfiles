@@ -221,6 +221,26 @@ in
     };
   };
 
+  # Smart restart timer to prevent gitea-runner memory leaks
+  # Restarts every 3 days but only when no jobs are running
+  systemd.timers.gitea-runner-restart = {
+    wantedBy = [ "timers.target" ];
+    timerConfig = {
+      OnCalendar = "*-*-* 02:00:00 America/Los_Angeles"; # Run at 2 AM PST/PDT daily
+      Persistent = true;
+      RandomizedDelaySec = "1h"; # Random delay up to 1 hour
+    };
+  };
+
+  systemd.services.gitea-runner-restart = {
+    script = builtins.readFile ./config/bin/gitea-runner-restart;
+    serviceConfig = {
+      Type = "oneshot";
+      User = "root";
+      PATH = "${pkgs.systemd}/bin:${pkgs.procps}/bin:${pkgs.coreutils}/bin";
+    };
+  };
+
   # Enable nginx web server with reverse proxy for Forgejo
   services.nginx = {
     enable = true;
