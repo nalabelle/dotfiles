@@ -81,7 +81,7 @@ jobs:
   build-home-manager:
     needs: pre-commit
     name: Build Home Manager Configuration
-    runs-on: ubuntu-latest
+    runs-on: macos-15
     steps:
       - name: Checkout repository
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
