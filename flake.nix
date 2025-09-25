@@ -86,6 +86,11 @@
           hostname = "default";
           system = "aarch64-darwin";
         };
+        homeConfigurations.nalabelle = libFunctions.mkHomeConfig {
+          # Generic home-manager config target
+          hostname = "default";
+          system = "aarch64-darwin";
+        };
       };
     };
 }

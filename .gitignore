@@ -3,3 +3,4 @@ node_modules
 .direnv
 /.pre-commit-config.yaml
 git/template/flake.lock
+artifacts

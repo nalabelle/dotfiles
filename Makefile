@@ -89,3 +89,20 @@ endif
 	# Verify permissions
 	ls -la /etc/opnix-token
 	# Should show: -rw-r----- 1 root onepassword-secrets
+
+# Package home-manager configuration for distribution
+package-home: artifacts/home-manager-config.tar.gz ## Package home-manager configuration as tar.gz
+
+artifacts/home-manager-config.tar.gz: ## Build home-manager configuration package
+	@echo "Building home-manager configuration..."
+	nix build .#homeConfigurations.nalabelle.activationPackage
+	@echo "Creating package..."
+	sudo rm -rf artifacts || true
+	mkdir -p artifacts
+	# Copy actual files (dereference symlinks) and exclude home-path
+	cp -rL result/home-files artifacts/home-files
+	cp -rL result/LaunchAgents artifacts/LaunchAgents
+	cp result/activate artifacts/
+	# Create tarball
+	cd artifacts && tar -czf home-manager-config.tar.gz home-files LaunchAgents activate
+	@echo "Package created: artifacts/home-manager-config.tar.gz"

@@ -77,3 +77,23 @@ jobs:
 
       - name: Build Darwin home configuration
         run: nix build .#homeConfigurations."nalabelle@darwin".activationPackage
+
+  build-home-manager:
+    needs: pre-commit
+    name: Build Home Manager Configuration
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
+
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@main
+
+      - name: Package home manager configuration
+        run: make package-home
+
+      - name: Upload home manager artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: home-manager-config
+          path: artifacts/home-manager-config.tar.gz
