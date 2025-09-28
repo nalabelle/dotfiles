@@ -43,8 +43,6 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - config: 'twain'
-            runner: ubuntu-latest
           - config: 'chandler'
             runner: ubuntu-latest
     steps:

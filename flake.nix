@@ -75,10 +75,6 @@
           hostname = "chandler";
           system = "x86_64-linux";
         };
-        nixosConfigurations.twain = libFunctions.mkNixOSSystem {
-          hostname = "twain";
-          system = "x86_64-linux";
-        };
         # Darwin Configs
         darwinConfigurations.tennyson = libFunctions.mkDarwinSystem { hostname = "tennyson"; };
         homeConfigurations."nalabelle@darwin" = libFunctions.mkHomeConfig {
