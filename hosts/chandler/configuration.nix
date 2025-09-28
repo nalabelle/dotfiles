@@ -211,12 +211,13 @@ in
       ];
       hostPackages = with pkgs; [
         bash
-        nix
         coreutils
-        gitMinimal
         curl
-        wget
+        gitMinimal
+        gnumake
+        nix
         nodejs_latest
+        wget
       ];
     };
   };
