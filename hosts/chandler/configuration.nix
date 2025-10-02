@@ -216,7 +216,9 @@ in
         gitMinimal
         gnumake
         nix
+        nixos-rebuild
         nodejs_latest
+        openssh
         wget
       ];
     };
