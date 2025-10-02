@@ -18,20 +18,6 @@ let
     mcpServers = config.vscode.hostMcpServers;
   };
 
-  # Template configuration for MCP settings
-  mcpSettingsTemplate = {
-    content =
-      let
-        mcpSettings = lib.recursiveUpdate mergedSettings {
-          mcpServers.github.env.GITHUB_PERSONAL_ACCESS_TOKEN = "${config.programs.onepassword-secrets.placeholder.githubMcpToken
-          }";
-        };
-      in
-      builtins.toJSON mcpSettings;
-    path = "${config.home.homeDirectory}/${configPath}/User/globalStorage/kilocode.kilo-code/settings/mcp_settings.json";
-    mode = "0600";
-  };
-
   # VS Code user settings
   userSettings = {
     # Privacy and telemetry settings
@@ -162,18 +148,11 @@ in
   };
 
   config = {
-    # opnix configuration for 1Password secrets
-    programs.onepassword-secrets = {
-      enable = true;
-      secrets = {
-        githubMcpToken = {
-          reference = "op://Applications/Github MCP/password";
-          path = ".config/secrets/github-mcp-token";
-          mode = "0600";
-          group = if pkgs.stdenv.isDarwin then "staff" else "users";
-        };
-      };
+    # MCP settings for Kilo Code extension
+    home.file."${configPath}/User/globalStorage/kilocode.kilo-code/settings/mcp_settings.json" = {
+      text = builtins.toJSON mergedSettings;
     };
+
     # VS Code user settings - merged with existing settings via activation script
     home.activation.vscodeSettings = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
       EXISTING_SETTINGS="$HOME/${configPath}/User/settings.json"
@@ -192,10 +171,6 @@ in
       fi
       # If no existing settings file exists, silently exit without creating one
     '';
-
-    # MCP settings for Kilo Code extension using template system
-    # This only manages the settings file, not the VSCode installation
-    programs.onepassword-secrets.templates.vscode-mcp-settings = mcpSettingsTemplate;
 
     # VS Code keybindings - managed declaratively
     home.file."${configPath}/User/keybindings.json" = lib.mkIf pkgs.stdenv.isDarwin {

@@ -84,6 +84,11 @@
           hostname = "default";
           system = "aarch64-darwin";
         };
+        homeConfigurations."nalabelle@linux" = libFunctions.mkHomeConfig {
+          # Linux home-manager config target for testing
+          hostname = "default";
+          system = "x86_64-linux";
+        };
       };
     };
 }

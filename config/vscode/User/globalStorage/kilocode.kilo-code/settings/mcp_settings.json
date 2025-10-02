@@ -14,25 +14,6 @@
         "@upstash/context7-mcp"
       ],
       "command": "nix"
-    },
-    "github": {
-      "command": "nix",
-      "args": [
-        "run",
-        "github:NixOS/nixpkgs/nixos-unstable#github-mcp-server",
-        "--",
-        "stdio",
-        "--read-only"
-      ],
-      "alwaysAllow": [
-        "get_me",
-        "list_workflow_jobs",
-        "get_job_logs",
-        "get_workflow_run"
-      ],
-      "env": {
-        "GITHUB_PERSONAL_ACCESS_TOKEN": ""
-      }
-   }
+    }
   }
 }
