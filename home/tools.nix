@@ -88,7 +88,6 @@
       ];
       text = builtins.readFile ../bin/template-diff;
     })
-    (import ../packages/fetch-mcp-server.nix { inherit pkgs; })
 
   ];
 

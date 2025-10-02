@@ -15,10 +15,6 @@
       ],
       "command": "nix"
     },
-    "fetch": {
-      "args": [],
-      "command": "fetch-mcp-server"
-    },
     "github": {
       "command": "nix",
       "args": [

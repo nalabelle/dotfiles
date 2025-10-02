@@ -62,9 +62,6 @@
               echo "Dev environment loaded."
             '';
           };
-          packages.fetch-mcp-server = pkgs.callPackage ./packages/fetch-mcp-server.nix {
-            inherit pkgs;
-          };
         };
       flake = {
         # Export flake modules for external consumption
