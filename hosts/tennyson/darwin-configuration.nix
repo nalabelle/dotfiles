@@ -14,6 +14,7 @@
       "balenaetcher"
       "calibre"
       "foobar2000"
+      "keepassxc"
       "kopiaui"
       "mountain-duck"
       "obsidian"
