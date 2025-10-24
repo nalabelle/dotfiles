@@ -53,7 +53,9 @@ in
         config = {
           pre-commit-defaults.enable = lib.mkDefault true;
           pre-commit-defaults.devShell = pkgs.mkShell {
-            nativeBuildInputs = config.pre-commit.settings.enabledPackages;
+            nativeBuildInputs = config.pre-commit.settings.enabledPackages ++ [
+              config.pre-commit.settings.package
+            ];
             shellHook = config.pre-commit-defaults.installationScript;
           };
 
