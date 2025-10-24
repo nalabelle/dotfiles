@@ -21,6 +21,7 @@
       "onlyoffice"
       "protonvpn"
       "zed"
+      "fastmail"
     ];
     taps = [
       "sst/tap"
