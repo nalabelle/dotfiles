@@ -25,6 +25,11 @@
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
+  boot.supportedFilesystems = [
+    "zfs"
+    "nfs"
+    "cifs"
+  ];
 
   fileSystems."/" = {
     device = "rpool/root";
