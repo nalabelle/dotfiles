@@ -13,6 +13,7 @@
       "android-studio"
       "balenaetcher"
       "calibre"
+      "fastmail"
       "foobar2000"
       "keepassxc"
       "kopiaui"
@@ -20,8 +21,8 @@
       "obsidian"
       "onlyoffice"
       "protonvpn"
+      "winbox"
       "zed"
-      "fastmail"
     ];
     taps = [
       "sst/tap"
