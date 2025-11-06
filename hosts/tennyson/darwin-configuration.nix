@@ -22,6 +22,7 @@
       "onlyoffice"
       "protonvpn"
       "winbox"
+      "wireshark"
       "zed"
     ];
     taps = [
