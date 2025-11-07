@@ -20,6 +20,7 @@
       "mountain-duck"
       "obsidian"
       "onlyoffice"
+      "orbstack"
       "protonvpn"
       "winbox"
       "wireshark"
