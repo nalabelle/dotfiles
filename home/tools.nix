@@ -32,9 +32,6 @@
     direnv
     nix-direnv
 
-    # Kubernetes/Containers
-    docker-compose
-
     # Tools
     sqlite
     # I wish psql came separate

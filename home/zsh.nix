@@ -47,16 +47,6 @@
     '';
 
     initContent = ''
-      # Homebrew completions setup (PATH is managed declaratively in home/shell.nix)
-      # We only need to add completions to fpath, not modify PATH
-      HOMEBREW=""
-      [ -d /opt/homebrew ] && HOMEBREW="/opt/homebrew"
-      [ -d /home/linuxbrew/.linuxbrew ] && HOMEBREW="/home/linuxbrew/.linuxbrew"
-      if [ -n "$HOMEBREW" ] && [ -d "$HOMEBREW" ]; then
-        # Only add completions, PATH is managed by home.sessionPath
-        fpath+=("$HOMEBREW/share/zsh/site-functions")
-      fi
-
       # Globbing options (no built-in Home Manager support)
       setopt nocaseglob
       setopt extendedglob

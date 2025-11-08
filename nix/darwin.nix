@@ -7,6 +7,26 @@
   ...
 }:
 {
+  # System-wide Zsh configuration
+  programs.zsh = {
+    enable = true; # Enable system Zsh (creates proper /etc/zshrc)
+    enableGlobalCompInit = false; # Don't call compinit (let user control it)
+
+    # Add completions to fpath for all users
+    # Completions match installation scope: system-wide apps get system-wide completions
+    shellInit = ''
+      # Homebrew completions
+      if [ -d /opt/homebrew/share/zsh/site-functions ]; then
+        fpath=(/opt/homebrew/share/zsh/site-functions $fpath)
+      fi
+
+      # OrbStack completions (includes _docker, _kubectl that aren't symlinked by cask)
+      if [ -d /Applications/OrbStack.app/Contents/Resources/completions/zsh ]; then
+        fpath=(/Applications/OrbStack.app/Contents/Resources/completions/zsh $fpath)
+      fi
+    '';
+  };
+
   nixpkgs.hostPlatform = "aarch64-darwin";
 
   networking.computerName = hostname;
