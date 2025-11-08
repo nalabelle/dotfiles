@@ -18,6 +18,7 @@
       "keepassxc"
       "kopiaui"
       "mountain-duck"
+      "musicbrainz-picard"
       "obsidian"
       "onlyoffice"
       "orbstack"
