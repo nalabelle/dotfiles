@@ -72,6 +72,7 @@ in
   # Define a user account. Don't forget to set a password with 'passwd'.
   users.users.nalabelle = {
     isNormalUser = true;
+    uid = 3001;
     extraGroups = [
       "wheel"
       "docker"
