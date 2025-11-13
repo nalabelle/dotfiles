@@ -1,0 +1,99 @@
+#!/usr/bin/env bash
+# Simple ZFS dataset transfer tool for bidirectional workflows
+# Usage: zfs-replicate <source> <destination>
+
+set -euo pipefail
+
+usage() {
+  cat <<EOF
+Usage: $(basename "$0") [OPTIONS] <source> <destination>
+
+Transfer a ZFS dataset with automatic snapshot creation.
+Designed for bidirectional workflows (pull to external, modify, push back).
+
+Arguments:
+  source       Source dataset (pool/dataset)
+  destination  Destination dataset (pool/dataset)
+
+Options:
+  -h, --help     Show this help message
+  -f, --force    Force receive (rollback destination if needed)
+  -v, --verbose  Show detailed progress with pv
+
+Examples:
+  # Pull dataset to external drive
+  $(basename "$0") tank/data external/data
+
+  # Push modified dataset back (with force to replace source)
+  $(basename "$0") -f external/data tank/data
+
+Notes:
+  - Always creates a timestamped snapshot automatically
+  - Use -f when sending back to source to replace it with modified version
+  - Use -v to see transfer progress with pv
+EOF
+  exit 0
+}
+
+FORCE=0
+VERBOSE=0
+
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    -h|--help)
+      usage
+      ;;
+    -f|--force)
+      FORCE=1
+      shift
+      ;;
+    -v|--verbose)
+      VERBOSE=1
+      shift
+      ;;
+    -*)
+      echo "Unknown option: $1" >&2
+      usage
+      ;;
+    *)
+      break
+      ;;
+  esac
+done
+
+if [[ $# -ne 2 ]]; then
+  echo "Error: Requires exactly 2 arguments" >&2
+  usage
+fi
+
+SOURCE="$1"
+DEST="$2"
+
+# Validate datasets exist
+if ! zfs list "$SOURCE" &>/dev/null; then
+  echo "Error: Source dataset '$SOURCE' does not exist" >&2
+  exit 1
+fi
+
+# Create snapshot
+SNAPSHOT="transfer-$(date +%Y%m%d-%H%M%S)"
+echo "Creating snapshot: ${SOURCE}@${SNAPSHOT}" >&2
+zfs snapshot "${SOURCE}@${SNAPSHOT}"
+
+# Build receive flags
+RECV_FLAGS=""
+if [[ $FORCE -eq 1 ]]; then
+  RECV_FLAGS="-F"
+  echo "Force mode: will rollback destination if needed" >&2
+fi
+
+# Build the pipeline
+echo "Transferring ${SOURCE}@${SNAPSHOT} → ${DEST}" >&2
+if [[ $VERBOSE -eq 1 ]]; then
+  zfs send -R "${SOURCE}@${SNAPSHOT}" | pv | zfs recv $RECV_FLAGS "$DEST"
+else
+  zfs send -R "${SOURCE}@${SNAPSHOT}" | zfs recv $RECV_FLAGS "$DEST"
+fi
+
+echo "Transfer complete!" >&2
+echo "Snapshot: ${SOURCE}@${SNAPSHOT}" >&2

@@ -11,6 +11,10 @@
   environment.systemPath = lib.mkAfter [
     "/usr/local/zfs/bin"
   ];
+  # ZFS snapshot replication tools
+  environment.systemPackages = with pkgs; [
+    pv # Progress monitoring for transfers
+  ];
 
   homebrew = {
     casks = [
