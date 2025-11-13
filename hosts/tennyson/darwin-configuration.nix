@@ -3,9 +3,15 @@
   inputs,
   hostname,
   username,
+  lib,
   ...
 }:
 {
+  # Add OpenZFS binaries to PATH
+  environment.systemPath = lib.mkAfter [
+    "/usr/local/zfs/bin"
+  ];
+
   homebrew = {
     casks = [
       "android-ndk"
