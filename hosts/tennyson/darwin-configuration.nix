@@ -21,6 +21,7 @@
       "musicbrainz-picard"
       "obsidian"
       "onlyoffice"
+      "openzfs"
       "orbstack"
       "protonvpn"
       "winbox"
