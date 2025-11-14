@@ -94,6 +94,8 @@ in
     # for syncoid
     mbuffer
     lzop
+    pv
+    sanoid
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
