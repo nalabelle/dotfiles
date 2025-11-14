@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Simple ZFS dataset transfer tool for bidirectional workflows
 # Usage: zfs-replicate <source> <destination>
+# bin/zfs-replicate -v root@chaucer.oops.run:storage0/music audio/music
 
 set -euo pipefail
 
@@ -9,11 +10,11 @@ usage() {
 Usage: $(basename "$0") [OPTIONS] <source> <destination>
 
 Transfer a ZFS dataset with automatic snapshot creation.
-Designed for bidirectional workflows (pull to external, modify, push back).
+Supports both local and remote (SSH) sources and destinations.
 
 Arguments:
-  source       Source dataset (pool/dataset)
-  destination  Destination dataset (pool/dataset)
+  source       Source dataset (pool/dataset or user@host:pool/dataset)
+  destination  Destination dataset (pool/dataset or user@host:pool/dataset)
 
 Options:
   -h, --help     Show this help message
@@ -21,10 +22,16 @@ Options:
   -v, --verbose  Show detailed progress with pv
 
 Examples:
-  # Pull dataset to external drive
+  # Local to local
   $(basename "$0") tank/data external/data
 
-  # Push modified dataset back (with force to replace source)
+  # Remote to local (pull)
+  $(basename "$0") root@server:/mnt/storage0/music audio/music
+
+  # Local to remote (push)
+  $(basename "$0") audio/music root@server:/mnt/storage0/music
+
+  # Push back with force (replace source)
   $(basename "$0") -f external/data tank/data
 
 Notes:
@@ -69,16 +76,51 @@ fi
 SOURCE="$1"
 DEST="$2"
 
-# Validate datasets exist
-if ! zfs list "$SOURCE" &>/dev/null; then
-  echo "Error: Source dataset '$SOURCE' does not exist" >&2
-  exit 1
+# Parse source and destination (format: [user@host:]pool/dataset)
+parse_location() {
+  local loc="$1"
+  if [[ "$loc" =~ ^([^:]+):(.+)$ ]]; then
+    echo "remote:${BASH_REMATCH[1]}:${BASH_REMATCH[2]}"
+  else
+    echo "local::$loc"
+  fi
+}
+
+SRC_INFO=$(parse_location "$SOURCE")
+DEST_INFO=$(parse_location "$DEST")
+
+SRC_TYPE=$(echo "$SRC_INFO" | cut -d: -f1)
+SRC_HOST=$(echo "$SRC_INFO" | cut -d: -f2)
+SRC_DATASET=$(echo "$SRC_INFO" | cut -d: -f3)
+
+DEST_TYPE=$(echo "$DEST_INFO" | cut -d: -f1)
+DEST_HOST=$(echo "$DEST_INFO" | cut -d: -f2)
+DEST_DATASET=$(echo "$DEST_INFO" | cut -d: -f3)
+
+# Validate source dataset exists
+if [[ "$SRC_TYPE" == "local" ]]; then
+  if ! zfs list "$SRC_DATASET" >/dev/null 2>&1; then
+    echo "Error: Source dataset '$SRC_DATASET' does not exist" >&2
+    exit 1
+  fi
+else
+  # shellcheck disable=SC2029
+  if ! ssh "$SRC_HOST" "zfs list \"$SRC_DATASET\" >/dev/null 2>&1"; then
+    echo "Error: Source dataset '$SRC_DATASET' does not exist on $SRC_HOST" >&2
+    exit 1
+  fi
 fi
 
 # Create snapshot
 SNAPSHOT="transfer-$(date +%Y%m%d-%H%M%S)"
-echo "Creating snapshot: ${SOURCE}@${SNAPSHOT}" >&2
-zfs snapshot "${SOURCE}@${SNAPSHOT}"
+echo "Creating snapshot: ${SRC_DATASET}@${SNAPSHOT}" >&2
+
+if [[ "$SRC_TYPE" == "local" ]]; then
+  zfs snapshot "${SRC_DATASET}@${SNAPSHOT}"
+else
+  # shellcheck disable=SC2029
+  ssh "$SRC_HOST" "zfs snapshot \"${SRC_DATASET}@${SNAPSHOT}\""
+fi
 
 # Build receive flags
 RECV_FLAGS=""
@@ -87,13 +129,27 @@ if [[ $FORCE -eq 1 ]]; then
   echo "Force mode: will rollback destination if needed" >&2
 fi
 
-# Build the pipeline
+# Build send command (use --raw for encrypted datasets)
+if [[ "$SRC_TYPE" == "local" ]]; then
+  SEND_CMD="zfs send -R --raw '${SRC_DATASET}@${SNAPSHOT}'"
+else
+  SEND_CMD="ssh '$SRC_HOST' 'zfs send -R --raw ${SRC_DATASET}@${SNAPSHOT}'"
+fi
+
+# Build receive command
+if [[ "$DEST_TYPE" == "local" ]]; then
+  RECV_CMD="zfs recv $RECV_FLAGS '$DEST_DATASET'"
+else
+  RECV_CMD="ssh '$DEST_HOST' 'zfs recv $RECV_FLAGS ${DEST_DATASET}'"
+fi
+
+# Execute transfer
 echo "Transferring ${SOURCE}@${SNAPSHOT} → ${DEST}" >&2
 if [[ $VERBOSE -eq 1 ]]; then
-  zfs send -R "${SOURCE}@${SNAPSHOT}" | pv | zfs recv $RECV_FLAGS "$DEST"
+  eval "$SEND_CMD | pv | $RECV_CMD"
 else
-  zfs send -R "${SOURCE}@${SNAPSHOT}" | zfs recv $RECV_FLAGS "$DEST"
+  eval "$SEND_CMD | $RECV_CMD"
 fi
 
 echo "Transfer complete!" >&2
-echo "Snapshot: ${SOURCE}@${SNAPSHOT}" >&2
+echo "Snapshot: ${SRC_DATASET}@${SNAPSHOT}" >&2
