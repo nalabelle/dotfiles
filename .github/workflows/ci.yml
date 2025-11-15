@@ -91,7 +91,7 @@ jobs:
         run: make package-home
 
       - name: Upload home manager artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5
         with:
           name: home-manager-config
           path: artifacts/home-manager-config.tar.gz
