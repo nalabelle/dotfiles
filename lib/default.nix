@@ -38,46 +38,6 @@ let
       specialArgs = { inherit inputs username hostname; };
     };
 
-  # Create a NixOS configuration for a host
-  mkNixOSSystem =
-    { hostname, system }:
-    inputs.nixpkgs.lib.nixosSystem {
-      inherit system;
-      modules = [
-        inputs.opnix.nixosModules.default
-        ../nix/common.nix
-        ../hosts/${hostname}/configuration.nix
-      ]
-      ++ (
-        if builtins.pathExists ../hosts/${hostname}/home-configuration.nix then
-          [
-            inputs.home-manager.nixosModules.home-manager
-            {
-              home-manager.useGlobalPkgs = true;
-              home-manager.useUserPackages = true;
-              home-manager.extraSpecialArgs = { inherit inputs username hostname; };
-              home-manager.users.${username} = {
-                imports = [
-                  inputs.opnix.homeManagerModules.default
-                  ./opnix-templates.nix
-                  ../home
-                  (
-                    if builtins.pathExists ../hosts/${hostname}/home-configuration.nix then
-                      ../hosts/${hostname}/home-configuration.nix
-                    else
-                      { }
-                  )
-                ];
-              };
-            }
-          ]
-        else
-          [ ]
-      );
-
-      specialArgs = { inherit inputs username hostname; };
-    };
-
   # Create a standalone home configuration
   mkHomeConfig =
     { hostname, system }:
@@ -108,5 +68,5 @@ let
 in
 {
   # Export the functions directly for explicit configuration
-  inherit mkDarwinSystem mkNixOSSystem mkHomeConfig;
+  inherit mkDarwinSystem mkHomeConfig;
 }
