@@ -23,7 +23,6 @@ let
           home-manager.users.${username} = {
             imports = [
               inputs.opnix.homeManagerModules.default
-              ./opnix-templates.nix
               ../home
               (
                 if builtins.pathExists ../hosts/${hostname}/home-configuration.nix then
@@ -53,7 +52,6 @@ let
           home.homeDirectory =
             if system == "aarch64-darwin" then "/Users/${username}" else "/home/${username}";
         }
-        ./opnix-templates.nix
         ../home
         (
           if builtins.pathExists ../hosts/${hostname}/home-configuration.nix then

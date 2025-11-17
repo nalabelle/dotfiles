@@ -19,5 +19,4 @@
 - **Error handling**: Always handle errors explicitly, use proper exit codes (0/1)
 
 ## Secret Management
-- **opnix Templates**: Use `lib/opnix-templates.nix` for configuration files needing secret injection
-- **Template placeholders**: Reference secrets with `${config.programs.onepassword-secrets.placeholder.secretName}`
+- **opnix**: Use opnix for managing 1Password secrets in NixOS/Home Manager configurations
