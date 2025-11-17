@@ -1,0 +1,80 @@
+#!/usr/bin/env bash
+
+# Smart restart script for gitea-runner to prevent memory leaks
+# Only restarts if service has been running for more than 3 days
+# Includes retry logic with maximum wait time to prevent restart starvation
+
+set -euo pipefail
+
+# Configuration
+THREE_DAYS=$((3 * 24 * 60 * 60))
+MAX_WAIT_HOURS=2  # Maximum time to wait for jobs to finish
+RETRY_INTERVAL=60  # Wait seconds between retries
+
+# List of runner services to manage (injected by Nix via @servicesList@)
+SERVICES=(
+@servicesList@
+)
+
+# Function to check and restart a single service
+restart_service() {
+  local service=$1
+
+  echo "=== Checking $service ==="
+
+  # Check if service is active
+  if ! systemctl is-active --quiet "$service"; then
+    echo "Service $service is not active, skipping"
+    return 0
+  fi
+
+  # Check if service has been running for more than 3 days
+  UPTIME=$(systemctl show "$service" --property=ActiveEnterTimestamp --value)
+  UPTIME_SEC=$(date -d "$UPTIME" +%s)
+  NOW_SEC=$(date +%s)
+  RUNNING_TIME=$((NOW_SEC - UPTIME_SEC))
+
+  echo "Service uptime: $((RUNNING_TIME / 86400)) days ($((RUNNING_TIME / 3600)) hours)"
+
+  if [ $RUNNING_TIME -lt $THREE_DAYS ]; then
+    echo "Service running for only $((RUNNING_TIME / 3600)) hours, skipping restart"
+    return 0
+  fi
+
+  # Retry logic with maximum wait time
+  wait_start=$NOW_SEC
+  max_wait_sec=$((MAX_WAIT_HOURS * 3600))
+
+  while true; do
+    # Check if any jobs are currently running for this service
+    if ! pgrep -f "act_runner.*workflow" > /dev/null; then
+      echo "No active CI jobs detected, proceeding with restart"
+      break
+    fi
+
+    # Check if we've waited too long
+    current_time=$(date +%s)
+    wait_time=$((current_time - wait_start))
+
+    if [ $wait_time -ge $max_wait_sec ]; then
+      echo "WARNING: Waited $((wait_time / 3600)) hours for jobs to finish, forcing restart anyway"
+      echo "This may interrupt running CI jobs, but prevents indefinite restart delays"
+      break
+    fi
+
+    echo "Active CI job detected, waiting ${RETRY_INTERVAL}s before retry (waited $((wait_time / 60)) minutes so far)"
+    pgrep -f "act_runner.*workflow" -l || true
+    sleep $RETRY_INTERVAL
+  done
+
+  echo "Restarting $service after $((RUNNING_TIME / 86400)) days uptime"
+  systemctl restart "$service"
+}
+
+# Main loop - restart each service
+for service in "${SERVICES[@]}"; do
+  restart_service "$service"
+  echo ""
+done
+
+echo "All runner services checked"

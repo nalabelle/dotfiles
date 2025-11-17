@@ -18,6 +18,14 @@ in
     # Include the results of the hardware scan. (Not tracked in git)
     # sudo nixos-generate-config --dir ~/git/dotfiles/hosts/chandler
     ./hardware-configuration.nix
+    (import ./services/forgejo.nix {
+      inherit
+        config
+        pkgs
+        lib
+        services_domain
+        ;
+    })
   ];
 
   # Use the systemd-boot EFI boot loader.
@@ -163,87 +171,6 @@ in
         owner = "root";
         group = "acme";
       };
-      forgejoRunnerToken = {
-        reference = "op://Applications/Forgejo/runner-token";
-        services = [
-          "forgejo"
-          "gitea-runner-default"
-        ];
-        mode = "0640";
-        owner = "root";
-        group = "forgejo";
-      };
-    };
-  };
-
-  # Enable Forgejo service
-  services.forgejo = {
-    enable = true;
-    database = {
-      type = "postgres";
-    };
-    lfs.enable = true;
-
-    settings = {
-      server = {
-        PROTOCOL = "http+unix";
-        ROOT_URL = "https://git.${services_domain}/";
-        DOMAIN = "git.${services_domain}";
-      };
-      actions = {
-        ENABLED = true;
-        DEFAULT_ACTIONS_URL = "github";
-      };
-    };
-    dump.enable = true;
-  };
-
-  services.gitea-actions-runner = {
-    package = pkgs.forgejo-runner;
-    instances.default = {
-      enable = true;
-      name = "Default";
-      url = "https://git.${services_domain}/";
-      # tokenFile should be in format TOKEN=<secret>, since it's EnvironmentFile for systemd
-      tokenFile = config.services.onepassword-secrets.secretPaths.forgejoRunnerToken;
-      labels = [
-        "ubuntu-latest:docker://node:24-bullseye"
-        "ubuntu-22.04:docker://node:24-bullseye"
-        "nixos-latest:docker://nixos/nix"
-        "native:host"
-      ];
-      hostPackages = with pkgs; [
-        bash
-        coreutils
-        curl
-        gitMinimal
-        gnumake
-        nix
-        nixos-rebuild
-        nodejs_latest
-        openssh
-        wget
-      ];
-    };
-  };
-
-  # Smart restart timer to prevent gitea-runner memory leaks
-  # Restarts every 3 days but only when no jobs are running
-  systemd.timers.gitea-runner-restart = {
-    wantedBy = [ "timers.target" ];
-    timerConfig = {
-      OnCalendar = "*-*-* 02:00:00 America/Los_Angeles"; # Run at 2 AM PST/PDT daily
-      Persistent = true;
-      RandomizedDelaySec = "1h"; # Random delay up to 1 hour
-    };
-  };
-
-  systemd.services.gitea-runner-restart = {
-    script = builtins.readFile ../../config/bin/gitea-runner-restart;
-    serviceConfig = {
-      Type = "oneshot";
-      User = "root";
-      PATH = "${pkgs.systemd}/bin:${pkgs.procps}/bin:${pkgs.coreutils}/bin";
     };
   };
 
