@@ -67,13 +67,14 @@
         # Export flake modules for external consumption
         flakeModules.pre-commit = ./flakeModules/pre-commit;
 
-        # NixOS Configs
-        nixosConfigurations.chandler = libFunctions.mkNixOSSystem {
+        # Darwin Configs
+        darwinConfigurations.tennyson = libFunctions.mkDarwinSystem { hostname = "tennyson"; };
+        homeConfigurations."nalabelle@chandler" = libFunctions.mkHomeConfig {
+          # Chandler (Linux server) home-manager config
+          # Bootstrap: nix run nixpkgs#home-manager -- switch --flake .#nalabelle@chandler
           hostname = "chandler";
           system = "x86_64-linux";
         };
-        # Darwin Configs
-        darwinConfigurations.tennyson = libFunctions.mkDarwinSystem { hostname = "tennyson"; };
         homeConfigurations."nalabelle@darwin" = libFunctions.mkHomeConfig {
           # Test target to ensure home-manager config works when testing on darwin
           hostname = "default";
