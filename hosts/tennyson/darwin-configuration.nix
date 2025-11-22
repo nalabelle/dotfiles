@@ -24,7 +24,6 @@
       "balenaetcher"
       "calibre"
       "fastmail"
-      "fmail3"
       "foobar2000"
       "gimp"
       "keepassxc"
