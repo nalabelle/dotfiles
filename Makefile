@@ -26,7 +26,7 @@ test-js: ## Test JavaScript utilities
 test-linux:
 ifeq ($(shell uname), Linux)
 	@echo "Testing Linux configurations..."
-	nix build .#nixosConfigurations.chandler.config.system.build.toplevel
+	nix build .#homeConfigurations."nalabelle@chandler".activationPackage
 else
 	@echo "Skipping Linux targets on non-Linux system"
 endif

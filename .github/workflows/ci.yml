@@ -35,15 +35,15 @@ jobs:
           nix shell nixpkgs#nodejs nixpkgs#nodePackages.npm --command bash -c "npm install && npm test"
           echo "JavaScript tests completed successfully!"
 
-  build-nixos:
+  build-home-manager:
     needs: pre-commit
-    name: Build NixOS Configurations (${{ matrix.config }})
+    name: Build Home Manager Configurations (${{ matrix.config }})
     runs-on: ${{ matrix.runner }}
     strategy:
       fail-fast: false
       matrix:
         include:
-          - config: 'chandler'
+          - config: "nalabelle@chandler"
             runner: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -52,8 +52,8 @@ jobs:
       - name: Install Nix
         uses: DeterminateSystems/nix-installer-action@main
 
-      - name: Build nixos configuration ${{ matrix.config }}
-        run: nix build .#nixosConfigurations.${{ matrix.config}}.config.system.build.toplevel
+      - name: Build Home Manager configuration  ${{ matrix.config }}
+        run: nix build .#homeConfigurations.${{ matrix.config }}.activationPackage
 
   build-darwin:
     needs: pre-commit
@@ -76,9 +76,9 @@ jobs:
       - name: Build Darwin home configuration
         run: nix build .#homeConfigurations."nalabelle@darwin".activationPackage
 
-  build-home-manager:
+  build-home-manager-darwin:
     needs: pre-commit
-    name: Build Home Manager Configuration
+    name: Build Home Manager Darwin Configuration Package
     runs-on: macos-15
     steps:
       - name: Checkout repository
