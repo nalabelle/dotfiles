@@ -60,47 +60,31 @@
       in
       [
         # Theme
-        xoria256
-        vim-airline
-        vim-airline-themes
+        xoria256 # xoria256 colorscheme
+        vim-airline # lightweight statusline
+        vim-airline-themes # extra airline themes
 
         # UI Enhancements
-        vim-maximizer
-        vim-win
-        vim-bufkill
-        vim-indent-guides
-        fastfold
-        vista-vim
-        fzf-vim
+        vim-maximizer # toggle maximized window
+        vim-win # nicer window management
+        vim-bufkill # close buffers safely
+        vim-indent-guides # visualize indent levels
+        fastfold # speed up folding
+        vista-vim # tag/outline sidebar
+        fzf-vim # fuzzy file/grep picker
 
         # Git
-        vim-fugitive
+        vim-fugitive # git integration
 
         # Editing
-        vim-surround
+        vim-surround # edit surroundings easily
 
         # Languages
-        vim-polyglot
-        tabular
-        vim-markdown
-        ale
-        html5-vim
-        vim-javascript
-
-        # Nix Support
-        tlib_vim
-        vim-addon-mw-utils
-        vim-addon-actions
-        vim-addon-completion
-        vim-addon-goto-thing-at-cursor
-        vim-addon-errorformats
-        vim-addon-nix
-
-        # Project Config
-        lh-vim-lib
+        tabular # align text by pattern
+        ale # async linting/fixing
 
         # Navigation/Terminal
-        terminalkeys
+        terminalkeys # better terminal key handling
       ];
   };
 
