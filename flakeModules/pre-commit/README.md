@@ -4,39 +4,45 @@ This module provides a self-contained pre-commit setup for flake-parts projects.
 
 ## Usage
 
-Add to your flake inputs:
+This module is designed for flake-parts projects. Here's a complete minimal example:
 
 ```nix
-inputs.dotfiles = {
-  url = "github:nalabelle/dotfiles";
-  inputs.nixpkgs.follows = "nixpkgs";
-};
-```
-
-Import the module:
-
-```nix
-imports = [
-  inputs.dotfiles.flakeModules.pre-commit
-];
-```
-
-Configure in perSystem:
-
-```nix
-perSystem = { config, pkgs, ... }: {
-  # Customize hooks if needed
-  pre-commit.settings.hooks = {
-    # your customizations
+{
+  inputs = {
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    dotfiles = {
+      url = "github:nalabelle/dotfiles";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-parts.follows = "flake-parts";
+    };
+    flake-parts.url = "github:hercules-ci/flake-parts";
   };
 
-  # Compose the pre-commit devShell into your default shell
-  devShells.default = pkgs.mkShell {
-    inputsFrom = [ config.devShells.pre-commit ];
-    buildInputs = [ pkgs.nodejs ];
-  };
-};
+  outputs = inputs@{ flake-parts, ... }:
+    flake-parts.lib.mkFlake { inherit inputs; } {
+      imports = [
+        inputs.dotfiles.flakeModules.pre-commit
+      ];
+
+      perSystem = { config, pkgs, ... }: {
+        # Customize hooks if needed
+        pre-commit.settings.hooks = {
+          # your customizations
+        };
+
+        # Compose the pre-commit devShell into your default shell
+        devShells.default = pkgs.mkShell {
+          inputsFrom = [ config.devShells.pre-commit ];
+          buildInputs = [ pkgs.nodejs ];
+        };
+      };
+
+      systems = [ "x86_64-linux" "aarch64-darwin" ];
+    };
+}
 ```
+
+**Note:** The `dotfiles` input provides `git-hooks` and `jumanjihouse-hooks` transitively, so you don't need to declare them.
 
 ## What This Module Provides
 
@@ -74,7 +80,7 @@ The module enables these hooks by default:
 
 ## Customization
 
-Override any hook settings:
+### Override Hook Settings
 
 ```nix
 pre-commit.settings.hooks = {
@@ -89,7 +95,17 @@ pre-commit.settings.hooks = {
 };
 ```
 
-## Disabling the Module
+### Enable Formatter (runs pre-commit in `nix flake check`)
+
+By default, the formatter is disabled. To enable it:
+
+```nix
+pre-commit-defaults.enableFormatter = true;
+```
+
+This will run `pre-commit run --all-files` as part of `nix flake check`.
+
+### Disable the Module
 
 ```nix
 pre-commit-defaults.enable = false;

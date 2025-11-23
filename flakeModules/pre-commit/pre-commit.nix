@@ -33,6 +33,12 @@ in
                 example = true;
                 description = "Enable pre-commit defaults";
               };
+              enableFormatter = lib.mkOption {
+                type = types.bool;
+                default = false;
+                example = true;
+                description = "Enable formatter (runs pre-commit in nix flake check)";
+              };
               installationScript = lib.mkOption {
                 type = types.str;
                 default = ''
@@ -54,7 +60,7 @@ in
             shellHook = config.pre-commit-defaults.installationScript;
           };
 
-          formatter = lib.optionalAttrs config.pre-commit-defaults.enable (
+          formatter = lib.mkIf config.pre-commit-defaults.enableFormatter (
             let
               script = ''
                 ${config.pre-commit.settings.package}/bin/pre-commit run --all-files --config ${config.pre-commit.settings.configFile}
