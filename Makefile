@@ -15,12 +15,6 @@ help:
 	}' $(MAKEFILE_LIST)
 
 
-# Test JavaScript utilities
-.PHONY: test-js
-test-js: ## Test JavaScript utilities
-	@echo "Testing JavaScript utilities..."
-	@cd packages/merge-vscode-settings && nix shell nixpkgs#nodejs nixpkgs#nodePackages.npm --command bash -c "npm install && npm test"
-	@echo "JavaScript tests completed successfully!"
 
 .PHONY: test-linux
 test-linux:
@@ -42,7 +36,7 @@ else
 endif
 
 .PHONY: test
-test: test-linux test-darwin test-js ## Test configurations appropriate for current OS (mirrors CI workflow)
+test: test-linux test-darwin ## Test configurations appropriate for current OS (mirrors CI workflow)
 	@echo "All tests completed successfully!"
 
 # Remove build artifacts

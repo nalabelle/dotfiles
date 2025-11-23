@@ -7,8 +7,6 @@
 }:
 
 let
-  # Import merge-vscode-settings package
-  mergeVscodeSettings = import ../packages/merge-vscode-settings.nix { inherit pkgs; };
 
   # Read base MCP settings and merge with host-specific servers
   baseSettings = lib.importJSON ../config/vscode/User/globalStorage/kilocode.kilo-code/settings/mcp_settings.json;
@@ -17,73 +15,6 @@ let
   mergedSettings = lib.recursiveUpdate baseSettings {
     mcpServers = config.vscode.hostMcpServers;
   };
-
-  # VS Code user settings
-  userSettings = {
-    # Privacy and telemetry settings
-    "telemetry.feedback.enabled" = false;
-    "telemetry.telemetryLevel" = "off";
-
-    # Project Manager extension settings
-    "remote.extensionKind" = {
-      "alefragnani.project-manager" = [ "workspace" ];
-    };
-    "projectManager.sortList" = "Path";
-    "projectManager.showParentFolderInfoOnDuplicates" = true;
-    "projectManager.removeCurrentProjectFromList" = false;
-    "projectManager.git.maxDepthRecursion" = 1;
-    "projectManager.git.baseFolders" = [
-      "/Users/nalabelle/git" # macOS path
-      "/home/nalabelle/git" # Linux path
-    ];
-    "projectManager.git.ignoredFolders" = [
-      "node_modules"
-      "out"
-      "typings"
-      "test"
-      ".haxelib"
-      ".devbox"
-      ".venv"
-      "result" # Nix build result directory
-    ];
-    "projectManager.vscode.baseFolders" = [
-      "/Users/nalabelle/git" # macOS path
-      "/home/nalabelle/git" # Linux path
-    ];
-    "projectManager.vscode.ignoredFolders" = [
-      "node_modules"
-      "out"
-      "typings"
-      "test"
-      ".devbox"
-      ".venv"
-      "result" # Nix build result directory
-    ];
-
-    # Git repository scanning settings
-    "git.repositoryScanIgnoredFolders" = [
-      "node_modules"
-      ".devbox"
-      ".venv"
-    ];
-
-    # Makefile extension settings
-    "makefile.configureOnOpen" = false;
-
-    # Auto-run command settings for Kilo Code
-    "auto-run-command.rules" = [
-      {
-        condition = "always";
-        command = "kilo-code.importSettings ${config.home.homeDirectory}/.kilocode/settings.json";
-        message = "Importing Kilo Code settings from file";
-      }
-    ];
-  };
-
-  # Create VS Code user settings file (base settings from Nix)
-  userSettingsFile = pkgs.runCommand "settings.json" { } ''
-    echo '${lib.generators.toJSON { } userSettings}' | ${pkgs.jq}/bin/jq '.' > $out
-  '';
 
   # Extract VS Code config directory name based on package
   vscodePname =
@@ -152,25 +83,6 @@ in
     home.file."${configPath}/User/globalStorage/kilocode.kilo-code/settings/mcp_settings.json" = {
       text = builtins.toJSON mergedSettings;
     };
-
-    # VS Code user settings - merged with existing settings via activation script
-    home.activation.vscodeSettings = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-      EXISTING_SETTINGS="$HOME/${configPath}/User/settings.json"
-      MANAGED_SETTINGS="${userSettingsFile}"
-
-      if [ -f "$EXISTING_SETTINGS" ]; then
-        # Merge existing settings with managed settings (managed settings take precedence)
-        echo "Merging existing VS Code settings with managed settings..."
-
-        # Use comment-preserving merge tool for JSONC format
-        if ${mergeVscodeSettings}/bin/merge-vscode-settings "$EXISTING_SETTINGS" "$MANAGED_SETTINGS" "$EXISTING_SETTINGS.tmp"; then
-          mv "$EXISTING_SETTINGS.tmp" "$EXISTING_SETTINGS"
-        else
-          echo "Warning: Skipping VS Code settings merge due to error"
-        fi
-      fi
-      # If no existing settings file exists, silently exit without creating one
-    '';
 
     # VS Code keybindings - managed declaratively
     home.file."${configPath}/User/keybindings.json" = lib.mkIf pkgs.stdenv.isDarwin {

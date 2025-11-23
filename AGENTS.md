@@ -1,9 +1,7 @@
 # Agents Guide for Dotfiles Repository
 
 ## Build/Test/Lint Commands
-- `make test` - Run all tests (includes JS tests + Nix builds for current OS)
-- `make test-js` - Test JavaScript utilities only
-- `cd packages/merge-vscode-settings && npm test` - Run single JS package tests
+- `make test` - Run all tests (Nix builds for current OS)
 - `nix build .#darwinConfigurations.tennyson.system` - Test Darwin config
 - `nix build .#homeConfigurations."nalabelle@darwin".activationPackage` - Test home config
 - `pre-commit run --all-files` - Run linting/formatting checks

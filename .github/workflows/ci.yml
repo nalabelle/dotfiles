@@ -17,24 +17,6 @@ jobs:
       - name: Run pre-commit
         run: nix develop --command pre-commit run --all-files --show-diff-on-failure
 
-  test-js:
-    needs: pre-commit
-    name: Test JavaScript utilities
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6
-
-      - name: Install Nix
-        uses: DeterminateSystems/nix-installer-action@main
-
-      - name: Test JavaScript utilities
-        run: |
-          echo "Testing JavaScript utilities..."
-          cd packages/merge-vscode-settings
-          nix shell nixpkgs#nodejs nixpkgs#nodePackages.npm --command bash -c "npm install && npm test"
-          echo "JavaScript tests completed successfully!"
-
   build-home-manager:
     needs: pre-commit
     name: Build Home Manager Configurations (${{ matrix.config }})
