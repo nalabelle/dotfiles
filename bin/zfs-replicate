@@ -3,6 +3,8 @@
 # Usage: zfs-replicate <source> <destination>
 # bin/zfs-replicate -v root@chaucer.oops.run:storage0/music audio/music
 
+# ssh root@chaucer.oops.run 'zfs list -t snapshot -o name storage0/music | grep transfer | xargs -n1 zfs destroy && echo "All test snapshots cleaned up"'
+
 set -euo pipefail
 
 usage() {
