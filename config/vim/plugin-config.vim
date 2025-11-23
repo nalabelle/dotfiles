@@ -22,12 +22,6 @@ map <Leader>af :ALEFix<CR>
 map <Leader>e :ALENextWrap<CR>
 set omnifunc=ale#completion#OmniFunc
 
-" Polyglot
-let g:polyglot_disabled = ['markdown']
-
-" Markdown Preview
-nmap <Leader>v <Plug>MarkdownPreviewToggle
-
 " FZF
 let g:fzf_buffers_jump = 1
 let g:fzf_command_prefix = 'Fzf'
@@ -39,24 +33,6 @@ nnoremap <C-f> :FzfGFiles<cr>
 " Vista
 let g:vista#renderer#enable_icon = 1
 nnoremap <Leader>v :Vista!!<CR>
-
-" NERDTree
-nnoremap <C-t> :NERDTreeToggleVCS<cr>
-autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | call feedkeys(":quit\<CR>:\<BS>") | endif
-
-" Vim Markdown
-let g:vim_markdown_folding_disabled = 0
-let g:vim_markdown_folding_style_pythonic = 1
-let g:vim_markdown_no_default_key_mappings = 1
-let g:vim_markdown_toc_autofit = 1
-let g:vim_markdown_new_list_item_indent = 0
-let g:vim_markdown_auto_insert_bullets = 0
-let g:vim_markdown_fenced_languages = ['php', 'py=python', 'js=javascript', 'bash=sh', 'viml=vim']
-let g:vim_markdown_toml_frontmatter = 1
-let g:vim_markdown_json_frontmatter = 1
-let g:vim_markdown_frontmatter = 1
-let g:vim_markdown_strikethrough = 1
-let g:vim_markdown_folding_level = 2
 
 " Vim Maximizer
 nnoremap <C-W>z :MaximizerToggle<CR>
