@@ -25,8 +25,8 @@
       url = "github:nix-darwin/nix-darwin";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    git-hooks = {
-      url = "github:cachix/git-hooks.nix";
+    pre-commit-module = {
+      url = "path:./flakeModules/pre-commit";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
@@ -43,7 +43,7 @@
         "x86_64-linux"
       ];
       imports = [
-        (import ./flakeModules/pre-commit { inherit inputs; })
+        inputs.pre-commit-module.flakeModule
       ];
 
       perSystem =
@@ -54,7 +54,7 @@
         }:
         {
           devShells.default = pkgs.mkShell {
-            inputsFrom = [ config.pre-commit-defaults.devShell ];
+            inputsFrom = [ config.devShells.pre-commit ];
             buildInputs = with pkgs; [
               nixd
             ];
@@ -65,7 +65,7 @@
         };
       flake = {
         # Export flake modules for external consumption
-        flakeModules.pre-commit = ./flakeModules/pre-commit;
+        flakeModules.pre-commit = inputs.pre-commit-module.flakeModule;
 
         # Darwin Configs
         darwinConfigurations.tennyson = libFunctions.mkDarwinSystem { hostname = "tennyson"; };
