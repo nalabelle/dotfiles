@@ -45,21 +45,6 @@ let
     cp -r ${../config/kilocode}/* $out/
   '';
 
-  # Ollama pin (temporary workaround)
-  # - Reason: avoids ggml/glibc crash with ollama 0.11.7 on NixOS/glibc 2.40
-  #   where runner init asserts: GGML_ASSERT(prev != ggml_uncaught_exception)
-  # - Scope: only pin the ollama package via a separate nixpkgs input (see flake.nix)
-  # - Runtime policy on this headless host:
-  #   * Force CPU backend: OLLAMA_LLM_LIBRARY=cpu
-  #   * Match model context: OLLAMA_CONTEXT_LENGTH=2048 (nomic-embed-text n_ctx_train=2048)
-  # - Unpin later by removing this pinned import and switching ExecStart back to pkgs.ollama
-  ollamaPinnedPkgs = import inputs.nixpkgs-ollama {
-    system = pkgs.system;
-    # inherit package config (e.g., allowUnfree)
-    config = pkgs.config;
-  };
-  ollamaPinned = ollamaPinnedPkgs.ollama;
-
 in
 {
   options.vscode.hostMcpServers = lib.mkOption {
@@ -134,48 +119,5 @@ in
         "${kilocodeSource}/" \
         "$HOME/.kilocode/"
     '';
-
-    # Linux systemd user services for Qdrant and Ollama (VS Code context)
-    systemd.user.services = lib.mkIf pkgs.stdenv.isLinux {
-      qdrant = lib.mkIf (pkgs ? qdrant && pkgs ? vscode) {
-        Unit = {
-          Description = "Qdrant Vector Database (User Service)";
-          After = [ "network.target" ];
-        };
-        Service = {
-          Type = "simple";
-          ExecStart = "${pkgs.qdrant}/bin/qdrant --disable-telemetry";
-          WorkingDirectory = "/tmp";
-          Restart = "always";
-          LimitNOFILE = 10240;
-          Environment = [
-            "QDRANT__STORAGE__STORAGE_PATH=%h/.local/share/qdrant/storage"
-            "QDRANT__STORAGE__SNAPSHOTS_PATH=%h/.local/share/qdrant/snapshots"
-            "QDRANT__STORAGE__TEMP_PATH=%h/.local/share/qdrant/temp"
-          ];
-          ExecStartPre = ''
-            ${pkgs.coreutils}/bin/mkdir -p %h/.local/share/qdrant/storage %h/.local/share/qdrant/snapshots %h/.local/share/qdrant/temp
-          '';
-        };
-        Install = {
-          WantedBy = [ "default.target" ];
-        };
-      };
-      ollama = lib.mkIf (pkgs ? ollama && pkgs ? vscode) {
-        Unit = {
-          Description = "Ollama LLM Service";
-        };
-        Service = {
-          Type = "simple";
-          ExecStart = "${ollamaPinned}/bin/ollama start";
-          ExecStartPost = "${ollamaPinned}/bin/ollama pull nomic-embed-text";
-          Restart = "always";
-          LimitNOFILE = 10240;
-        };
-        Install = {
-          WantedBy = [ "default.target" ];
-        };
-      };
-    };
   };
 }

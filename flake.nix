@@ -3,11 +3,6 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
-    # Ollama pin (temporary):
-    # - Avoids ggml/glibc crash (GGML_ASSERT(prev != ggml_uncaught_exception)) seen with ollama 0.11.7 on NixOS/glibc 2.40
-    # - This input is used only to source a known-good ollama package for the user service
-    # - To remove later: delete this input and the pinned import in home/vscode.nix, then rebuild
-    nixpkgs-ollama.url = "github:nixos/nixpkgs/0e209ec10915826c36bd0518251fd664967cbb9e";
     flake-parts.url = "github:hercules-ci/flake-parts";
     opnix = {
       url = "github:brizzbuzz/opnix";

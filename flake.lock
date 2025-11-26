@@ -204,22 +204,6 @@
         "type": "github"
       }
     },
-    "nixpkgs-ollama": {
-      "locked": {
-        "lastModified": 1756165500,
-        "narHash": "sha256-FbrvBEgDcyvcgX4SFLdgQh8K9v140u2zvyv++yMi0vQ=",
-        "owner": "nixos",
-        "repo": "nixpkgs",
-        "rev": "0e209ec10915826c36bd0518251fd664967cbb9e",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nixos",
-        "repo": "nixpkgs",
-        "rev": "0e209ec10915826c36bd0518251fd664967cbb9e",
-        "type": "github"
-      }
-    },
     "opnix": {
       "inputs": {
         "flake-utils": "flake-utils",
@@ -266,7 +250,6 @@
         "mkAlias": "mkAlias",
         "nix-darwin": "nix-darwin",
         "nixpkgs": "nixpkgs",
-        "nixpkgs-ollama": "nixpkgs-ollama",
         "opnix": "opnix",
         "pre-commit-module": "pre-commit-module"
       }
