@@ -172,6 +172,20 @@
     keyboard = {
       enableKeyMapping = true;
       remapCapsLockToEscape = true;
+      # Swap left control and left command
+      # HID usage page 0x07 (Keyboard/Keypad)
+      # 0x7000000E0 = Left Control
+      # 0x7000000E3 = Left GUI (Command)
+      userKeyMapping = [
+        {
+          HIDKeyboardModifierMappingSrc = 30064771296; # Left Control (0x7000000E0)
+          HIDKeyboardModifierMappingDst = 30064771299; # Left GUI (0x7000000E3)
+        }
+        {
+          HIDKeyboardModifierMappingSrc = 30064771299; # Left GUI (0x7000000E3)
+          HIDKeyboardModifierMappingDst = 30064771296; # Left Control (0x7000000E0)
+        }
+      ];
     };
   };
 
