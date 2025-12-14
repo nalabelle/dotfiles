@@ -1,19 +1,17 @@
 {
   "mcpServers": {
+    "kodit": {
+      "type": "streamable-http",
+      "alwaysAllow": [],
+      "url": "https://kodit.oops.city/mcp"
+    },
     "context7": {
       "alwaysAllow": [
         "resolve-library-id",
         "get-library-docs"
       ],
-      "args": [
-        "shell",
-        "nixpkgs#nodejs",
-        "--command",
-        "npx",
-        "--",
-        "@upstash/context7-mcp"
-      ],
-      "command": "nix"
+      "type": "streamable-http",
+      "url": "https://mcp.context7.com/mcp"
     }
   }
 }
