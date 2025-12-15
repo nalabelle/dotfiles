@@ -1,17 +1,9 @@
 {
   "mcpServers": {
-    "kodit": {
+    "mcpjungle": {
       "type": "streamable-http",
       "alwaysAllow": [],
-      "url": "https://kodit.oops.city/mcp"
-    },
-    "context7": {
-      "alwaysAllow": [
-        "resolve-library-id",
-        "get-library-docs"
-      ],
-      "type": "streamable-http",
-      "url": "https://mcp.context7.com/mcp"
+      "url": "https://mcpjungle.oops.city/mcp"
     }
   }
 }
