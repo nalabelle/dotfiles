@@ -44,10 +44,13 @@ test: test-linux test-darwin ## Test configurations appropriate for current OS (
 clean: ## Clean up build results
 	rm -rf result
 
-# Switch darwin configuration for current host
-.PHONY: darwin-switch
-darwin-switch: ## Update system configuration
+.PHONY: switch
+switch: ## Update system and home configurations
+ifeq ($(shell uname), Linux)
+	home-manager switch --flake .
+else ifeq ($(shell uname), Darwin)
 	sudo darwin-rebuild switch --flake .#$(shell hostname)
+endif
 
 # Switch home-manager configuration
 .PHONY: home-switch
