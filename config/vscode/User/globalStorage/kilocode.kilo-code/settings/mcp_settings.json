@@ -1,9 +1,19 @@
 {
   "mcpServers": {
     "mcpjungle": {
-      "type": "streamable-http",
+      "command": "nix",
+      "args": [
+        "shell",
+        "nixpkgs#nodejs",
+        "--command",
+        "npx",
+        "-y",
+        "mcp-remote",
+        "https://mcpjungle.oops.city/mcp"
+      ],
+      "env": {},
       "alwaysAllow": [],
-      "url": "https://mcpjungle.oops.city/mcp"
+      "disabled": false
     }
   }
 }
