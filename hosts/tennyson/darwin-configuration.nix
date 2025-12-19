@@ -18,29 +18,43 @@
 
   homebrew = {
     casks = [
+      "1password"
       "android-ndk"
       "android-platform-tools"
       "android-studio"
       "archivewebpage"
       "balenaetcher"
+      "brave-browser"
+      "caldigit-docking-utility"
       "calibre"
-      "fastmail"
+      "coconutbattery"
+      "connectmenow"
       "foobar2000"
+      "forecast"
       "gimp"
+      "iterm2"
       "keepassxc"
       "kopiaui"
       "linearmouse"
+      "logitune" # Needs manual install
       "mountain-duck"
       "musicbrainz-picard"
       "obsidian"
       "onlyoffice"
       "openzfs"
       "orbstack"
+      "plexamp"
       "protonvpn"
+      "raycast"
       "replaywebpage"
+      "swinsian"
+      "syncthing-app"
+      "tailscale-app"
+      "visual-studio-code"
       "winbox"
-      "wireshark"
+      "wireshark-app"
       "zed"
+      "zoom"
     ];
     taps = [
       "sst/tap"
@@ -79,7 +93,6 @@
       KeepAlive = false; # Don't restart after completion
       StartCalendarInterval = [
         {
-          Weekday = 1; # Monday
           Hour = 3; # 3 AM
           Minute = 0; # On the hour
         }

@@ -185,22 +185,6 @@
       upgrade = true;
       extraFlags = [ "--verbose" ];
     };
-
-    casks = [
-      "1password"
-      "brave-browser"
-      "caldigit-docking-utility"
-      "coconutbattery"
-      "docker-desktop"
-      "iterm2"
-      "logitune" # Needs manual install
-      "plexamp"
-      "raycast"
-      "syncthing-app"
-      "tailscale-app"
-      "unnaturalscrollwheels"
-      "visual-studio-code"
-    ];
   };
 
 }
