@@ -39,6 +39,7 @@
       "logitune" # Needs manual install
       "mountain-duck"
       "musicbrainz-picard"
+      "obs"
       "obsidian"
       "onlyoffice"
       "openzfs"
@@ -51,6 +52,7 @@
       "syncthing-app"
       "tailscale-app"
       "visual-studio-code"
+      "vlc"
       "winbox"
       "wireshark-app"
       "zed"
