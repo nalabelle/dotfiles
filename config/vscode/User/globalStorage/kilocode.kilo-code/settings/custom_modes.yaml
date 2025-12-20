@@ -170,7 +170,6 @@ customModes:
       - command
       - mcp
     source: global
-    iconName: codicon-run-all
   - slug: research
     name: Research
     iconName: codicon-question
@@ -199,4 +198,4 @@ customModes:
       2. Research and summarize best practices for given frameworks, APIs, or infrastructure tools used in the project.
       3. Help interpret implementation intent based on code and configuration.
       4. Suggest improvements in documentation clarity or technical structure without making direct code edits.
-    source: project
+    source: global
