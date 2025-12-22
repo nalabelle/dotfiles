@@ -72,7 +72,7 @@
         };
         homeConfigurations."nalabelle@doyle" = libFunctions.mkHomeConfig {
           # Bootstrap: nix run nixpkgs#home-manager -- switch --flake .#nalabelle@doyle
-          hostname = "chandler";
+          hostname = "doyle";
           system = "x86_64-linux";
         };
         homeConfigurations."nalabelle@darwin" = libFunctions.mkHomeConfig {
