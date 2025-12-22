@@ -7,6 +7,9 @@
 }:
 
 {
+  # Enable integration with generic Linux desktop environments
+  targets.genericLinux.enable = true;
+
   # Configure VS Code to use VS Code SSH path
   vscode.configPath = ".vscode-server/data";
 
