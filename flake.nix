@@ -62,6 +62,12 @@
         # Export flake modules for external consumption
         flakeModules.pre-commit = inputs.pre-commit-module.flakeModule;
 
+        homeManagerModules.default = {
+          imports = [
+            ./home
+          ];
+        };
+
         # Darwin Configs
         darwinConfigurations.tennyson = libFunctions.mkDarwinSystem { hostname = "tennyson"; };
         homeConfigurations."nalabelle@chandler" = libFunctions.mkHomeConfig {
