@@ -70,6 +70,11 @@
           hostname = "chandler";
           system = "x86_64-linux";
         };
+        homeConfigurations."nalabelle@doyle" = libFunctions.mkHomeConfig {
+          # Bootstrap: nix run nixpkgs#home-manager -- switch --flake .#nalabelle@doyle
+          hostname = "chandler";
+          system = "x86_64-linux";
+        };
         homeConfigurations."nalabelle@darwin" = libFunctions.mkHomeConfig {
           # Test target to ensure home-manager config works when testing on darwin
           hostname = "default";
