@@ -68,23 +68,6 @@ update: ## Update dependencies
 gc: ## Clean up old packages
 	nix-collect-garbage --delete-old
 
-# Set up 1Password service account token for opnix
-.PHONY: opnix-token-set
-opnix-token-set: ## Set up 1Password service account token for opnix
-	@echo "Setting up opnix service account token..."
-	sudo -E nix run github:brizzbuzz/opnix -- token set
-	sudo chmod 640 /etc/opnix-token
-ifeq ($(shell uname), Darwin)
-	sudo chown root:staff /etc/opnix-token
-endif
-ifeq ($(shell uname), Linux)
-	sudo chown root:users /etc/opnix-token
-endif
-
-	# Verify permissions
-	ls -la /etc/opnix-token
-	# Should show: -rw-r----- 1 root onepassword-secrets
-
 # Package home-manager configuration for distribution
 package-home: artifacts/home-manager-config.tar.gz ## Package home-manager configuration as tar.gz
 

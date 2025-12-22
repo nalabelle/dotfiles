@@ -15,6 +15,3 @@
 - **Naming**: Use kebab-case for files, camelCase for JS variables, descriptive names
 - **Comments**: Preserve existing comments in JSON/JSONC files, minimal comments elsewhere
 - **Error handling**: Always handle errors explicitly, use proper exit codes (0/1)
-
-## Secret Management
-- **opnix**: Use opnix for managing 1Password secrets in NixOS/Home Manager configurations
