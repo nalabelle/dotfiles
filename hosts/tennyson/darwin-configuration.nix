@@ -29,7 +29,7 @@
       "calibre"
       "coconutbattery"
       "connectmenow"
-      "foobar2000"
+      "element"
       "forecast"
       "gimp"
       "iterm2"
