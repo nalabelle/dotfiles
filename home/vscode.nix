@@ -7,15 +7,6 @@
 }:
 
 let
-
-  # Read base MCP settings and merge with host-specific servers
-  baseSettings = lib.importJSON ../config/vscode/User/globalStorage/kilocode.kilo-code/settings/mcp_settings.json;
-
-  # Merge base settings with host-specific MCP servers
-  mergedSettings = lib.recursiveUpdate baseSettings {
-    mcpServers = config.vscode.hostMcpServers;
-  };
-
   # Extract VS Code config directory name based on package
   vscodePname =
     if pkgs.stdenv.isDarwin then
@@ -47,12 +38,6 @@ let
 
 in
 {
-  options.vscode.hostMcpServers = lib.mkOption {
-    type = lib.types.attrs;
-    default = { };
-    description = "Host-specific MCP servers for VSCode";
-  };
-
   options.vscode.configPath = lib.mkOption {
     type = lib.types.str;
     default =
@@ -64,11 +49,6 @@ in
   };
 
   config = {
-    # MCP settings for Kilo Code extension
-    home.file."${configPath}/User/globalStorage/kilocode.kilo-code/settings/mcp_settings.json" = {
-      text = builtins.toJSON mergedSettings;
-    };
-
     # VS Code keybindings - managed declaratively
     home.file."${configPath}/User/keybindings.json" = lib.mkIf pkgs.stdenv.isDarwin {
       source = ../config/vscode/User/keybindings.darwin.jsonc;
@@ -77,11 +57,6 @@ in
     # OpenCode configuration file
     home.file.".config/opencode/opencode.json" = {
       source = ../config/opencode/opencode.json;
-    };
-
-    # Kilocode custom modes file
-    home.file."${configPath}/User/globalStorage/kilocode.kilo-code/settings/custom_modes.yaml" = {
-      source = ../config/vscode/User/globalStorage/kilocode.kilo-code/settings/custom_modes.yaml;
     };
 
     # Kilo Code rule files (both platforms)
