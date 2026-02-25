@@ -55,6 +55,7 @@ This module is designed for flake-parts projects. Here's a complete minimal exam
 The module enables these hooks by default:
 
 ### File Integrity
+
 - fix-byte-order-marker
 - check-case-conflicts
 - check-executables-have-shebangs
@@ -70,10 +71,12 @@ The module enables these hooks by default:
 - trim-trailing-whitespace
 
 ### Language-Specific
+
 - shellcheck
-- nixfmt-rfc-style
+- nixfmt
 
 ### Custom Hooks
+
 - forbid-binary - Prevents binary files from being committed
 - script-must-have-extension - Non-executable shell scripts must end in .sh
 - script-must-not-have-extension - Executable shell scripts must not have extensions

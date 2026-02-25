@@ -94,7 +94,7 @@ in
 
                 # Language-specific hooks
                 shellcheck.enable = lib.mkDefault true;
-                nixfmt-rfc-style.enable = lib.mkDefault true;
+                nixfmt.enable = lib.mkDefault true;
 
                 # Custom hooks from jumanjihouse/pre-commit-hooks
                 # Source: https://github.com/jumanjihouse/pre-commit-hooks

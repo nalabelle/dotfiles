@@ -25,7 +25,7 @@
     devbox
     mkcert
     _1password-cli
-    nixfmt-rfc-style
+    nixfmt
     nixfmt-tree
 
     # Environment
