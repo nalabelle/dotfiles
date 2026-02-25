@@ -38,6 +38,10 @@
     pkgs.bash
     (pkgs.callPackage ../packages/peazip.nix { })
   ];
+  # Source /etc/bashrc for non-interactive bash sessions so nix is on PATH.
+  # Bash only sources $BASH_ENV for non-interactive shells; without this,
+  # scripts run via `bash -c` or Makefile recipes won't find nix binaries.
+  environment.variables.BASH_ENV = "/etc/bashrc";
   environment.systemPath = lib.mkBefore [
     # User-specific Nix profiles (needed for GUI applications)
     # When useUserPackages = true: packages managed by nix-darwin in /etc/profiles/per-user/
