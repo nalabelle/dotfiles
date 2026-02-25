@@ -81,6 +81,22 @@
       keep-outputs = false
       keep-derivations = false
     '';
+
+    # 4) Trust binary caches used by infra flake (nix-community, numtide, fufexan)
+    #    Without these in nix.conf, flake nixConfig substituters are ignored unless
+    #    --accept-flake-config is passed, causing source builds with test failures.
+    settings = {
+      extra-substituters = [
+        "https://nix-community.cachix.org"
+        "https://numtide.cachix.org"
+        "https://fufexan.cachix.org"
+      ];
+      extra-trusted-public-keys = [
+        "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+        "numtide.cachix.org-1:2ps1kLBUWjxIneOy1Ik6cQjb41X0iXVXeHigGmycPPE="
+        "fufexan.cachix.org-1:LwCDjCJNJQf5XD2BV+yamQIMZfcKWR9ISIFy5curUsY="
+      ];
+    };
   };
 
   # Configure the Nix garbage collection service with additional options
