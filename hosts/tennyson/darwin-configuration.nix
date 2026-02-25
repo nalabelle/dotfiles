@@ -14,6 +14,7 @@
   # ZFS snapshot replication tools
   environment.systemPackages = with pkgs; [
     pv # Progress monitoring for transfers
+    (pkgs.callPackage ../../packages/kilocode-cli.nix { })
   ];
 
   homebrew = {
