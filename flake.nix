@@ -21,6 +21,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     opencode.url = "github:anomalyco/opencode";
+    kilocode.url = "github:Kilo-Org/kilocode";
   };
 
   outputs =
