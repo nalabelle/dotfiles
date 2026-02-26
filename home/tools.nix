@@ -144,6 +144,12 @@
         warn_timeout = "60s";
         hide_env_diff = true;
       };
+      whitelist = {
+        prefix = [
+          "/home/nalabelle/.local/share/kilo/worktree"
+          "/home/nalabelle/.local/share/opencode/worktree"
+        ];
+      };
     };
   };
 
