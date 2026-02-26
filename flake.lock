@@ -115,6 +115,24 @@
         "type": "github"
       }
     },
+    "kilocode": {
+      "inputs": {
+        "nixpkgs": "nixpkgs"
+      },
+      "locked": {
+        "lastModified": 1772120707,
+        "narHash": "sha256-TimkgKFW8T/x4V0HnBiv3FZ3yQR2EVZagamS+ToV3Z0=",
+        "owner": "Kilo-Org",
+        "repo": "kilocode",
+        "rev": "86a255509dd0bbbca9c218efd6046eece70d8a15",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Kilo-Org",
+        "repo": "kilocode",
+        "type": "github"
+      }
+    },
     "mkAlias": {
       "inputs": {
         "nixpkgs": [
@@ -157,16 +175,16 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1771848320,
-        "narHash": "sha256-0MAd+0mun3K/Ns8JATeHT1sX28faLII5hVLq0L3BdZU=",
-        "owner": "nixos",
+        "lastModified": 1770812194,
+        "narHash": "sha256-OH+lkaIKAvPXR3nITO7iYZwew2nW9Y7Xxq0yfM/UcUU=",
+        "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "2fc6539b481e1d2569f25f8799236694180c0993",
+        "rev": "8482c7ded03bae7550f3d69884f1e611e3bd19e8",
         "type": "github"
       },
       "original": {
-        "owner": "nixos",
-        "ref": "nixos-unstable",
+        "owner": "NixOS",
+        "ref": "nixpkgs-unstable",
         "repo": "nixpkgs",
         "type": "github"
       }
@@ -188,6 +206,22 @@
     },
     "nixpkgs_2": {
       "locked": {
+        "lastModified": 1771848320,
+        "narHash": "sha256-0MAd+0mun3K/Ns8JATeHT1sX28faLII5hVLq0L3BdZU=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "2fc6539b481e1d2569f25f8799236694180c0993",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs_3": {
+      "locked": {
         "lastModified": 1770812194,
         "narHash": "sha256-OH+lkaIKAvPXR3nITO7iYZwew2nW9Y7Xxq0yfM/UcUU=",
         "owner": "NixOS",
@@ -204,7 +238,7 @@
     },
     "opencode": {
       "inputs": {
-        "nixpkgs": "nixpkgs_2"
+        "nixpkgs": "nixpkgs_3"
       },
       "locked": {
         "lastModified": 1772031356,
@@ -242,9 +276,10 @@
       "inputs": {
         "flake-parts": "flake-parts",
         "home-manager": "home-manager",
+        "kilocode": "kilocode",
         "mkAlias": "mkAlias",
         "nix-darwin": "nix-darwin",
-        "nixpkgs": "nixpkgs",
+        "nixpkgs": "nixpkgs_2",
         "opencode": "opencode",
         "pre-commit-module": "pre-commit-module"
       }
