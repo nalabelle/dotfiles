@@ -110,10 +110,11 @@ let
       };
     };
   };
+  opencodeConfigFile = pkgs.writeText "opencode.json" opencodeConfig;
 in
 {
   # OpenCode configuration (generated to resolve nix binary path per-platform)
-  home.file.".config/opencode/opencode.json".text = opencodeConfig;
+  home.file.".config/opencode/opencode.json".source = opencodeConfigFile;
   # KiloCode uses the same MCP server configuration
-  home.file.".config/kilo/opencode.json".text = opencodeConfig;
+  home.file.".config/kilo/opencode.json".source = opencodeConfigFile;
 }
