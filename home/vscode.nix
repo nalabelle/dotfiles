@@ -54,11 +54,6 @@ in
       source = ../config/vscode/User/keybindings.darwin.jsonc;
     };
 
-    # OpenCode configuration file
-    home.file.".config/opencode/opencode.json" = {
-      source = ../config/opencode/opencode.json;
-    };
-
     # Kilo Code rule files (both platforms)
     #
     # WORKAROUND: Using activation scripts to copy files instead of symlinks.

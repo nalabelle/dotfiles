@@ -8,6 +8,7 @@
   imports = [
     ./colors.nix
     ./git.nix
+    ./opencode.nix
     ./tmux.nix
     ./tools.nix
     ./vim.nix
