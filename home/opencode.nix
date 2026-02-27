@@ -111,10 +111,27 @@ let
     };
   };
   opencodeConfigFile = pkgs.writeText "opencode.json" opencodeConfig;
+
+  # Shared config deployed to both opencode and kilo directories
+  agentFiles = {
+    "code-reviewer.md" = ../config/opencode/agents/code-reviewer.md;
+    "research.md" = ../config/opencode/agents/research.md;
+  };
+
+  mkAgentFiles =
+    dir:
+    builtins.listToAttrs (
+      builtins.map (name: {
+        name = ".config/${dir}/agents/${name}";
+        value.source = agentFiles.${name};
+      }) (builtins.attrNames agentFiles)
+    );
 in
 {
-  # OpenCode configuration (generated to resolve nix binary path per-platform)
-  home.file.".config/opencode/opencode.json".source = opencodeConfigFile;
-  # KiloCode uses the same MCP server configuration
-  home.file.".config/kilo/opencode.json".source = opencodeConfigFile;
+  home.file = {
+    ".config/opencode/opencode.json".source = opencodeConfigFile;
+    ".config/kilo/opencode.json".source = opencodeConfigFile;
+  }
+  // mkAgentFiles "opencode"
+  // mkAgentFiles "kilo";
 }
