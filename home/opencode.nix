@@ -77,7 +77,6 @@ let
           "@modelcontextprotocol/server-github"
         ];
         environment = {
-          GITHUB_PERSONAL_ACCESS_TOKEN = "{env:GITHUB_MCP_TOKEN}";
           GITHUB_TOOLSETS = "";
           GITHUB_READ_ONLY = "1";
         };
