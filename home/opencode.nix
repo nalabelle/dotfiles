@@ -68,16 +68,10 @@ let
         enabled = true;
         type = "local";
         command = [
-          "${pkgs.nix}/bin/nix"
-          "shell"
-          "nixpkgs#nodejs"
-          "--command"
-          "npx"
-          "-y"
-          "@modelcontextprotocol/server-github"
+          "${pkgs.github-mcp-server}/bin/github-mcp-server"
+          "stdio"
         ];
         environment = {
-          GITHUB_TOOLSETS = "";
           GITHUB_READ_ONLY = "1";
         };
       };
@@ -89,6 +83,17 @@ let
           "run"
           "github:utensils/mcp-nixos"
           "--"
+        ];
+      };
+      forgejo = {
+        enabled = true;
+        type = "local";
+        command = [
+          "${pkgs.forgejo-mcp}/bin/forgejo-mcp"
+          "--transport"
+          "stdio"
+          "--url"
+          "https://git.oops.city"
         ];
       };
       context7 = {
