@@ -47,4 +47,44 @@
     };
     Install.WantedBy = [ "default.target" ];
   };
+
+  systemd.user.timers.opencode-restart = {
+    Unit.Description = "Daily restart timer for OpenCode web server";
+    Timer = {
+      OnCalendar = "*-*-* 05:00:00 America/New_York";
+      RandomizedDelaySec = "10m";
+      Persistent = true;
+    };
+    Install.WantedBy = [ "timers.target" ];
+  };
+
+  systemd.user.services.opencode-restart = {
+    Unit = {
+      Description = "Restart OpenCode web server";
+    };
+    Service = {
+      Type = "oneshot";
+      ExecStart = "${pkgs.systemd}/bin/systemctl --user restart opencode.service";
+    };
+  };
+
+  systemd.user.timers.kilocode-restart = {
+    Unit.Description = "Daily restart timer for KiloCode web server";
+    Timer = {
+      OnCalendar = "*-*-* 05:00:00 America/New_York";
+      RandomizedDelaySec = "10m";
+      Persistent = true;
+    };
+    Install.WantedBy = [ "timers.target" ];
+  };
+
+  systemd.user.services.kilocode-restart = {
+    Unit = {
+      Description = "Restart KiloCode web server";
+    };
+    Service = {
+      Type = "oneshot";
+      ExecStart = "${pkgs.systemd}/bin/systemctl --user restart kilocode.service";
+    };
+  };
 }
