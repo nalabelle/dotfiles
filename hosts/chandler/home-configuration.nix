@@ -27,6 +27,7 @@
       RestartSec = "5s";
       TimeoutStopSec = "5s";
       Environment = "PATH=/run/current-system/sw/bin:/nix/var/nix/profiles/default/bin:%h/.nix-profile/bin";
+      EnvironmentFile = "-${config.home.homeDirectory}/.config/credentials/opencode.env";
     };
     Install.WantedBy = [ "default.target" ];
   };
@@ -42,6 +43,7 @@
       RestartSec = "5s";
       TimeoutStopSec = "5s";
       Environment = "PATH=/run/current-system/sw/bin:/nix/var/nix/profiles/default/bin:%h/.nix-profile/bin";
+      EnvironmentFile = "-${config.home.homeDirectory}/.config/credentials/opencode.env";
     };
     Install.WantedBy = [ "default.target" ];
   };
