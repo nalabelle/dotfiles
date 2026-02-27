@@ -1,6 +1,6 @@
 ---
 description: Expert code review specialist. Proactively reviews code for quality, security, and maintainability.
-mode: subagent
+mode: primary
 permission:
   edit: ask
   bash: allow
