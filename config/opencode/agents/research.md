@@ -1,6 +1,6 @@
 ---
 description: Get answers and explanations about code, architecture, and best practices.
-mode: subagent
+mode: primary
 permission:
   edit: deny
   bash: allow
