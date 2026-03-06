@@ -29,7 +29,6 @@
       "git log",
       "git diff",
       "git show",
-      "template-diff",
       "pre-commit run --all-files",
       "npm test",
       "npm install",
