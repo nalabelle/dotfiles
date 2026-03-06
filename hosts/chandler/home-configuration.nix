@@ -36,19 +36,23 @@ in
     Install.WantedBy = [ "default.target" ];
   };
 
-  systemd.user.services.kilocode = {
+  systemd.user.timers.opencode-restart = {
+    Unit.Description = "Daily restart timer for OpenCode web server";
+    Timer = {
+      OnCalendar = "*-*-* 05:00:00 America/New_York";
+      RandomizedDelaySec = "10m";
+      Persistent = true;
+    };
+    Install.WantedBy = [ "timers.target" ];
+  };
+
+  systemd.user.services.opencode-restart = {
     Unit = {
-      Description = "KiloCode web server";
-      X-Restart-Triggers = [ config.home.file.".config/kilo/opencode.json".source ];
+      Description = "Restart OpenCode web server";
     };
     Service = {
-      ExecStart = "${kilocode-cli}/bin/kilo web --port 4097 --hostname 127.0.0.1";
-      Restart = "on-failure";
-      RestartSec = "5s";
-      TimeoutStopSec = "5s";
-      Environment = "PATH=/run/current-system/sw/bin:/nix/var/nix/profiles/default/bin:%h/.nix-profile/bin";
-      EnvironmentFile = "-${config.home.homeDirectory}/.config/credentials/opencode.env";
+      Type = "oneshot";
+      ExecStart = "${pkgs.systemd}/bin/systemctl --user restart opencode.service";
     };
-    Install.WantedBy = [ "default.target" ];
   };
 }
