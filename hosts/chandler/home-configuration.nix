@@ -6,13 +6,16 @@
   ...
 }:
 
+let
+  kilocode-cli = pkgs.callPackage ../../nix/pkgs/kilocode-cli.nix { };
+in
 {
   # Configure VS Code to use VS Code SSH path
   vscode.configPath = ".vscode-server/data";
 
   home.packages = [
     inputs.opencode.packages.x86_64-linux.default
-    inputs.kilocode.packages.x86_64-linux.default
+    kilocode-cli
     pkgs.btop
   ];
 
@@ -38,7 +41,7 @@
       X-Restart-Triggers = [ config.home.file.".config/kilo/opencode.json".source ];
     };
     Service = {
-      ExecStart = "${inputs.kilocode.packages.x86_64-linux.default}/bin/kilo web --port 4097 --hostname 127.0.0.1";
+      ExecStart = "${kilocode-cli}/bin/kilo web --port 4097 --hostname 127.0.0.1";
       Restart = "on-failure";
       RestartSec = "5s";
       TimeoutStopSec = "5s";
