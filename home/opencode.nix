@@ -61,6 +61,9 @@ let
         "export *" = "ask";
         "source *" = "ask";
         ". *" = "ask";
+        # Git
+        "git commit *" = "ask";
+        "git push *" = "ask";
       };
     };
     mcp = {
