@@ -115,24 +115,6 @@
         "type": "github"
       }
     },
-    "kilocode": {
-      "inputs": {
-        "nixpkgs": "nixpkgs"
-      },
-      "locked": {
-        "lastModified": 1772227445,
-        "narHash": "sha256-v2on0zKKQWDWt0TskWcDkUepLWW39mLXyVGD8Kc1Kk4=",
-        "owner": "Kilo-Org",
-        "repo": "kilocode",
-        "rev": "759719fc2865517febda1f0e044482643aa8b5ea",
-        "type": "github"
-      },
-      "original": {
-        "owner": "Kilo-Org",
-        "repo": "kilocode",
-        "type": "github"
-      }
-    },
     "mkAlias": {
       "inputs": {
         "nixpkgs": [
@@ -175,16 +157,16 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1770812194,
-        "narHash": "sha256-OH+lkaIKAvPXR3nITO7iYZwew2nW9Y7Xxq0yfM/UcUU=",
-        "owner": "NixOS",
+        "lastModified": 1771848320,
+        "narHash": "sha256-0MAd+0mun3K/Ns8JATeHT1sX28faLII5hVLq0L3BdZU=",
+        "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "8482c7ded03bae7550f3d69884f1e611e3bd19e8",
+        "rev": "2fc6539b481e1d2569f25f8799236694180c0993",
         "type": "github"
       },
       "original": {
-        "owner": "NixOS",
-        "ref": "nixpkgs-unstable",
+        "owner": "nixos",
+        "ref": "nixos-unstable",
         "repo": "nixpkgs",
         "type": "github"
       }
@@ -201,56 +183,6 @@
       "original": {
         "owner": "nix-community",
         "repo": "nixpkgs.lib",
-        "type": "github"
-      }
-    },
-    "nixpkgs_2": {
-      "locked": {
-        "lastModified": 1771848320,
-        "narHash": "sha256-0MAd+0mun3K/Ns8JATeHT1sX28faLII5hVLq0L3BdZU=",
-        "owner": "nixos",
-        "repo": "nixpkgs",
-        "rev": "2fc6539b481e1d2569f25f8799236694180c0993",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nixos",
-        "ref": "nixos-unstable",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
-    "nixpkgs_3": {
-      "locked": {
-        "lastModified": 1770812194,
-        "narHash": "sha256-OH+lkaIKAvPXR3nITO7iYZwew2nW9Y7Xxq0yfM/UcUU=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "8482c7ded03bae7550f3d69884f1e611e3bd19e8",
-        "type": "github"
-      },
-      "original": {
-        "owner": "NixOS",
-        "ref": "nixpkgs-unstable",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
-    "opencode": {
-      "inputs": {
-        "nixpkgs": "nixpkgs_3"
-      },
-      "locked": {
-        "lastModified": 1772241494,
-        "narHash": "sha256-/oguV33xt0PAKm1wCknMSnHz2rDFebf/ZDhxZ7fwoUE=",
-        "owner": "anomalyco",
-        "repo": "opencode",
-        "rev": "2a2082233d9e8bda4674ce596f04b61b3b32522d",
-        "type": "github"
-      },
-      "original": {
-        "owner": "anomalyco",
-        "repo": "opencode",
         "type": "github"
       }
     },
@@ -276,11 +208,9 @@
       "inputs": {
         "flake-parts": "flake-parts",
         "home-manager": "home-manager",
-        "kilocode": "kilocode",
         "mkAlias": "mkAlias",
         "nix-darwin": "nix-darwin",
-        "nixpkgs": "nixpkgs_2",
-        "opencode": "opencode",
+        "nixpkgs": "nixpkgs",
         "pre-commit-module": "pre-commit-module"
       }
     }
