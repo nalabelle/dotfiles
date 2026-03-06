@@ -74,15 +74,6 @@
       runtimeInputs = [ procps ];
       text = builtins.readFile ../bin/status-getload;
     })
-    (writeShellApplication {
-      name = "template-diff";
-      runtimeInputs = [
-        git
-        diffutils
-        coreutils
-      ];
-      text = builtins.readFile ../bin/template-diff;
-    })
 
   ];
 

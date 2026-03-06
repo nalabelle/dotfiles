@@ -155,7 +155,7 @@ Global: UTF-8, LF line endings, final newline, trim trailing whitespace (except 
 
 ## Naming Conventions
 
-- **Files**: kebab-case (`darwin-configuration.nix`, `template-diff`).
+- **Files**: kebab-case (`darwin-configuration.nix`, `flake.nix`).
   Simple module names use plain lowercase (`shell.nix`, `git.nix`).
 - **Directories**: lowercase (`home/`, `hosts/`, `nix/`).
   Exception: `flakeModules` follows flake-parts convention.
