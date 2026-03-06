@@ -137,6 +137,7 @@ in
 {
   home.file = {
     ".config/opencode/opencode.json".source = opencodeConfigFile;
+    ".config/opencode/AGENTS.md".source = ../config/opencode/AGENTS.md;
     ".config/kilo/opencode.json".source = opencodeConfigFile;
   }
   // mkAgentFiles "opencode"
