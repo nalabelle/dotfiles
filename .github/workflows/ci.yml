@@ -17,16 +17,10 @@ jobs:
       - name: Run pre-commit
         run: nix develop --command pre-commit run --all-files --show-diff-on-failure
 
-  build-home-manager:
+  build-linux:
     needs: pre-commit
-    name: Build Home Manager Configurations (${{ matrix.config }})
-    runs-on: ${{ matrix.runner }}
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - config: "nalabelle@chandler"
-            runner: ubuntu-latest
+    name: Build Linux Hosts
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
@@ -34,34 +28,31 @@ jobs:
       - name: Install Nix
         uses: DeterminateSystems/nix-installer-action@main
 
-      - name: Build Home Manager configuration  ${{ matrix.config }}
-        run: nix build .#homeConfigurations.${{ matrix.config }}.activationPackage
+      - name: Build chandler
+        run: nix build .#homeConfigurations."nalabelle@chandler".activationPackage
+
+      - name: Build doyle
+        run: nix build .#homeConfigurations."nalabelle@doyle".activationPackage
 
   build-darwin:
     needs: pre-commit
-    name: Build Darwin Configurations (${{ matrix.config }})
+    name: Build Darwin Host (tennyson)
     runs-on: macos-15
-    strategy:
-      fail-fast: false
-      matrix:
-        config: [tennyson]
     steps:
       - name: Checkout repository
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
 
-      - name: Install Nix (Determinate Systems)
+      - name: Install Nix
         uses: DeterminateSystems/nix-installer-action@main
 
-      - name: Build Darwin configuration
-        run: nix build .#darwinConfigurations.${{ matrix.config }}.system
+      - name: Build tennyson system
+        run: nix build .#darwinConfigurations.tennyson.system
 
-      - name: Build Darwin home configuration
-        run: nix build .#homeConfigurations."nalabelle@darwin".activationPackage
-
-  build-home-manager-darwin:
+  package-home:
     needs: pre-commit
-    name: Build Home Manager Darwin Configuration Package
+    name: Package Home Manager Config
     runs-on: macos-15
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     steps:
       - name: Checkout repository
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
