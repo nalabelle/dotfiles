@@ -1,0 +1,39 @@
+name: CI Darwin Package
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'home/**'
+      - 'hosts/tennyson/**'
+      - 'nix/**'
+      - 'flake.nix'
+      - '.github/workflows/ci-darwin.yml'
+  workflow_dispatch:
+
+jobs:
+  build-darwin:
+    name: Build Darwin Host (tennyson) + Package Home
+    runs-on: macos-15
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@main
+
+      - name: Build tennyson system
+        run: nix build .#darwinConfigurations.tennyson.system
+
+      - name: Package home manager configuration
+        run: make package-home
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+      - name: Upload home manager artifact
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        with:
+          name: home-manager-config
+          path: artifacts/home-manager-config.tar.gz
