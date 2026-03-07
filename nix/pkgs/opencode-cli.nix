@@ -17,6 +17,12 @@ writeShellApplication {
     export NPM_CONFIG_CACHE="''${XDG_CACHE_HOME:-$HOME/.cache}/opencode-cli/npm-cache"
     export NPM_CONFIG_PREFIX="''${XDG_CACHE_HOME:-$HOME/.cache}/opencode-cli/npm-prefix"
     mkdir -p "$NPM_CONFIG_CACHE" "$NPM_CONFIG_PREFIX/lib" "$NPM_CONFIG_PREFIX/bin"
+    if [ -f "$HOME/.config/credentials/opencode.env" ]; then
+      set -a
+      # shellcheck source=/dev/null
+      . "$HOME/.config/credentials/opencode.env"
+      set +a
+    fi
     npx --yes opencode-ai@${version} "$@"
   '';
 
