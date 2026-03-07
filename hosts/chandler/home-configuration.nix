@@ -30,7 +30,10 @@ in
       Restart = "on-failure";
       RestartSec = "5s";
       TimeoutStopSec = "5s";
-      Environment = "PATH=/run/current-system/sw/bin:/nix/var/nix/profiles/default/bin:%h/.nix-profile/bin";
+      Environment = [
+        "PATH=/run/current-system/sw/bin:/nix/var/nix/profiles/default/bin:%h/.nix-profile/bin"
+        "SHELL=/run/current-system/sw/bin/zsh"
+      ];
     };
     Install.WantedBy = [ "default.target" ];
   };
