@@ -33,9 +33,6 @@ in
 
     # Less configuration
     LESSHISTSIZE = "0";
-
-    # Vi mode configuration (remove escape lag)
-    KEYTIMEOUT = "1";
   };
 
   # Readline configuration
@@ -47,11 +44,11 @@ in
       set show-mode-in-prompt on
 
       $if Bash
-        set vi-ins-mode-string \001\e[6 q\e[38;5;14m\002+\001\e[0m\002
-        set vi-cmd-mode-string \001\e[2 q\e[38;5;13m\002!\001\e[0m\002
+        set vi-ins-mode-string \001\e[38;5;14m\002+\001\e[0m\002
+        set vi-cmd-mode-string \001\e[38;5;13m\002!\001\e[0m\002
       $else
-        set vi-ins-mode-string \1\e[2 q\e[0m\2
-        set vi-cmd-mode-string \1\e[6 q\e[0m\2
+        set vi-ins-mode-string +
+        set vi-cmd-mode-string !
       $endif
 
       # Color files by types

@@ -13,12 +13,10 @@
     shortcut = "a";
     keyMode = "vi";
     customPaneNavigationAndResize = true;
-    escapeTime = 500;
-    mouse = true;
+    mouse = false;
     newSession = true;
 
     plugins = with pkgs; [
-      tmuxPlugins.cpu
       tmuxPlugins.pain-control
       tmuxPlugins.prefix-highlight
       tmuxPlugins.yank
@@ -39,16 +37,6 @@
         bind-key R run-shell " \
         tmux source-file ${tmux_config} > /dev/null; \
         tmux display-message 'Sourced ${tmux_config}!'"
-
-        # Don't move around panes with arrow keys
-        unbind Left
-        unbind Down
-        unbind Up
-        unbind Right
-
-        # yank and visual selection in the tmux buffer
-        #bind -t vi-copy v begin-selection
-        #bind -t vi-copy y copy-selection
 
         # prefix, S to send a pane to a window
         bind-key S choose-window "join-pane -t "%%""
@@ -75,8 +63,8 @@
 
         # status-right
         set -ag status-right-style dim
-        set -g status-right-length 80
-        set -g status-right '#{ram_fg_color}#{ram_percentage}#[fg=default] #{cpu_fg_color}#{cpu_percentage}#[fg=default] #(status-getload)/#(status-getcpu) #[bg=colour236,fg=default] %H:%M #[bg=default,fg=default] #h '
+        set -g status-right-length 20
+        set -g status-right '#[bg=colour236,fg=default] %H:%M #[bg=default,fg=default] #h '
         set -g status-interval 10
       '';
   };
