@@ -66,6 +66,11 @@ let
         "git push *" = "ask";
       };
     };
+    disabled_providers = [
+      "github-copilot"
+      "github-copilot-enterprise"
+      "github-models"
+    ];
     mcp = {
       github = {
         enabled = true;
