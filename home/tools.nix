@@ -64,16 +64,6 @@
       ];
       text = builtins.readFile ../bin/find-and-replace;
     })
-    (writeShellApplication {
-      name = "status-getcpu";
-      runtimeInputs = [ procps ];
-      text = builtins.readFile ../bin/status-getcpu;
-    })
-    (writeShellApplication {
-      name = "status-getload";
-      runtimeInputs = [ procps ];
-      text = builtins.readFile ../bin/status-getload;
-    })
 
   ];
 
@@ -119,6 +109,7 @@
 
   programs.fzf = {
     enable = true;
+    enableBashIntegration = false;
     enableZshIntegration = true;
     tmux.enableShellIntegration = true;
   };

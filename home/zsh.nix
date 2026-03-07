@@ -60,6 +60,9 @@
       # History verify (supplement existing history config)
       setopt histverify
 
+      # Vi mode configuration (remove escape lag)
+      KEYTIMEOUT=1
+
       # Vi mode key bindings (supplement built-in vi mode)
       bindkey -v '^?' backward-delete-char
       bindkey -M vicmd 'k' history-substring-search-up
@@ -69,11 +72,12 @@
 
   programs.starship = {
     enable = true;
+    enableBashIntegration = false;
     enableZshIntegration = true;
     settings = {
       "$schema" = "https://starship.rs/config-schema.json";
 
-      add_newline = true;
+      add_newline = false;
       format = ''
         $time$fill$username$hostname
         $all

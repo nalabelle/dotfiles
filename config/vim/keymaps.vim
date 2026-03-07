@@ -5,12 +5,6 @@ let mapleader = "\\"
 nnoremap <Leader>q q
 nnoremap q <NOP>
 
-" Enforce hjkl movement
-map <Left> :echo "NOPE! Use h"<cr>
-map <Right> :echo "NOPE! Use l"<cr>
-map <Up> :echo "NOPE! Use k"<cr>
-map <Down> :echo "NOPE! Use j"<cr>
-
 " Custom mappings
 map <Leader>n :call ToggleFormatting()<CR>
 map <Leader>p :set paste!<CR>
