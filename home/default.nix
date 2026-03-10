@@ -16,7 +16,6 @@
     ./zsh.nix
     ./darwin.nix
     ./shell.nix
-    ./fonts.nix
   ];
 
   home.stateVersion = "24.11";
