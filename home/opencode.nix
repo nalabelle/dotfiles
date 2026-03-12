@@ -5,6 +5,7 @@
 let
   opencodeConfig = builtins.toJSON {
     "$schema" = "https://opencode.ai/config.json";
+    model = "opencode-go/kimi-k2.5";
     permission = {
       bash = {
         # Destructive file operations
