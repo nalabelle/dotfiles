@@ -6,7 +6,16 @@
   username,
   ...
 }:
+
 {
+  # Disable nix-darwin's Nix management (Determinate Nix handles this)
+  nix.enable = false;
+
+  nixpkgs = {
+    hostPlatform = "aarch64-darwin";
+    config.allowUnfree = true;
+  };
+
   # System-wide Zsh configuration
   programs.zsh = {
     enable = true; # Enable system Zsh (creates proper /etc/zshrc)
@@ -27,8 +36,6 @@
     '';
   };
 
-  nixpkgs.hostPlatform = "aarch64-darwin";
-
   networking.computerName = hostname;
   networking.hostName = hostname;
   users.users."${username}".home = "/Users/${username}";
@@ -36,6 +43,7 @@
   environment.systemPackages = [
     # Upgrade ancient osx bash
     pkgs.bash
+    pkgs.home-manager
     (pkgs.callPackage ../packages/peazip.nix { })
   ];
   # Source /etc/bashrc for non-interactive bash sessions so nix is on PATH.
@@ -176,6 +184,54 @@
     keyboard = {
       enableKeyMapping = true;
       remapCapsLockToEscape = true;
+    };
+  };
+
+  # Determinate Nix configuration - written to nix.custom.conf
+  # These settings augment/replace what nix-darwin used to manage directly
+  # knownSha256Hashes includes the Determinate installer default content so we
+  # can overwrite it on first activation without manual intervention.
+  environment.etc."nix/nix.custom.conf" = {
+    text = ''
+      # Aggressive GC settings
+      keep-outputs = false
+      keep-derivations = false
+
+      # Automatic store optimisation at build time
+      auto-optimise-store = true
+
+      # Binary caches for faster builds
+      extra-substituters = https://nix-community.cachix.org https://numtide.cachix.org https://fufexan.cachix.org
+      extra-trusted-public-keys = nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs= numtide.cachix.org-1:2ps1kLBUWjxIneOy1Ik6cQjb41X0iXVXeHigGmycPPE= fufexan.cachix.org-1:LwCDjCJNJQf5XD2BV+yamQIMZfcKWR9ISIFy5curUsY=
+    '';
+    knownSha256Hashes = [
+      # Determinate Nix installer default content hash (with trailing newlines)
+      "3bd68ef979a42070a44f8d82c205cfd8e8cca425d91253ec2c10a88179bb34aa"
+    ];
+  };
+
+  # Nix garbage collection service (replaces nix-darwin's built-in gc)
+  launchd.user.agents.nix-gc = {
+    serviceConfig = {
+      ProgramArguments = [
+        "/run/current-system/sw/bin/nix-collect-garbage"
+        "--delete-older-than"
+        "7d"
+      ];
+      RunAtLoad = true;
+      KeepAlive = false;
+      StartCalendarInterval = [
+        {
+          Hour = 3;
+          Minute = 0;
+        }
+      ];
+      ProcessType = "Background";
+      Nice = 19;
+      LowPriorityIO = true;
+      TimeOut = 3600;
+      StandardOutPath = "/Users/${username}/.local/var/log/nix-gc.log";
+      StandardErrorPath = "/Users/${username}/.local/var/log/nix-gc.log";
     };
   };
 
