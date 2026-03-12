@@ -11,14 +11,17 @@ let
     inputs.nix-darwin.lib.darwinSystem {
       system = "aarch64-darwin";
       modules = [
-        ../nix/common.nix
         ../nix/darwin.nix
         ../hosts/${hostname}/darwin-configuration.nix
         inputs.home-manager.darwinModules.home-manager
         {
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
-          home-manager.extraSpecialArgs = { inherit inputs username hostname; };
+          home-manager.extraSpecialArgs = {
+            inherit inputs username hostname;
+            isDarwin = true;
+            isLinux = false;
+          };
           home-manager.users.${username} = {
             imports = [
               ../home
@@ -32,12 +35,20 @@ let
           };
         }
       ];
-      specialArgs = { inherit inputs username hostname; };
+      specialArgs = {
+        inherit inputs username hostname;
+        isDarwin = true;
+        isLinux = false;
+      };
     };
 
   # Create a standalone home configuration
   mkHomeConfig =
     { hostname, system }:
+    let
+      isDarwin = builtins.match "^.*-darwin$" system != null;
+      isLinux = !isDarwin;
+    in
     inputs.home-manager.lib.homeManagerConfiguration {
       pkgs = import inputs.nixpkgs {
         inherit system;
@@ -46,8 +57,7 @@ let
       modules = [
         {
           home.username = username;
-          home.homeDirectory =
-            if system == "aarch64-darwin" then "/Users/${username}" else "/home/${username}";
+          home.homeDirectory = if isDarwin then "/Users/${username}" else "/home/${username}";
         }
         ../home
         (
@@ -57,7 +67,7 @@ let
             { }
         )
       ];
-      extraSpecialArgs = { inherit inputs; };
+      extraSpecialArgs = { inherit inputs isDarwin isLinux; };
     };
 
 in
