@@ -62,9 +62,6 @@
     taps = [
       "sst/tap"
     ];
-    brews = [
-      "sst/tap/opencode"
-    ];
   };
 
   # Automatic file cleanup service for Downloads and Screenshots directories
