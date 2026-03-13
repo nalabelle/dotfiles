@@ -25,6 +25,9 @@
     devbox
     mkcert
     _1password-cli
+
+    # Nix language
+    nil
     nixfmt
     nixfmt-tree
 
