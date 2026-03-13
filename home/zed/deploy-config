@@ -33,8 +33,17 @@ main() {
     fi
   fi
 
-  # Copy source to target (not symlink) and make writable
-  cp "$source" "$target"
+  # Deploy with deep-merge if target exists and is valid JSON
+  if [ -f "$target" ] && jq empty "$target" 2>/dev/null; then
+    # Deep merge: existing * source (source wins on conflicts)
+    # This preserves keys like ssh_connections that only exist in target
+    jq -s '.[0] * .[1]' "$target" "$source" > "${target}.tmp"
+    mv "${target}.tmp" "$target"
+  else
+    # Plain copy when target doesn't exist or is invalid JSON
+    cp "$source" "$target"
+  fi
+
   chmod +w "$target"
 
   # Clean up old backups
