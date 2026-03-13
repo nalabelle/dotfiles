@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+main() {
+  if [ "$#" -lt 3 ]; then
+    echo "Usage: $0 <source-json> <target-path> <backup-dir> [max-age-days]" >&2
+    exit 1
+  fi
+
+  local source="$1"
+  local target="$2"
+  local backup_dir="$3"
+  local max_age="${4:-30}"
+
+  # Ensure backup directory exists
+  mkdir -p "$backup_dir"
+
+  # Clean up temp files from previous runs
+  rm -f "${target}.tmp"
+
+  # If target is a symlink (from previous deployment), remove it
+  if [ -L "$target" ]; then
+    rm "$target"
+  fi
+
+  # Backup existing config if it differs from source
+  if [ -f "$target" ]; then
+    if ! cmp -s "$source" "$target"; then
+      local backup_file
+      backup_file="${backup_dir}/$(basename "$target").backup.$(date +%Y%m%d-%H%M%S)"
+      cp "$target" "$backup_file"
+      echo "Backed up existing config to $backup_file" >&2
+    fi
+  fi
+
+  # Copy source to target (not symlink) and make writable
+  cp "$source" "$target"
+  chmod +w "$target"
+
+  # Clean up old backups
+  find "$backup_dir" -name "$(basename "$target").backup.*" -mtime "+${max_age}" -exec rm {} \; 2>/dev/null || true
+}
+
+main "$@"

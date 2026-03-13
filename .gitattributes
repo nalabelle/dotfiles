@@ -3,3 +3,6 @@
 
 README.md merge=ours
 .gitignore merge=ours
+
+# Treat JSONC files as JSON for diff purposes
+*.jsonc diff=json
