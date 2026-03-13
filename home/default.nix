@@ -28,6 +28,7 @@
 {
   imports = [
     ./colors.nix
+    ./fonts.nix
     ./git.nix
     ./opencode.nix
     ./tmux.nix
