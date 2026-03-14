@@ -91,6 +91,25 @@ let
       light = "One Light";
       dark = "Ayu Dark";
     };
+    buffer_font_family = "Monaspace Neon";
+    buffer_font_features = {
+      calt = true;
+      liga = true;
+      ss01 = true;
+      ss02 = true;
+      ss03 = true;
+      ss04 = true;
+      ss05 = true;
+      ss06 = true;
+      ss07 = true;
+      ss08 = true;
+      ss09 = true;
+      cv01 = 2;
+      cv31 = 1;
+    };
+    terminal = {
+      font_family = "Monaspace Neon";
+    };
   };
 
   zedSettingsJson = pkgs.writeText "zed-settings.json" (builtins.toJSON zedSettings);
