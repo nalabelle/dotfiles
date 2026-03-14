@@ -1,6 +1,4 @@
 {
-  config,
-  lib,
   pkgs,
   ...
 }:
@@ -9,14 +7,14 @@
     enable = true;
     packageConfigurable = pkgs.vim-full; # Use vim with all features
 
-    extraConfig = builtins.concatStringsSep "\n" ([
-      (builtins.readFile ../config/vim/base.vim)
-      (builtins.readFile ../config/vim/functions.vim)
-      (builtins.readFile ../config/vim/keymaps.vim)
-      (builtins.readFile ../config/vim/appearance.vim)
-      (builtins.readFile ../config/vim/autocmds.vim)
-      (builtins.readFile ../config/vim/plugin-config.vim)
-    ]);
+    extraConfig = builtins.concatStringsSep "\n" [
+      (builtins.readFile ./config/base.vim)
+      (builtins.readFile ./config/functions.vim)
+      (builtins.readFile ./config/keymaps.vim)
+      (builtins.readFile ./config/appearance.vim)
+      (builtins.readFile ./config/autocmds.vim)
+      (builtins.readFile ./config/plugin-config.vim)
+    ];
 
     plugins =
       with pkgs.vimPlugins;
@@ -94,15 +92,15 @@
     map (file: {
       name = ".vim/ftdetect/${file}";
       value = {
-        source = ../config/vim/ftdetect + "/${file}";
+        source = ./ftdetect + "/${file}";
       };
-    }) (builtins.attrNames (builtins.readDir ../config/vim/ftdetect))
+    }) (builtins.attrNames (builtins.readDir ./ftdetect))
     # ftplugin files
     ++ map (file: {
       name = ".vim/ftplugin/${file}";
       value = {
-        source = ../config/vim/ftplugin + "/${file}";
+        source = ./ftplugin + "/${file}";
       };
-    }) (builtins.attrNames (builtins.readDir ../config/vim/ftplugin))
+    }) (builtins.attrNames (builtins.readDir ./ftplugin))
   );
 }

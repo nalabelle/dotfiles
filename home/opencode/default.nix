@@ -127,8 +127,8 @@ let
 
   # Shared config deployed to both opencode and kilo directories
   agentFiles = {
-    "code-reviewer.md" = ../config/opencode/agents/code-reviewer.md;
-    "research.md" = ../config/opencode/agents/research.md;
+    "code-reviewer.md" = ./agents/code-reviewer.md;
+    "research.md" = ./agents/research.md;
   };
 
   mkAgentFiles =
@@ -143,7 +143,7 @@ in
 {
   home.file = {
     ".config/opencode/opencode.json".source = opencodeConfigFile;
-    ".config/opencode/AGENTS.md".source = ../config/opencode/AGENTS.md;
+    ".config/opencode/AGENTS.md".source = ./AGENTS.md;
     ".config/kilo/opencode.json".source = opencodeConfigFile;
   }
   // mkAgentFiles "opencode"
