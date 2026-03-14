@@ -27,13 +27,13 @@
 
 {
   imports = [
-    ./colors.nix
+    ./colors
     ./fonts.nix
     ./git.nix
-    ./opencode.nix
+    ./opencode
     ./tmux.nix
     ./tools.nix
-    ./vim.nix
+    ./vim
     ./zed
     ./zsh.nix
     ./shell.nix

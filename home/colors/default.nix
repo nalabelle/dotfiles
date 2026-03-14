@@ -12,8 +12,8 @@
     # Enable automatic shell integration
     enableBashIntegration = true;
     enableZshIntegration = true;
-    # Reference the existing dircolors file directly
-    extraConfig = builtins.readFile ../config/dircolors;
+    # Reference the dircolors config file in this directory
+    extraConfig = builtins.readFile ./dircolors.conf;
   };
 
   # Consistent colored command aliases using Nix packages
