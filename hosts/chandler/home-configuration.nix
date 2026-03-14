@@ -7,16 +7,11 @@
 
 let
   opencode-cli = pkgs.callPackage ../../nix/pkgs/opencode-cli.nix { };
-  kilocode-cli = pkgs.callPackage ../../nix/pkgs/kilocode-cli.nix { };
 in
 
 {
-  # Configure VS Code to use VS Code SSH path
-  vscode.configPath = ".vscode-server/data";
-
   home.packages = [
     opencode-cli
-    kilocode-cli
     pkgs.btop
   ];
 

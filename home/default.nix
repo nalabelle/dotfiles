@@ -34,7 +34,6 @@
     ./tmux.nix
     ./tools.nix
     ./vim.nix
-    ./vscode.nix
     ./zed
     ./zsh.nix
     ./shell.nix
