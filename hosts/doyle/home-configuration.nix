@@ -25,7 +25,6 @@
       winetricks
 
       # Code
-      vscode
       opencode
       zed-editor
 

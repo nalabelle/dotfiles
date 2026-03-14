@@ -14,13 +14,10 @@
       ".DS_Store"
       ".cache"
       ".*cache"
-      ".kilocode"
-      ".kilocodeignore"
       ".mcp"
       ".mcp.json"
       ".metals"
       ".tags"
-      ".vscode"
       "vimrc.local"
     ];
 
