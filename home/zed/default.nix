@@ -112,7 +112,7 @@ let
     };
   };
 
-  zedSettingsJson = pkgs.writeText "zed-settings.json" (builtins.toJSON zedSettings);
+  zedSettingsJson = (pkgs.formats.json { }).generate "zed-settings.json" zedSettings;
 
   deployScript = pkgs.writeShellApplication {
     name = "zed-deploy-config";
