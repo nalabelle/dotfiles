@@ -7,13 +7,13 @@ configurations. Primary languages: **Nix** and **Bash**.
 
 ### IMPORTANT: Dev Shell Required
 
-Most commands (`make`, `pre-commit`, `shellcheck`, etc.) require tools provided
+Most commands (`make`, `nix fmt`, `shellcheck`, etc.) require tools provided
 by the Nix dev shell. If a command fails with "command not found", you are not
 in the dev shell. Fix this by prefixing commands with `nix develop --command`:
 
 ```sh
 nix develop --command make test
-nix develop --command pre-commit run --all-files
+nix develop --command nix fmt
 ```
 
 Alternatively, enter the shell first with `nix develop` or `direnv allow`, then
@@ -43,13 +43,12 @@ nix build .#homeConfigurations."nalabelle@linux".activationPackage
 ### Linting and Formatting
 
 ```sh
-pre-commit run --all-files                 # Run all checks
-pre-commit run nixfmt --all-files          # Only Nix formatting
-pre-commit run shellcheck --all-files      # Only shell linting
+nix fmt                                    # Format all files (treefmt)
+nix flake check                            # Run all checks (formatting + linting)
+lefthook run                               # Run git hooks manually
 ```
 
-The `.pre-commit-config.yaml` is **auto-generated** by `flakeModules/pre-commit/`.
-Do NOT edit it directly -- modify `flakeModules/pre-commit/pre-commit.nix` instead.
+Configuration is managed via the `git-hooks` flake module from `github:nalabelle/git-hooks`.
 
 ### Other Make Targets
 
@@ -72,7 +71,6 @@ home/default.nix           # Home-manager aggregator (imports all home/*.nix)
 home/*.nix                 # One concern per file (git, zsh, vim, tmux, etc.)
 hosts/<name>/*.nix         # Per-host overrides (darwin-configuration, home-configuration)
 packages/*.nix             # Custom package derivations
-flakeModules/pre-commit/   # Reusable pre-commit flake module
 bin/                       # Shell scripts (wrapped via writeShellApplication)
 config/                    # Raw config files (vim, vscode, etc.)
 ```
@@ -81,7 +79,7 @@ config/                    # Raw config files (vim, vscode, etc.)
 
 ### Nix Files (*.nix)
 
-- **Formatting**: Enforced by `nixfmt` via pre-commit. 2-space indent.
+- **Formatting**: Enforced by `nixfmt` via treefmt. 2-space indent.
 - **Module arguments**: Set pattern, one arg per line, always end with `...`:
   ```nix
   {
@@ -112,7 +110,7 @@ config/                    # Raw config files (vim, vscode, etc.)
 ### Shell Scripts (bin/*)
 
 - **Strict mode**: `set -euo pipefail` at the top of non-trivial scripts.
-- **No file extension** on executable scripts (enforced by pre-commit).
+- **No file extension** on executable scripts (enforced by git-hooks).
   Non-executable scripts must end in `.sh`.
 - **Shebang**: `#!/usr/bin/env bash` preferred. `#!/bin/sh` for POSIX-only.
 - **Quoting**: Always double-quote variable expansions (`"$1"`, `"$var"`).
@@ -166,21 +164,24 @@ Global: UTF-8, LF line endings, final newline, trim trailing whitespace (except 
 - **Shell**: Always `set -euo pipefail`. Validate inputs early. Exit 1 on failure.
   Errors to stderr. `|| true` only when failure is expected.
 
-## Pre-commit Hooks (enforced in CI)
+## Git Hooks (enforced in CI)
 
-`nixfmt`, `shellcheck`, `end-of-file-fixer`, `trim-trailing-whitespace`,
-`mixed-line-endings`, `check-json`, `check-toml`, `check-xml`, `check-yaml`,
-`check-executables-have-shebangs`, `check-merge-conflicts`, `check-case-conflicts`,
+Formatting: `nixfmt`, `end-of-file-fixer`, `trim-trailing-whitespace-fixer`,
+`mixed-line-endings`, `fix-byte-order-marker`.
+
+Linting: `shellcheck`, `check-json`, `check-toml`, `check-xml`, `check-yaml`,
+`check-executables-have-shebangs`, `check-shebang-scripts-are-executable`,
+`check-merge-conflicts`, `check-symlinks`, `check-case-conflicts`,
 `forbid-binary`, `script-must-not-have-extension`, `script-must-have-extension`.
 
 ## CI Pipeline
 
 GitHub Actions on push/PR to `main` (`ci.yml`):
-1. **pre-commit** -- Lint/format checks (ubuntu)
+1. **checks** -- Lint/format checks (ubuntu)
 2. **build-linux** -- Build `nalabelle@chandler` and `nalabelle@doyle` (ubuntu)
 3. **build-darwin** -- Build `tennyson` system config (macos-15)
 
-All build jobs depend on pre-commit passing first.
+All build jobs depend on checks passing first.
 
 Separate workflow (`ci-darwin.yml`, push to `main` only): packages home-manager
 config as a distributable artifact via `make package-home`.
