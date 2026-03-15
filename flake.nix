@@ -16,9 +16,10 @@
       url = "github:nix-darwin/nix-darwin";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    pre-commit-module = {
-      url = "path:./flakeModules/pre-commit";
+    git-hooks = {
+      url = "github:nalabelle/git-hooks";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-parts.follows = "flake-parts";
     };
   };
 
@@ -34,7 +35,7 @@
         "x86_64-linux"
       ];
       imports = [
-        inputs.pre-commit-module.flakeModule
+        inputs.git-hooks.flakeModule
       ];
 
       perSystem =
@@ -45,7 +46,7 @@
         }:
         {
           devShells.default = pkgs.mkShell {
-            inputsFrom = [ config.devShells.pre-commit ];
+            inputsFrom = [ config.devShells.git-hooks ];
             buildInputs = with pkgs; [
               nixd
             ];
@@ -55,9 +56,6 @@
           };
         };
       flake = {
-        # Export flake modules for external consumption
-        flakeModules.pre-commit = inputs.pre-commit-module.flakeModule;
-
         homeManagerModules.default = {
           imports = [
             ./home

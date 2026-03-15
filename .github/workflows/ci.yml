@@ -8,17 +8,17 @@ on:
   workflow_dispatch:
 
 jobs:
-  pre-commit:
+  checks:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
       - name: Install Nix
         uses: DeterminateSystems/nix-installer-action@main
-      - name: Run pre-commit
-        run: nix develop --command pre-commit run --all-files --show-diff-on-failure
+      - name: Run checks
+        run: nix flake check
 
   build-linux:
-    needs: pre-commit
+    needs: checks
     name: Build Linux Hosts
     runs-on: ubuntu-latest
     steps:
@@ -35,7 +35,7 @@ jobs:
         run: nix build .#homeConfigurations."nalabelle@doyle".activationPackage
 
   build-darwin:
-    needs: pre-commit
+    needs: checks
     name: Build Darwin Host (tennyson)
     runs-on: macos-15
     steps:
