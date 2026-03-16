@@ -32,11 +32,11 @@ assert waylandSupport -> libxkbcommon != null;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vintagestory";
-  version = "1.22.0-rc.1";
+  version = "1.22.0-rc.2";
 
   src = fetchurl {
     url = "https://cdn.vintagestory.at/gamefiles/unstable/vs_client_linux-x64_${finalAttrs.version}.tar.gz";
-    hash = "sha256-1Cq5uqvGYIPLdyVW6aNPyaxcTAwoK4jENcqZ6YMRfmA=";
+    hash = "sha256-ey9xJIWJrK4orYtsE9Bzfwuy7Ngal2shkoU62HLKvpc=";
   };
 
   nativeBuildInputs = [
