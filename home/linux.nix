@@ -11,10 +11,12 @@
       frequency = "weekly";
       timestamp = "-30 days";
     };
-    autoUpgrade = {
-      enable = true;
-      frequency = "weekly";
-    };
+    # DO NOT enable autoUpgrade on hosts managed via the NixOS home-manager module
+    # (inputs.home-manager.nixosModules.home-manager). The autoUpgrade service runs
+    # `home-manager switch` as a standalone tool using nix channels, which conflicts
+    # with NixOS-module-managed generations and corrupts the home-manager config on
+    # every reboot (the timer is Persistent=true). Updates happen via nixos-rebuild /
+    # make deploy-<host> instead.
   };
 
   # Nix package manager settings (Linux only - Determinate Nix handles this on Darwin)
