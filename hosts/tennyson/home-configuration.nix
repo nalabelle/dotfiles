@@ -5,10 +5,10 @@
 }:
 
 let
-  opencode-cli = pkgs.callPackage ../../nix/pkgs/opencode-cli.nix { };
+  opencode-wrappers = pkgs.callPackage ../../nix/pkgs/opencode-wrappers.nix { };
 in
 {
   home.packages = [
-    opencode-cli
+    opencode-wrappers.opencode-wrapped
   ];
 }

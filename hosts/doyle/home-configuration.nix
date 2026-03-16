@@ -3,6 +3,11 @@
   pkgs,
   ...
 }:
+
+let
+  opencode-wrappers = pkgs.callPackage ../../nix/pkgs/opencode-wrappers.nix { };
+in
+
 {
   home.packages =
     (with pkgs; [
@@ -25,7 +30,6 @@
       winetricks
 
       # Code
-      opencode
       zed-editor
 
       # Media
@@ -56,6 +60,7 @@
     ])
     ++ [
       (pkgs.callPackage ../../nix/pkgs/vintagestory { })
+      opencode-wrappers.opencode-wrapped
     ];
 
   # Enable MangoHud overlay for all supported games

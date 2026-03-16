@@ -1,8 +1,10 @@
 {
   pkgs,
+  inputs,
   ...
 }:
 let
+  pkgsUnstable = inputs.nixpkgs-unstable.legacyPackages.${pkgs.system};
   opencodeConfig = builtins.toJSON {
     "$schema" = "https://opencode.ai/config.json";
     model = "opencode-go/kimi-k2.5";
@@ -98,7 +100,7 @@ let
         enabled = true;
         type = "local";
         command = [
-          "${pkgs.forgejo-mcp}/bin/forgejo-mcp"
+          "${pkgsUnstable.forgejo-mcp}/bin/forgejo-mcp"
           "--transport"
           "stdio"
           "--url"

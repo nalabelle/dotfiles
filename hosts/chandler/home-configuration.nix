@@ -6,12 +6,12 @@
 }:
 
 let
-  opencode-cli = pkgs.callPackage ../../nix/pkgs/opencode-cli.nix { };
+  opencode-wrappers = pkgs.callPackage ../../nix/pkgs/opencode-wrappers.nix { };
 in
 
 {
   home.packages = [
-    opencode-cli
+    opencode-wrappers.opencode-wrapped
     pkgs.btop
   ];
 
@@ -21,7 +21,7 @@ in
       X-Restart-Triggers = [ config.home.file.".config/opencode/opencode.json".source ];
     };
     Service = {
-      ExecStart = "${opencode-cli}/bin/opencode web --port 4096 --hostname 127.0.0.1";
+      ExecStart = "${opencode-wrappers.opencode-wrapped}/bin/opencode web --port 4096 --hostname 127.0.0.1";
       Restart = "on-failure";
       RestartSec = "5s";
       TimeoutStopSec = "5s";
