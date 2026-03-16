@@ -61,6 +61,12 @@
             ./home
           ];
         };
+        homeManagerModules.doyle = {
+          imports = [
+            ./home
+            ./hosts/doyle/home-configuration.nix
+          ];
+        };
 
         # Darwin Configs
         darwinConfigurations.tennyson = libFunctions.mkDarwinSystem { hostname = "tennyson"; };
