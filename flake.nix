@@ -17,6 +17,9 @@
       url = "github:nix-darwin/nix-darwin/nix-darwin-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nix-flatpak = {
+      url = "github:gmodena/nix-flatpak/v0.7.0";
+    };
     git-hooks = {
       url = "github:nalabelle/git-hooks";
       inputs.nixpkgs.follows = "nixpkgs";

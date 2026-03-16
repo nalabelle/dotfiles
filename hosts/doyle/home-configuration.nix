@@ -1,6 +1,8 @@
 # Doyle desktop/gaming PC user packages
 {
   pkgs,
+  nix-flatpak,
+  lib,
   ...
 }:
 
@@ -9,6 +11,22 @@ let
 in
 
 {
+  imports = [ nix-flatpak.homeManagerModules.nix-flatpak ];
+
+  services.flatpak = {
+    enable = true;
+    remotes = lib.mkDefault [
+      {
+        name = "vintagestory";
+        location = "https://flatpak.vintagestory.at/VintageStory.flatpakrepo";
+      }
+    ];
+    packages = [
+      "at.vintagestory.VintageStory"
+      "at.vintagestory.VintageStoryUnstable"
+    ];
+  };
+
   home.packages =
     (with pkgs; [
       # Desktop
@@ -59,7 +77,6 @@ in
       vdpauinfo # check VDPAU status
     ])
     ++ [
-      (pkgs.callPackage ../../nix/pkgs/vintagestory { })
       opencode-wrappers.opencode-wrapped
     ];
 

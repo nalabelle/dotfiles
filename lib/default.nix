@@ -67,7 +67,10 @@ let
             { }
         )
       ];
-      extraSpecialArgs = { inherit inputs isDarwin isLinux; };
+      extraSpecialArgs = {
+        inherit inputs isDarwin isLinux;
+        inherit (inputs) nix-flatpak;
+      };
     };
 
 in
