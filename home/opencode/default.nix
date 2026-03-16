@@ -4,7 +4,7 @@
   ...
 }:
 let
-  pkgsUnstable = inputs.nixpkgs-unstable.legacyPackages.${pkgs.system};
+  pkgsUnstable = inputs.nixpkgs-unstable.legacyPackages.${pkgs.stdenv.hostPlatform.system};
   opencodeConfig = builtins.toJSON {
     "$schema" = "https://opencode.ai/config.json";
     model = "opencode-go/kimi-k2.5";
