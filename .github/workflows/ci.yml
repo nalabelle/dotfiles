@@ -9,51 +9,40 @@ on:
 
 jobs:
   checks:
-    runs-on: ubuntu-latest
+    runs-on: native
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
-      - name: Install Nix
-        uses: DeterminateSystems/nix-installer-action@main
-      - name: Enable Nix cache
-        uses: DeterminateSystems/magic-nix-cache-action@565684385bcd71bad329742eefe8d12f2e765b39 # v13
       - name: Run checks
         run: nix flake check
 
   build-chandler:
     name: Build chandler
-    runs-on: ubuntu-latest
+    runs-on: native
     steps:
       - name: Checkout repository
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
-      - name: Install Nix
-        uses: DeterminateSystems/nix-installer-action@main
-      - name: Enable Nix cache
-        uses: DeterminateSystems/magic-nix-cache-action@565684385bcd71bad329742eefe8d12f2e765b39 # v13
       - name: Build chandler
         run: nix build .#homeConfigurations."nalabelle@chandler".activationPackage
 
   build-doyle:
     name: Build doyle
-    runs-on: ubuntu-latest
+    runs-on: native
     steps:
       - name: Checkout repository
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
-      - name: Install Nix
-        uses: DeterminateSystems/nix-installer-action@main
-      - name: Enable Nix cache
-        uses: DeterminateSystems/magic-nix-cache-action@565684385bcd71bad329742eefe8d12f2e765b39 # v13
       - name: Build doyle
         run: nix build .#homeConfigurations."nalabelle@doyle".activationPackage
 
-  build-darwin:
-    name: Build Darwin Host (tennyson)
-    runs-on: macos-15
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
-      - name: Install Nix
-        uses: DeterminateSystems/nix-installer-action@main
-      - name: Enable Nix cache
-        uses: DeterminateSystems/magic-nix-cache-action@565684385bcd71bad329742eefe8d12f2e765b39 # v13
-      - name: Build tennyson system
-        run: nix build .#darwinConfigurations.tennyson.system
+  # Disabled: requires macos-15 runner not available on Forgejo
+  # build-darwin:
+  #   name: Build Darwin Host (tennyson)
+  #   runs-on: macos-15
+  #   steps:
+  #     - name: Checkout repository
+  #       uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+  #     - name: Install Nix
+  #       uses: DeterminateSystems/nix-installer-action@main
+  #     - name: Enable Nix cache
+  #       uses: DeterminateSystems/magic-nix-cache-action@565684385bcd71bad329742eefe8d12f2e765b39 # v13
+  #     - name: Build tennyson system
+  #       run: nix build .#darwinConfigurations.tennyson.system
