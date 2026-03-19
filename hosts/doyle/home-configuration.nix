@@ -22,8 +22,14 @@ in
       }
     ];
     packages = [
-      "at.vintagestory.VintageStory"
-      "at.vintagestory.VintageStoryUnstable"
+      {
+        appId = "at.vintagestory.VintageStory";
+        origin = "vintagestory";
+      }
+      {
+        appId = "at.vintagestory.VintageStory.Unstable";
+        origin = "vintagestory";
+      }
     ];
   };
 
@@ -75,6 +81,54 @@ in
       # Diagnostics
       libva-utils # vainfo - check VA-API status
       vdpauinfo # check VDPAU status
+
+      # CIFS mount helper script
+      # Usage: mount-cifs //server/share /path/to/mountpoint
+      (writeShellScriptBin "mount-cifs" ''
+        set -euo pipefail
+
+        # Usage information
+        usage() {
+          echo "Usage: mount-cifs <//server/share> <mountpoint>"
+          echo ""
+          echo "Mount a CIFS/SMB share with your uid/gid and credentials from /run/agenix/nalabelleSmbCredentials"
+          echo ""
+          echo "Examples:"
+          echo "  mount-cifs //chaucer/media ~/mnt/media"
+          echo "  mount-cifs //192.168.1.100/backup /mnt/backup"
+          exit 1
+        }
+
+        # Check arguments
+        if [ $# -ne 2 ]; then
+          usage
+        fi
+
+        SHARE="$1"
+        MOUNTPOINT="$2"
+        CREDS_FILE="/run/agenix/nalabelleSmbCredentials"
+
+        # Check if credentials file exists
+        if [ ! -f "$CREDS_FILE" ]; then
+          echo "Error: Credentials file not found at $CREDS_FILE"
+          exit 1
+        fi
+
+        # Create mountpoint if it doesn't exist
+        mkdir -p "$MOUNTPOINT"
+
+        # Get uid and gid
+        MOUNT_UID=$(id -u)
+        MOUNT_GID=$(id -g)
+
+        # Mount the share
+        echo "Mounting $SHARE to $MOUNTPOINT..."
+        sudo ${cifs-utils}/bin/mount.cifs "$SHARE" "$MOUNTPOINT" \
+          -o "credentials=$CREDS_FILE,uid=$MOUNT_UID,gid=$MOUNT_GID,file_mode=0644,dir_mode=0755"
+
+        echo "Successfully mounted $SHARE at $MOUNTPOINT"
+      '')
+
     ])
     ++ [
       opencode-wrappers.opencode-wrapped
