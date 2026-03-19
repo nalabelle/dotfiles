@@ -38,6 +38,7 @@ in
       # Desktop
       brave
       btop
+      gearlever # AppImage manager with desktop integration and auto-updates
       obs-studio
       obsidian
       kopia-ui
