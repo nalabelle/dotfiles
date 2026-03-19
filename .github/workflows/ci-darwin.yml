@@ -8,6 +8,7 @@ on:
 jobs:
   package-home:
     name: Package Home Manager Config
+    if: github.server_url == 'https://github.com'
     runs-on: macos-15
     steps:
       - name: Checkout repository
